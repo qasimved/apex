@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>APEX Tracker</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation;margin:0;padding:0}
+:root{
+  --red:#ef4444;--red-dark:#b91c1c;--red-dim:rgba(239,68,68,.14);--red-border:rgba(239,68,68,.25);
+  --bg:#080c14;--bg2:rgba(255,255,255,.03);--bg3:rgba(255,255,255,.06);
+  --text:#e2e8f0;--muted:#6b7280;--muted2:#374151;
+  --green:#86efac;--green-dim:rgba(34,197,94,.08);--green-border:rgba(34,197,94,.25);
+  --blue:#93c5fd;--blue-dim:rgba(59,130,246,.07);--blue-border:rgba(59,130,246,.2);
+  --amber:#fbbf24;--amber-dim:rgba(251,191,36,.08);--amber-border:rgba(251,191,36,.25);
+  --orange:#fb923c;--purple:#a78bfa;--purple-dim:rgba(167,139,250,.08);--purple-border:rgba(167,139,250,.25);
+}
+body{background:var(--bg);min-height:100vh;color:var(--text);font-family:'Space Mono',monospace}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(239,68,68,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,.022) 1px,transparent 1px);
+  background-size:44px 44px}
+.wrap{max-width:480px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1}
+
+/* ── HEADER */
+.logo{font-family:'Orbitron',sans-serif;font-size:2rem;font-weight:900;color:var(--red);letter-spacing:.18em;line-height:1}
+.logo span{color:rgba(239,68,68,.25)}
+.tagline{font-size:9px;color:var(--muted);letter-spacing:.18em;margin-top:3px;text-transform:uppercase}
+.vbadge{display:inline-flex;background:rgba(239,68,68,.08);border:1px solid var(--red-border);border-radius:3px;padding:2px 8px;font-size:8px;color:var(--red);letter-spacing:.1em;margin-top:8px;margin-bottom:24px}
+
+/* ── SECTIONS */
+.section{margin-bottom:22px}
+.sec-head{display:flex;align-items:center;gap:9px;margin-bottom:11px}
+.sec-num{width:22px;height:22px;background:var(--red);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;font-family:'Orbitron',sans-serif}
+.sec-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em}
+.sec-sub{font-size:9px;color:var(--muted);margin-top:1px}
+
+/* ── CARDS */
+.card{background:var(--bg2);border:1px solid var(--red-border);border-radius:10px;padding:15px}
+
+/* ── LABELS + INPUTS */
+.lbl{display:block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--red);margin-bottom:6px}
+.lbl-sm{display:block;font-size:9px;color:#9ca3af;margin-bottom:4px;text-transform:capitalize}
+.inp{background:rgba(255,255,255,.04);border:1px solid var(--red-border);border-radius:6px;padding:9px 11px;color:var(--text);font-size:12px;width:100%;font-family:'Space Mono',monospace;outline:none;transition:border .15s,background .15s;-webkit-appearance:none;appearance:none}
+.inp:focus{border-color:var(--red);background:rgba(239,68,68,.06)}
+.inp::placeholder{color:var(--muted)}
+input[type=datetime-local].inp{color-scheme:dark}
+input[type=range]{width:100%;accent-color:var(--red);cursor:pointer}
+textarea.inp{resize:vertical;min-height:80px;font-size:10px;line-height:1.6}
+.range-row{display:flex;justify-content:space-between;font-size:9px;color:var(--muted2);margin-top:5px}
+
+/* ── TOGGLES */
+.tog-row{display:flex;gap:6px}
+.tog{flex:1;padding:9px 4px;border-radius:6px;border:1px solid var(--red-border);background:transparent;color:var(--muted);cursor:pointer;font-size:10px;font-family:'Space Mono',monospace;letter-spacing:.03em;transition:all .15s;text-align:center}
+.tog.on{background:rgba(239,68,68,.82);border-color:var(--red);color:#fff;font-weight:700}
+.tog:active{opacity:.8}
+
+/* ── SORENESS */
+.sor-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.sor-item{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:7px;padding:8px 10px}
+.sor-pills{display:flex;gap:3px;margin-top:5px}
+.pill{flex:1;padding:4px 2px;border-radius:4px;border:1px solid rgba(255,255,255,.07);background:transparent;color:var(--muted);font-size:8px;font-family:'Space Mono',monospace;cursor:pointer;text-align:center;transition:all .12s}
+.pill.none.on{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:#e2e8f0}
+.pill.mild.on{background:rgba(251,191,36,.14);border-color:rgba(251,191,36,.4);color:var(--amber)}
+.pill.moderate.on{background:rgba(249,115,22,.14);border-color:rgba(249,115,22,.4);color:var(--orange)}
+.pill.severe.on{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.5);color:#f87171}
+
+/* ── MPS BADGES */
+.badge-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.badge{padding:3px 7px;border-radius:3px;font-size:8px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.badge-active{background:rgba(239,68,68,.18);border:1px solid rgba(239,68,68,.4);color:#fca5a5}
+.badge-clear{background:var(--green-dim);border:1px solid var(--green-border);color:var(--green)}
+.badge-unk{background:rgba(107,114,128,.08);border:1px solid rgba(107,114,128,.15);color:var(--muted)}
+.badge-due{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);color:var(--amber)}
+.badge-ok{background:var(--green-dim);border:1px solid var(--green-border);color:var(--green)}
+.badge-full{background:var(--purple-dim);border:1px solid var(--purple-border);color:var(--purple)}
+.badge-zero{background:rgba(107,114,128,.08);border:1px solid rgba(107,114,128,.15);color:var(--muted)}
+
+/* ── SWITCH */
+.sw-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px dashed rgba(255,255,255,.07);border-radius:7px;cursor:pointer;transition:background .15s}
+.sw-row:hover{background:rgba(255,255,255,.02)}
+.sw-box{width:36px;height:20px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);position:relative;transition:background .2s;flex-shrink:0}
+.sw-box.on{background:rgba(239,68,68,.65);border-color:var(--red)}
+.sw-knob{width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.sw-box.on .sw-knob{left:18px}
+.sw-lbl{font-size:10px;color:var(--muted);line-height:1.4}
+
+/* ── SCAN */
+.scan-zone{border:2px dashed rgba(239,68,68,.22);border-radius:8px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(239,68,68,.02)}
+.scan-zone:hover{border-color:rgba(239,68,68,.5);background:rgba(239,68,68,.04)}
+.img-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.img-card{background:rgba(0,0,0,.4);border:1px solid rgba(239,68,68,.18);border-radius:7px;overflow:hidden;position:relative}
+.img-card img{width:100%;max-height:110px;object-fit:cover;display:block}
+.img-card-body{padding:8px}
+.img-rm{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.75);border:1px solid rgba(239,68,68,.4);border-radius:3px;color:#f87171;font-size:9px;padding:2px 6px;cursor:pointer;font-family:'Space Mono',monospace}
+.scan-mini{width:100%;margin-top:6px;padding:6px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:5px;color:#f87171;font-size:9px;cursor:pointer;font-family:'Space Mono',monospace;transition:all .15s}
+.scan-mini:hover{background:rgba(239,68,68,.18)}
+.scan-mini:disabled{opacity:.4;cursor:not-allowed}
+
+/* ── ALERTS */
+.alert{border-radius:7px;padding:10px 13px;font-size:10px;line-height:1.65;margin-bottom:12px}
+.a-blue{background:var(--blue-dim);border:1px solid var(--blue-border);color:var(--blue)}
+.a-green{background:var(--green-dim);border:1px solid var(--green-border);color:var(--green)}
+.a-red{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);color:#fca5a5}
+.a-amber{background:var(--amber-dim);border:1px solid var(--amber-border);color:var(--amber)}
+.a-purple{background:var(--purple-dim);border:1px solid var(--purple-border);color:var(--purple)}
+
+/* ── SPINNER */
+.spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:sp .6s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ── BUTTONS */
+.btn{background:linear-gradient(135deg,var(--red),var(--red-dark));border:none;border-radius:7px;padding:13px;color:#fff;font-weight:700;cursor:pointer;width:100%;font-size:12px;font-family:'Space Mono',monospace;letter-spacing:.06em;transition:opacity .15s}
+.btn:active{opacity:.82}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-ghost{background:transparent;border:1px solid var(--red-border);border-radius:6px;padding:8px 13px;color:#f87171;font-size:10px;cursor:pointer;font-family:'Space Mono',monospace;letter-spacing:.04em;transition:all .15s;white-space:nowrap}
+.btn-ghost:hover{background:var(--red-dim)}
+.btn-ghost:disabled{opacity:.4;cursor:not-allowed}
+.btn-purple{background:transparent;border:1px solid var(--purple-border);border-radius:6px;padding:8px 13px;color:var(--purple);font-size:10px;cursor:pointer;font-family:'Space Mono',monospace;letter-spacing:.04em;transition:all .15s;white-space:nowrap}
+.btn-purple:hover{background:var(--purple-dim)}
+.btn-green{background:transparent;border:1px solid var(--green-border);border-radius:6px;padding:8px 13px;color:var(--green);font-size:10px;cursor:pointer;font-family:'Space Mono',monospace;letter-spacing:.04em;transition:all .15s;white-space:nowrap}
+.btn-green:hover{background:var(--green-dim)}
+
+/* ── OUTPUT */
+.out-wrap{background:#000;border:1px solid rgba(239,68,68,.3);border-radius:9px;overflow:hidden;margin-bottom:12px}
+.out-head{background:rgba(239,68,68,.1);padding:8px 13px;font-size:9px;font-weight:700;letter-spacing:.12em;color:var(--red);text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+.out-body{padding:14px;font-size:10px;color:#86efac;line-height:1.8;word-break:break-word;white-space:pre-wrap;font-family:'Space Mono',monospace;max-height:480px;overflow-y:auto}
+.out-body::-webkit-scrollbar{width:3px}
+.out-body::-webkit-scrollbar-thumb{background:rgba(239,68,68,.3);border-radius:2px}
+
+/* ── TOKEN BAR */
+.token-bar{display:flex;gap:0;border:1px solid rgba(255,255,255,.06);border-radius:7px;overflow:hidden;margin-bottom:12px}
+.token-stat{flex:1;text-align:center;padding:10px 8px;background:rgba(0,0,0,.3)}
+.token-stat+.token-stat{border-left:1px solid rgba(255,255,255,.06)}
+.token-val{font-family:'Orbitron',sans-serif;font-size:1.05rem;font-weight:700;line-height:1}
+.token-lbl{font-size:8px;color:var(--muted);margin-top:3px;letter-spacing:.04em;text-transform:uppercase}
+
+/* ── HISTORY PANEL */
+.hist-panel{background:rgba(167,139,250,.04);border:1px solid var(--purple-border);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.hist-header{padding:13px 15px;cursor:pointer;user-select:none;display:flex;align-items:center;justify-content:space-between}
+.hist-header-left{display:flex;align-items:center;gap:8px}
+.hist-icon{font-size:14px}
+.hist-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--purple)}
+.hist-count{font-size:9px;color:var(--muted);margin-top:1px}
+.hist-chev{color:var(--muted);font-size:11px;transition:transform .2s}
+.hist-chev.open{transform:rotate(180deg)}
+.hist-body{padding:0 15px 15px;border-top:1px solid rgba(167,139,250,.15)}
+.hist-entry{padding:9px 11px;border-radius:6px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);margin-top:8px}
+.hist-entry-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px}
+.hist-date{font-size:10px;color:var(--text);font-weight:700}
+.hist-meta{font-size:8px;color:var(--muted);text-align:right;line-height:1.5}
+.hist-muscles{display:flex;flex-wrap:wrap;gap:3px}
+.hist-muscle{padding:2px 6px;border-radius:3px;font-size:8px;font-weight:700;text-transform:uppercase;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#fca5a5}
+.hist-rm{background:none;border:none;color:var(--muted2);font-size:9px;cursor:pointer;font-family:'Space Mono',monospace;padding:2px 4px;transition:color .15s}
+.hist-rm:hover{color:#f87171}
+
+/* ── IMPORT AREA */
+.import-area{margin-top:12px;padding-top:12px;border-top:1px solid rgba(167,139,250,.15)}
+
+/* ── API KEY */
+.key-box{background:rgba(251,191,36,.04);border:1px solid rgba(251,191,36,.18);border-radius:9px;padding:13px;margin-bottom:20px}
+.key-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.key-title{font-size:10px;font-weight:700;color:var(--amber);letter-spacing:.08em;text-transform:uppercase}
+.key-chev{color:var(--muted);font-size:11px;transition:transform .2s}
+.key-chev.open{transform:rotate(180deg)}
+
+hr{border:none;border-top:1px solid rgba(239,68,68,.1);margin:11px 0}
+.mb12{margin-bottom:12px}
+.mb16{margin-bottom:16px}
+.row{display:flex;gap:8px;align-items:center}
+.row-wrap{display:flex;gap:6px;flex-wrap:wrap}
+.footer{margin-top:32px;padding-top:14px;border-top:1px solid rgba(239,68,68,.07);font-size:8px;color:var(--muted2);text-align:center;letter-spacing:.1em}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+// ════════════════════════════════════════════════════════
+//  CONSTANTS
+// ════════════════════════════════════════════════════════
+const MUSCLES = ['chest','back','shoulders','biceps','triceps','forearms','legs','calves'];
+const SORENESS_OPTS = ['none','mild','moderate','severe'];
+const MPS_H = {chest:48,back:48,shoulders:36,biceps:36,triceps:36,forearms:24,legs:48,calves:36};
+const HISTORY_KEEP_DAYS = 84; // 12 weeks in localStorage
+const HISTORY_PACKET_DAYS = 14; // 14 days shown in packet
+
+const MUSCLE_KW = {
+  chest:     ['chest press','bench press','pec deck','chest fly','cable fly','incline press','decline press','dumbbell press','db press','push up','pushup','chest'],
+  back:      ['lat pulldown','pull-down','pulldown','seated row','cable row','t-bar row','barbell row','db row','dumbbell row','pull up','pullup','chin up','chinup','deadlift','back extension','hyperextension','back'],
+  shoulders: ['shoulder press','overhead press',' ohp ','military press','arnold press','lateral raise','front raise','rear delt','upright row','shoulder','delt'],
+  biceps:    ['barbell curl','ez bar curl','preacher curl','concentration curl','hammer curl','incline curl','cable curl','bicep curl',' curl','bicep'],
+  triceps:   ['tricep pushdown','skull crusher','close grip bench','overhead tricep','rope pushdown','tricep extension','tricep dip','tricep','pushdown'],
+  forearms:  ['wrist curl','reverse curl','forearm','farmer carry'],
+  legs:      ['squat','leg press','lunge','leg curl','leg extension','romanian deadlift','rdl','hip thrust','glute bridge','hack squat','bulgarian','step up','hamstring','quad','glute','leg day'],
+  calves:    ['standing calf','seated calf','donkey calf','calf raise','calf press','calf']
+};
+
+// ════════════════════════════════════════════════════════
+//  TIME HELPERS
+// ════════════════════════════════════════════════════════
+const pad = n => String(n).padStart(2,'0');
+function nowDT(){
+  const d=new Date();
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+function yestDT(){
+  const d=new Date();d.setDate(d.getDate()-1);
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function fmtDT(s){
+  if(!s) return '—';
+  const d=new Date(s);
+  return `${DAYS[d.getDay()]} ${pad(d.getDate())} ${MONS[d.getMonth()]} ${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+function fmtDateShort(s){
+  if(!s) return '—';
+  const d=new Date(s);
+  return `${DAYS[d.getDay()]} ${pad(d.getDate())} ${MONS[d.getMonth()]}`;
+}
+function fmtDateFull(s){
+  if(!s) return '—';
+  const d=new Date(s);
+  return `${pad(d.getDate())} ${MONS[d.getMonth()]} ${d.getFullYear()}`;
+}
+function hDiff(a,b){
+  if(!a||!b) return null;
+  return Math.round((new Date(b)-new Date(a))/360000)/10;
+}
+function daysAgo(s){
+  if(!s) return null;
+  return Math.floor((Date.now()-new Date(s))/86400000);
+}
+function dateKey(s){ return (s||'').slice(0,10); }
+function eLbl(v){
+  if(v<=2)return'DEAD';if(v<=4)return'LOW';if(v<=6)return'OK';if(v<=8)return'GOOD';return'FIRED UP';
+}
+function hCol(h){
+  if(h===null)return'var(--muted)';
+  if(h<24)return'#f87171';if(h<36)return'var(--amber)';if(h<48)return'var(--orange)';return'var(--green)';
+}
+
+// ════════════════════════════════════════════════════════
+//  MUSCLE DETECTION
+// ════════════════════════════════════════════════════════
+function detectMuscles(text){
+  if(!text) return [];
+  const low = text.toLowerCase();
+  return MUSCLES.filter(m => MUSCLE_KW[m].some(kw => low.includes(kw)));
+}
+function extractDuration(text){
+  if(!text) return null;
+  const m = text.match(/DURATION[:\s]+([^\n]+)/i);
+  return m ? m[1].trim() : null;
+}
+
+// ════════════════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════════════════
+let S = {
+  // Persisted
+  apiKey:'', dayType:'gym', sessionDT:nowDT(), energy:7,
+  soreness: Object.fromEntries(MUSCLES.map(m=>[m,'none'])),
+  lastUnknown:false, lastDT:yestDT(),
+  history:[], // [{date,dayType,energy,muscles,scanText,duration}] newest first
+
+  // Session-only (not persisted)
+  keyOpen:false, histOpen:false, showImport:false, importText:'',
+  images:[], outputGenerated:false, outputText:''
+};
+
+// ════════════════════════════════════════════════════════
+//  STORAGE
+// ════════════════════════════════════════════════════════
+function loadStorage(){
+  try{
+    const r = localStorage.getItem('apex_v4');
+    if(!r) return;
+    const d = JSON.parse(r);
+    const fields = ['apiKey','dayType','energy','soreness','lastDT','lastUnknown','history'];
+    fields.forEach(f=>{ if(d[f]!==undefined) S[f]=d[f]; });
+  }catch(e){}
+  // prune old history on load
+  pruneHistory();
+}
+function persist(){
+  pruneHistory();
+  try{
+    localStorage.setItem('apex_v4', JSON.stringify({
+      apiKey:S.apiKey, dayType:S.dayType, energy:S.energy,
+      soreness:S.soreness, lastDT:S.lastDT, lastUnknown:S.lastUnknown,
+      history:S.history
+    }));
+  }catch(e){}
+}
+function pruneHistory(){
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - HISTORY_KEEP_DAYS);
+  S.history = S.history.filter(h => new Date(h.date) > cutoff);
+}
+
+// ════════════════════════════════════════════════════════
+//  HISTORY MANAGEMENT
+// ════════════════════════════════════════════════════════
+
+// Called when packet is generated — saves current session
+function logSession(muscles, scanText, duration){
+  // One entry per calendar day — overwrite if same day
+  const key = dateKey(S.sessionDT);
+  S.history = S.history.filter(h => dateKey(h.date) !== key);
+  S.history.unshift({
+    date: S.sessionDT,
+    dayType: S.dayType,
+    energy: S.energy,
+    muscles: muscles,
+    scanText: scanText || '',
+    duration: duration || ''
+  });
+  S.history.sort((a,b) => new Date(b.date) - new Date(a.date));
+  persist();
+}
+
+// Rolling 7-day frequency — excludes today's session
+function getFrequency(){
+  const cutoff = new Date(); cutoff.setDate(cutoff.getDate()-7);
+  const todayKey = dateKey(S.sessionDT);
+  const recent = S.history.filter(h =>
+    new Date(h.date) > cutoff &&
+    dateKey(h.date) !== todayKey &&
+    h.dayType === 'gym'
+  );
+  const freq = Object.fromEntries(MUSCLES.map(m=>[m,0]));
+  const lastTrained = Object.fromEntries(MUSCLES.map(m=>[m,null]));
+  recent.forEach(entry => {
+    (entry.muscles||[]).forEach(m => {
+      freq[m]++;
+      if(!lastTrained[m] || new Date(entry.date) > new Date(lastTrained[m])){
+        lastTrained[m] = entry.date;
+      }
+    });
+  });
+  return {freq, lastTrained};
+}
+
+// 14-day history block for packet
+function buildHistoryBlock(){
+  const cutoff = new Date(); cutoff.setDate(cutoff.getDate()-HISTORY_PACKET_DAYS);
+  const todayKey = dateKey(S.sessionDT);
+  const entries = S.history.filter(h =>
+    new Date(h.date) > cutoff && dateKey(h.date) !== todayKey
+  );
+
+  if(entries.length === 0) return null;
+
+  const {freq, lastTrained} = getFrequency();
+  const due = MUSCLES.filter(m => freq[m]===1 && lastTrained[m]);
+  const zero = MUSCLES.filter(m => freq[m]===0);
+  const complete = MUSCLES.filter(m => freq[m]>=2);
+
+  const L = [];
+  L.push('— TRAINING HISTORY (14 days) ——————————');
+  entries.forEach(h => {
+    const muscles = (h.muscles||[]).length > 0
+      ? h.muscles.map(m=>m.toUpperCase()).join(', ')
+      : h.dayType === 'rest' ? 'REST' : 'CARDIO';
+    const dur = h.duration ? ` | ${h.duration}` : '';
+    const e = ` | E:${h.energy}`;
+    L.push(`${fmtDateShort(h.date)} → ${muscles}${dur}${e}`);
+  });
+  L.push('');
+  L.push('WEEKLY FREQUENCY (rolling 7 days):');
+  MUSCLES.forEach(m => {
+    const f = freq[m];
+    const last = lastTrained[m] ? ` — last ${fmtDateShort(lastTrained[m])} (${daysAgo(lastTrained[m])}d ago)` : ' — not trained';
+    const flag = f===0 ? ' ← not trained' : f===1 ? ' ← due 2nd session' : f>=2 ? ' ✓ target met' : '';
+    L.push(`  ${m.toUpperCase().padEnd(12)}: ${f}x${last}${flag}`);
+  });
+  if(due.length > 0) L.push(`\nMUSCLES DUE 2ND SESSION: ${due.map(m=>m.toUpperCase()).join(', ')}`);
+  if(zero.length > 0) L.push(`NOT TRAINED THIS WEEK:   ${zero.map(m=>m.toUpperCase()).join(', ')}`);
+  if(complete.length > 0) L.push(`TARGET MET (2x+):        ${complete.map(m=>m.toUpperCase()).join(', ')}`);
+  L.push('————————————————————————————————————————');
+
+  return L.join('\n');
+}
+
+// ════════════════════════════════════════════════════════
+//  EXPORT / IMPORT
+// ════════════════════════════════════════════════════════
+
+// Full history export — importable, paste into Notes
+function buildFullExport(){
+  const L = [];
+  L.push('APEX_HISTORY_EXPORT');
+  L.push(`v:4 exported:${fmtDateFull(nowDT())} entries:${S.history.length}`);
+  L.push('');
+  S.history.forEach(h => {
+    L.push('---');
+    L.push(`DATE:${h.date}`);
+    L.push(`TYPE:${h.dayType}`);
+    L.push(`ENERGY:${h.energy}`);
+    L.push(`MUSCLES:${(h.muscles||[]).join(',')}`);
+    if(h.duration) L.push(`DURATION:${h.duration}`);
+    if(h.scanText) L.push(`SCAN:\n${h.scanText}`);
+  });
+  L.push('---');
+  return L.join('\n');
+}
+
+// Parse imported history text back into entries
+function parseImport(text){
+  const entries = [];
+  const blocks = text.split(/\n---\n?/).filter(b => b.includes('DATE:'));
+  blocks.forEach(block => {
+    try{
+      const lines = block.split('\n');
+      const get = (key) => {
+        const l = lines.find(l=>l.startsWith(key+':'));
+        return l ? l.slice(key.length+1).trim() : '';
+      };
+      const scanStart = block.indexOf('\nSCAN:\n');
+      const scanText = scanStart >= 0 ? block.slice(scanStart+7).trim() : '';
+      const musclesRaw = get('MUSCLES');
+      const muscles = musclesRaw ? musclesRaw.split(',').filter(Boolean) : [];
+      const entry = {
+        date: get('DATE'),
+        dayType: get('TYPE') || 'gym',
+        energy: parseInt(get('ENERGY'))||7,
+        muscles: muscles,
+        duration: get('DURATION'),
+        scanText: scanText
+      };
+      if(entry.date) entries.push(entry);
+    }catch(e){}
+  });
+  return entries;
+}
+
+// 4-week review export — formatted for APEX programme analysis
+function build4WeekReview(){
+  const cutoff = new Date(); cutoff.setDate(cutoff.getDate()-28);
+  const entries = S.history.filter(h => new Date(h.date) > cutoff);
+  const gymSessions = entries.filter(h => h.dayType==='gym');
+
+  if(gymSessions.length === 0) return '// No gym sessions in the last 4 weeks.';
+
+  // Frequency summary
+  const freqCount = Object.fromEntries(MUSCLES.map(m=>[m,0]));
+  gymSessions.forEach(h => (h.muscles||[]).forEach(m => { freqCount[m]++; }));
+
+  const oldest = entries[entries.length-1]?.date;
+  const newest = entries[0]?.date;
+
+  const L = [];
+  L.push('APEX 4-WEEK PROGRAMME REVIEW');
+  L.push(`Period: ${fmtDateFull(oldest)} — ${fmtDateFull(newest)}`);
+  L.push(`Total gym sessions: ${gymSessions.length}`);
+  L.push(`Total sessions logged: ${entries.length}`);
+  L.push('');
+  L.push('━━ SESSION LOG ━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  gymSessions.forEach(h => {
+    const muscles = (h.muscles||[]).length > 0 ? h.muscles.map(m=>m.toUpperCase()).join(', ') : 'unknown';
+    const dur = h.duration ? ` | ${h.duration}` : '';
+    L.push(`${fmtDateFull(h.date)} | E:${h.energy}/10${dur} | ${muscles}`);
+    if(h.scanText){
+      h.scanText.split('\n').forEach(line => { if(line.trim()) L.push(`  ${line}`); });
+    }
+    L.push('');
+  });
+  L.push('━━ FREQUENCY SUMMARY (4 weeks) ━━━━━━━━━━');
+  const targetPerWeek = 2;
+  const target4Weeks = targetPerWeek * 4;
+  MUSCLES.forEach(m => {
+    const count = freqCount[m];
+    const avg = (count/4).toFixed(1);
+    const status = count >= target4Weeks ? '✓ on target'
+      : count >= target4Weeks * 0.75 ? '~ slightly under'
+      : '✗ undertrained';
+    L.push(`  ${m.toUpperCase().padEnd(12)}: ${count}x over 4 weeks (${avg}x/week avg) — ${status}`);
+  });
+  L.push('');
+  L.push('━━ REVIEW REQUEST ━━━━━━━━━━━━━━━━━━━━━━━');
+  L.push('Please analyse this 4-week training block and provide:');
+  L.push('1. Muscle groups undertrained (below 2x/week) — causes and fixes');
+  L.push('2. Strength progression per exercise — identify PRs and stalls');
+  L.push('3. Volume assessment — which muscles are at MEV/MAV/MRV?');
+  L.push('4. Recovery patterns — any soreness/performance correlations?');
+  L.push('5. Energy trend — average energy per week, performance correlation');
+  L.push('6. Recommended split adjustments for next 4-week block');
+  L.push('7. One priority focus area for the next block');
+  return L.join('\n');
+}
+
+// ════════════════════════════════════════════════════════
+//  COPY UTILITY
+// ════════════════════════════════════════════════════════
+function copyText(text, btnId){
+  const flash = () => {
+    const b = document.getElementById(btnId);
+    if(!b) return;
+    const o = b.textContent;
+    b.textContent = '✓ COPIED!';
+    b.style.background = 'linear-gradient(135deg,#16a34a,#15803d)';
+    setTimeout(()=>{ b.textContent=o; b.style.background=''; }, 2000);
+  };
+  navigator.clipboard.writeText(text).then(flash).catch(()=>{
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    flash();
+  });
+}
+
+// ════════════════════════════════════════════════════════
+//  IMAGE HANDLING
+// ════════════════════════════════════════════════════════
+function handleFiles(files){
+  Array.from(files).forEach(file => {
+    if(!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      S.images.push({dataUrl:e.target.result, file, fileName:file.name,
+        scanning:false, scanResult:null, scanError:null});
+      S.outputGenerated = false;
+      render();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function removeImg(i){ S.images.splice(i,1); S.outputGenerated=false; render(); }
+
+// ════════════════════════════════════════════════════════
+//  SCAN
+// ════════════════════════════════════════════════════════
+async function scanOne(idx){
+  const img = S.images[idx]; if(!img) return;
+  if(!S.apiKey.trim()){
+    img.scanError = 'No API key — expand the API Key section above.';
+    render(); return;
+  }
+  img.scanning=true; img.scanResult=null; img.scanError=null; render();
+  try{
+    const base64 = img.dataUrl.split(',')[1];
+    const mtype = img.file.type || 'image/jpeg';
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key': S.apiKey.trim(),
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1200,
+        messages:[{role:'user', content:[
+          {type:'image', source:{type:'base64', media_type:mtype, data:base64}},
+          {type:'text', text:`Extract ALL workout data from this gym app screenshot.
+Return ONLY plain text — no markdown, no backticks, no asterisks, no ## headers.
+
+Format:
+SESSION: [workout name if visible]
+DURATION: [total time if visible]
+
+EXERCISES:
+[Exercise Name] ([equipment: machine/cable/barbell/dumbbell/bodyweight]): [weightxreps], [weightxreps], ...
+
+NOTES: [total volume, calories, heart rate, any other visible metrics]
+
+Rules: include weight units (kg or lbs). Skip fields not visible. Be precise — do not estimate.`}
+        ]}]
+      })
+    });
+    const data = await res.json();
+    if(data.error) throw new Error(data.error.message);
+    img.scanResult = data.content.map(b=>b.text||'').join('').trim();
+  }catch(e){
+    img.scanError = e.message || 'Scan failed — check API key and try again.';
+  }
+  img.scanning=false; S.outputGenerated=false; render();
+}
+async function scanAll(){
+  const pending = S.images.map((_,i)=>i).filter(i=>!S.images[i].scanResult && !S.images[i].scanning);
+  for(const i of pending) await scanOne(i);
+}
+
+// ════════════════════════════════════════════════════════
+//  BUILD PACKET
+// ════════════════════════════════════════════════════════
+function buildPacket(){
+  const nowV = S.sessionDT || nowDT();
+  const lastV = S.lastUnknown ? null : S.lastDT;
+  const hrs = hDiff(lastV, nowV);
+
+  const allScans = S.images.filter(i=>i.scanResult).map((img,i)=>{
+    const pre = S.images.length > 1 ? `[Screenshot ${i+1}]\n` : '';
+    return pre + img.scanResult;
+  }).join('\n\n');
+
+  const trained = detectMuscles(allScans);
+  const duration = extractDuration(allScans);
+
+  // MPS — only for muscles detected in scan
+  let mps = {};
+  if(!S.lastUnknown && hrs!==null && trained.length > 0){
+    trained.forEach(m => { mps[m] = hrs < MPS_H[m] ? 'active' : 'clear'; });
+  }
+  const mpsActive = trained.filter(m=>mps[m]==='active');
+  const mpsClear  = trained.filter(m=>mps[m]==='clear');
+
+  const sore = Object.entries(S.soreness).filter(([,v])=>v!=='none');
+
+  // Auto-save to history
+  logSession(trained, allScans, duration);
+
+  // Build history block
+  const histBlock = buildHistoryBlock();
+
+  const L = [];
+
+  // TODAY
+  L.push(`DATE: ${fmtDT(nowV)}`);
+  L.push(`DAY: ${S.dayType.toUpperCase()} | ENERGY: ${S.energy}/10 [${eLbl(S.energy)}]`);
+  L.push('');
+
+  // SORENESS
+  if(sore.length === 0){
+    L.push('SORENESS: none');
+  } else {
+    L.push('SORENESS:');
+    sore.forEach(([m,v]) => L.push(`  ${m.toUpperCase()}: ${v.toUpperCase()}`));
+  }
+  L.push('');
+
+  // LAST SESSION + MPS
+  if(S.lastUnknown){
+    L.push('LAST SESSION: unknown — use conservative baseline');
+  } else {
+    L.push(`LAST SESSION: ${fmtDT(lastV)} (${hrs!==null?hrs+'h ago':'N/A'})`);
+    if(trained.length > 0){
+      if(mpsActive.length > 0){
+        L.push('MPS ACTIVE — avoid retraining:');
+        mpsActive.forEach(m=>{
+          const rem = Math.max(0, MPS_H[m]-hrs).toFixed(0);
+          L.push(`  ${m.toUpperCase()}: ${rem}h remaining`);
+        });
+      }
+      if(mpsClear.length > 0){
+        L.push(`MPS CLEAR — safe to train: ${mpsClear.map(m=>m.toUpperCase()).join(', ')}`);
+      }
+      const notTrained = MUSCLES.filter(m=>!trained.includes(m));
+      if(notTrained.length > 0){
+        L.push(`NOT TRAINED LAST SESSION: ${notTrained.map(m=>m.toUpperCase()).join(', ')}`);
+      }
+    } else if(allScans){
+      L.push('MPS: muscle groups not auto-detected — assess from exercises below');
+    } else {
+      L.push('MPS: no scan data — programme conservatively');
+    }
+  }
+  L.push('');
+
+  // FLAGS
+  const flags = [];
+  if(S.energy<=4)      flags.push(`LOW ENERGY (${S.energy}/10) — reduce volume ~25%, drop isolation`);
+  else if(S.energy>=9) flags.push(`PEAK ENERGY (${S.energy}/10) — attempt +5% load or extra compound set`);
+  const sevSore = MUSCLES.filter(m=>S.soreness[m]==='severe');
+  const modSore = MUSCLES.filter(m=>S.soreness[m]==='moderate');
+  if(sevSore.length) flags.push(`SEVERE SORENESS [${sevSore.map(m=>m.toUpperCase()).join(', ')}] — avoid training`);
+  if(modSore.length) flags.push(`MODERATE SORENESS [${modSore.map(m=>m.toUpperCase()).join(', ')}] — reduce load`);
+  if(S.soreness.shoulders==='moderate'||S.soreness.shoulders==='severe')
+    flags.push('SHOULDER PROTOCOL — no overhead press, cable laterals only');
+  if(S.soreness.back==='severe')
+    flags.push('BACK SEVERE — no deadlifts or heavy rows');
+  mpsActive.forEach(m=>{
+    const rem = Math.max(0, MPS_H[m]-hrs).toFixed(0);
+    flags.push(`MPS BLOCK [${m.toUpperCase()}] — ${rem}h left, skip or MEV only`);
+  });
+  if(hrs!==null && hrs<20) flags.push(`SHORT RECOVERY — ${hrs}h only, consider cardio/mobility`);
+  if(flags.length > 0){
+    L.push('FLAGS:');
+    flags.forEach(f => L.push(`  ⚠ ${f}`));
+    L.push('');
+  }
+
+  // LAST WORKOUT DATA
+  if(S.lastUnknown){
+    L.push('LAST WORKOUT: unknown — set moderate weights, RPE 7, log as baseline');
+  } else if(allScans){
+    L.push('LAST WORKOUT:');
+    L.push(allScans);
+  } else {
+    L.push('LAST WORKOUT: no scan — progressive overload targets unknown');
+  }
+
+  // HISTORY BLOCK
+  if(histBlock){
+    L.push('');
+    L.push(histBlock);
+  }
+
+  return L.join('\n');
+}
+
+function generatePacket(){
+  S.outputText = buildPacket();
+  S.outputGenerated = true;
+  render();
+  setTimeout(()=>{
+    const el = document.getElementById('out-sec');
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 120);
+}
+
+// ════════════════════════════════════════════════════════
+//  RENDER
+// ════════════════════════════════════════════════════════
+function render(){
+  const app = document.getElementById('app');
+  if(!app) return;
+
+  const nowV = S.sessionDT || nowDT();
+  const lastV = S.lastUnknown ? null : S.lastDT;
+  const hrs = hDiff(lastV, nowV);
+  const allScans = S.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\n\n');
+  const trained = detectMuscles(allScans);
+  let mps = {};
+  if(!S.lastUnknown && hrs!==null && trained.length>0){
+    trained.forEach(m=>{ mps[m] = hrs<MPS_H[m]?'active':'clear'; });
+  }
+  const mpsActive = trained.filter(m=>mps[m]==='active');
+  const mpsClear  = trained.filter(m=>mps[m]==='clear');
+  const anyScanning = S.images.some(i=>i.scanning);
+  const scanned = S.images.filter(i=>i.scanResult).length;
+  const unscanned = S.images.filter(i=>!i.scanResult&&!i.scanning).length;
+  const {freq, lastTrained} = getFrequency();
+
+  let h = '';
+
+  // ── HEADER
+  h += `<div style="margin-bottom:24px">
+    <div class="logo">⚡ AP<span>E</span>X</div>
+    <div class="tagline">Adaptive Performance Engine</div>
+    <div class="vbadge">v1 · FULL HISTORY SYSTEM</div>
+  </div>`;
+
+  // ── API KEY
+  h += `<div class="key-box">
+    <div class="key-toggle" onclick="S.keyOpen=!S.keyOpen;render()">
+      <span class="key-title">${S.apiKey?'🔑 API Key — configured':'🔑 API Key — required for scanning'}</span>
+      <span class="key-chev${S.keyOpen?' open':''}">▼</span>
+    </div>
+    ${S.keyOpen?`<div style="margin-top:11px">
+      <div style="font-size:9px;color:var(--muted);line-height:1.65;margin-bottom:8px">
+        Required to scan workout screenshots. Get yours at <span style="color:var(--amber)">console.anthropic.com → API Keys</span><br>
+        Stored in your browser only — never transmitted except to Anthropic's API.
+      </div>
+      <div class="row">
+        <input type="password" class="inp" style="flex:1;font-size:11px" placeholder="sk-ant-api03-..." value="${S.apiKey}"
+          oninput="S.apiKey=this.value;persist()"/>
+        <button class="btn-ghost" onclick="S.keyOpen=false;render()">Done</button>
+      </div>
+      ${S.apiKey?`<div style="font-size:9px;color:var(--green);margin-top:6px">✓ Key saved — scanning enabled</div>`:''}
+    </div>`:''}
+  </div>`;
+
+  h += `<div class="alert a-blue">Fill all 3 sections → scan screenshots → <strong>Generate Packet</strong> → open fresh APEX chat → paste.<br>
+    <span style="color:rgba(147,197,253,.55);font-size:9px">History auto-saves on every packet generate. Static athlete profile lives in project instructions.</span>
+  </div>`;
+
+  // ── SECTION 1: TODAY
+  h += `<div class="section">
+    <div class="sec-head">
+      <div class="sec-num">1</div>
+      <div><div class="sec-title">Today's Session</div><div class="sec-sub">Date, time & readiness</div></div>
+    </div>
+    <div class="card">
+      <div class="mb16">
+        <label class="lbl">Day Type</label>
+        <div class="tog-row">
+          ${['gym','cardio','rest'].map(t=>`<button class="tog${S.dayType===t?' on':''}" onclick="S.dayType='${t}';persist();render()">
+            ${t==='gym'?'🏋️ GYM':t==='cardio'?'🏃 CARDIO':'😴 REST'}
+          </button>`).join('')}
+        </div>
+      </div>
+      <div class="mb16">
+        <label class="lbl">Session Date & Time</label>
+        <input type="datetime-local" class="inp" value="${S.sessionDT}" oninput="S.sessionDT=this.value;render()"/>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px">${fmtDT(S.sessionDT)}</div>
+      </div>
+      <div>
+        <label class="lbl">Energy: ${S.energy}/10 — <span style="color:var(--amber)">${eLbl(S.energy)}</span></label>
+        <input type="range" min="1" max="10" step="1" value="${S.energy}" oninput="S.energy=parseInt(this.value);persist();render()"/>
+        <div class="range-row"><span>Dead</span><span>OK</span><span>Fired Up</span></div>
+      </div>
+    </div>
+  </div>`;
+
+  // ── SECTION 2: SORENESS
+  h += `<div class="section">
+    <div class="sec-head">
+      <div class="sec-num">2</div>
+      <div><div class="sec-title">Muscle Soreness</div><div class="sec-sub">Tap each muscle to set level</div></div>
+    </div>
+    <div class="card">
+      <div class="sor-grid">
+        ${MUSCLES.map(m=>`<div class="sor-item">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="lbl-sm" style="margin:0">${m}</span>
+            <span style="font-size:8px;font-weight:700;text-transform:uppercase;color:${
+              S.soreness[m]==='none'?'var(--muted)':S.soreness[m]==='mild'?'var(--amber)':S.soreness[m]==='moderate'?'var(--orange)':'#f87171'
+            }">${S.soreness[m]}</span>
+          </div>
+          <div class="sor-pills">
+            ${SORENESS_OPTS.map(o=>`<button class="pill ${o}${S.soreness[m]===o?' on':''}"
+              onclick="S.soreness['${m}']='${o}';persist();render()">${o==='none'?'—':o.slice(0,3)}</button>`).join('')}
+          </div>
+        </div>`).join('')}
+      </div>
+      ${trained.length>0 && lastV ? `
+      <div style="margin-top:13px;padding-top:12px;border-top:1px solid rgba(255,255,255,.05)">
+        <div style="font-size:9px;color:var(--muted);letter-spacing:.06em;margin-bottom:6px">MPS — from detected exercises · ${hrs}h since last session</div>
+        <div class="badge-row">
+          ${mpsActive.map(m=>{const rem=Math.max(0,MPS_H[m]-hrs).toFixed(0);return`<span class="badge badge-active">⚡ ${m} ${rem}h</span>`;}).join('')}
+          ${mpsClear.map(m=>`<span class="badge badge-clear">✓ ${m}</span>`).join('')}
+          ${MUSCLES.filter(mu=>!trained.includes(mu)).map(m=>`<span class="badge badge-unk">— ${m}</span>`).join('')}
+        </div>
+        <div style="font-size:8px;color:var(--muted2);margin-top:5px">⚡ active — avoid &nbsp;|&nbsp; ✓ clear — safe &nbsp;|&nbsp; — not trained last session</div>
+      </div>`:
+      S.history.length > 0 ? `
+      <div style="margin-top:13px;padding-top:12px;border-top:1px solid rgba(255,255,255,.05)">
+        <div style="font-size:9px;color:var(--muted);margin-bottom:6px">Weekly frequency (rolling 7 days):</div>
+        <div class="badge-row">
+          ${MUSCLES.map(m=>{
+            const f=freq[m];
+            const cls=f===0?'badge-zero':f===1?'badge-due':f>=2?'badge-full':'badge-ok';
+            return`<span class="badge ${cls}">${m} ${f}x</span>`;
+          }).join('')}
+        </div>
+      </div>`:''}
+    </div>
+  </div>`;
+
+  // ── SECTION 3: LAST WORKOUT
+  h += `<div class="section">
+    <div class="sec-head">
+      <div class="sec-num">3</div>
+      <div><div class="sec-title">Last Workout</div><div class="sec-sub">Date, time & screenshots for progressive overload</div></div>
+    </div>
+    <div class="card">
+      <div class="sw-row mb12" onclick="S.lastUnknown=!S.lastUnknown;persist();render()">
+        <div class="sw-box${S.lastUnknown?' on':''}"><div class="sw-knob"></div></div>
+        <span class="sw-lbl">${S.lastUnknown
+          ?'<span style="color:var(--amber)">Last workout unknown</span> — APEX uses conservative baseline'
+          :'Mark last workout as unknown'}</span>
+      </div>
+      ${!S.lastUnknown?`
+      <div class="mb12">
+        <label class="lbl">Last Workout Date & Time</label>
+        <input type="datetime-local" class="inp" value="${S.lastDT}" oninput="S.lastDT=this.value;persist();render()"/>
+        <div style="font-size:9px;margin-top:4px;color:${hCol(hrs)}">${fmtDT(S.lastDT)}${hrs!==null?` · ${hrs}h ago`:''}</div>
+      </div>
+      <hr/>
+      <div style="margin-top:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <label class="lbl" style="margin:0">Workout Screenshots</label>
+          <span style="font-size:9px;color:var(--muted)">${S.images.length} img · ${scanned} scanned</span>
+        </div>
+        ${S.images.length>0?`<div class="img-grid">
+          ${S.images.map((img,i)=>`<div class="img-card">
+            <img src="${img.dataUrl}" alt=""/>
+            <button class="img-rm" onclick="removeImg(${i})">✕</button>
+            <div class="img-card-body">
+              <div style="font-size:8px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${img.fileName}</div>
+              <div style="font-size:8px;margin-top:4px">
+                ${img.scanning?`<span class="spin"></span><span style="color:var(--muted)">scanning...</span>`
+                  :img.scanResult?`<span style="color:var(--green)">✓ ${img.scanResult.split('\n').filter(l=>l.trim()).length} lines</span>`
+                  :img.scanError?`<span style="color:#fca5a5" title="${img.scanError}">✗ error</span>`
+                  :`<span style="color:var(--muted)">not scanned</span>`}
+              </div>
+              ${!img.scanResult&&!img.scanning?`<button class="scan-mini" onclick="scanOne(${i})" ${!S.apiKey?'disabled':''}>⚡ Scan</button>`:''}
+              ${img.scanResult?`<button class="scan-mini" onclick="scanOne(${i})" style="color:var(--muted);border-color:rgba(255,255,255,.08)">↺ Re-scan</button>`:''}
+              ${img.scanError?`<div style="font-size:8px;color:#fca5a5;margin-top:4px;line-height:1.4">${img.scanError.slice(0,70)}</div>`:''}
+            </div>
+          </div>`).join('')}
+        </div>`:''}
+        <div class="scan-zone" onclick="document.getElementById('fileInp').click()"
+          ondragover="event.preventDefault()"
+          ondrop="event.preventDefault();handleFiles(event.dataTransfer.files)">
+          <div style="font-size:20px;margin-bottom:4px">📷</div>
+          <div style="font-size:11px;color:#9ca3af;margin-bottom:2px">${S.images.length?'Add more screenshots':'Upload workout screenshots'}</div>
+          <div style="font-size:9px;color:var(--muted2)">Gymshark · Strong · any app · multiple OK · tap or drag</div>
+        </div>
+        <input type="file" id="fileInp" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files);this.value=''"/>
+        ${unscanned>1?`<button class="btn-ghost" style="width:100%;margin-top:8px" onclick="scanAll()" ${anyScanning||!S.apiKey?'disabled':''}>
+          ${anyScanning?`<span class="spin"></span>Scanning...`:`⚡ SCAN ALL ${unscanned} IMAGES`}
+        </button>`:''}
+        ${scanned>0&&trained.length>0?`<div class="alert a-green" style="margin-top:10px;margin-bottom:0">✓ Muscles detected: <strong>${trained.map(m=>m.toUpperCase()).join(', ')}</strong></div>`:''}
+        ${scanned>0&&trained.length===0?`<div class="alert a-amber" style="margin-top:10px;margin-bottom:0">⚠ Muscle groups not auto-detected — APEX will assess from exercise list.</div>`:''}
+      </div>`:''}
+    </div>
+  </div>`;
+
+  // ── GENERATE
+  h += `<button class="btn" style="font-size:13px;padding:15px;margin-bottom:20px" onclick="generatePacket()">
+    ${S.outputGenerated?'↺ REGENERATE PACKET':'⚡ GENERATE APEX PACKET'}
+  </button>`;
+
+  // ── OUTPUT
+  if(S.outputGenerated){
+    const esc = S.outputText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const tokens = Math.round(S.outputText.length/4);
+    h += `<div id="out-sec">
+      <div class="alert a-green">✓ Packet ready. Open a fresh APEX chat → paste this → get your plan.</div>
+      <div class="token-bar">
+        <div class="token-stat"><div class="token-val" style="color:var(--green)">~${tokens}</div><div class="token-lbl">Tokens</div></div>
+        <div class="token-stat"><div class="token-val" style="color:var(--blue)">${S.outputText.length}</div><div class="token-lbl">Characters</div></div>
+        <div class="token-stat"><div class="token-val" style="color:var(--amber)">${S.history.length}</div><div class="token-lbl">Sessions logged</div></div>
+      </div>
+      <div class="out-wrap">
+        <div class="out-head"><span>APEX PACKET</span><span style="color:var(--muted)">copy → paste to new chat</span></div>
+        <div class="out-body">${esc}</div>
+      </div>
+      <button class="btn" id="cpyBtn" onclick="copyText(S.outputText,'cpyBtn')" style="margin-bottom:10px">📋 COPY FOR APEX CHAT</button>
+      <button class="btn-ghost" style="width:100%" onclick="S.outputGenerated=false;S.outputText='';S.images=[];S.sessionDT=nowDT();S.lastDT=yestDT();S.energy=7;S.soreness=Object.fromEntries(MUSCLES.map(m=>[m,'none']));render()">↺ RESET — NEW SESSION</button>
+    </div>`;
+  }
+
+  // ── HISTORY PANEL
+  h += `<div class="hist-panel" style="margin-top:24px">
+    <div class="hist-header" onclick="S.histOpen=!S.histOpen;render()">
+      <div class="hist-header-left">
+        <span class="hist-icon">📋</span>
+        <div>
+          <div class="hist-title">Training History</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:1px">${S.history.length} sessions · ${HISTORY_KEEP_DAYS}-day rolling log</div>
+        </div>
+      </div>
+      <span class="hist-chev${S.histOpen?' open':''}">▼</span>
+    </div>
+    ${S.histOpen?`<div class="hist-body">
+
+      <!-- EXPORT / IMPORT BUTTONS -->
+      <div style="margin-top:12px;margin-bottom:14px">
+        <div style="font-size:9px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.1em">Backup & Restore</div>
+        <div class="row-wrap">
+          <button class="btn-green" id="expBtn" onclick="copyText(buildFullExport(),'expBtn')">⬆ Export History</button>
+          <button class="btn-purple" id="rev4Btn" onclick="copyText(build4WeekReview(),'rev4Btn')">📊 4-Week Review</button>
+          <button class="btn-ghost" onclick="S.showImport=!S.showImport;render()">${S.showImport?'▲ Hide Import':'⬇ Import History'}</button>
+        </div>
+        <div style="font-size:9px;color:var(--muted);margin-top:8px;line-height:1.65">
+          <strong style="color:var(--green)">Export History</strong> → copy → paste into Notes app (your permanent backup)<br>
+          <strong style="color:var(--purple)">4-Week Review</strong> → copy → paste into fresh APEX chat for programme analysis<br>
+          <strong style="color:#f87171">Import History</strong> → paste a previous export to restore after cache wipe or new device
+        </div>
+        ${S.showImport?`<div class="import-area">
+          <label class="lbl">Paste Exported History</label>
+          <textarea class="inp" placeholder="Paste your APEX_HISTORY_EXPORT block here..." oninput="S.importText=this.value">${S.importText}</textarea>
+          <button class="btn" style="margin-top:8px" onclick="(function(){
+            const entries=parseImport(S.importText);
+            if(!entries.length){alert('No valid entries found. Make sure you copied the full export.');return;}
+            entries.forEach(e=>{
+              const k=dateKey(e.date);
+              S.history=S.history.filter(h=>dateKey(h.date)!==k);
+              S.history.push(e);
+            });
+            S.history.sort((a,b)=>new Date(b.date)-new Date(a.date));
+            persist();
+            S.importText='';S.showImport=false;
+            alert(entries.length+' sessions imported successfully.');
+            render();
+          })()">⬇ IMPORT ${S.importText?parseImport(S.importText).length+' SESSIONS':''}</button>
+        </div>`:''}
+      </div>
+
+      <!-- SESSION LIST -->
+      ${S.history.length===0?`<div style="font-size:10px;color:var(--muted);padding:12px 0;text-align:center">No sessions logged yet.<br>Generate your first packet to start tracking.</div>`:''}
+      ${S.history.slice(0,20).map((h,i)=>`
+      <div class="hist-entry">
+        <div class="hist-entry-top">
+          <div>
+            <div class="hist-date">${fmtDateShort(h.date)} ${h.date.slice(11,16)}</div>
+            <div style="font-size:8px;color:var(--muted);margin-top:2px">${h.dayType.toUpperCase()} · E:${h.energy}/10${h.duration?' · '+h.duration:''}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span style="font-size:8px;color:var(--muted2)">${daysAgo(h.date)}d ago</span>
+            <button class="hist-rm" onclick="S.history.splice(${i},1);persist();render()" title="Remove">✕</button>
+          </div>
+        </div>
+        <div class="hist-muscles">
+          ${(h.muscles||[]).length>0
+            ? (h.muscles||[]).map(m=>`<span class="hist-muscle">${m}</span>`).join('')
+            : `<span style="font-size:8px;color:var(--muted)">${h.dayType==='rest'?'Rest day':h.dayType==='cardio'?'Cardio':'No muscles detected'}</span>`}
+        </div>
+      </div>`).join('')}
+      ${S.history.length>20?`<div style="font-size:9px;color:var(--muted);text-align:center;margin-top:10px">+${S.history.length-20} older sessions (included in exports)</div>`:''}
+    </div>`:''}
+  </div>`;
+
+  h += `<div class="footer">APEX v4 · AUTO-HISTORY · EXPORT · IMPORT · 4-WEEK REVIEW</div>`;
+
+  app.innerHTML = h;
+}
+
+// ── INIT
+loadStorage();
+render();
+</script>
+</body>
+</html>
