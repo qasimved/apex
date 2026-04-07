@@ -170,6 +170,40 @@ hr{border:none;border-top:1px solid rgba(239,68,68,.1);margin:11px 0}
 .row{display:flex;gap:8px;align-items:center}
 .row-wrap{display:flex;gap:6px;flex-wrap:wrap}
 .footer{margin-top:32px;padding-top:14px;border-top:1px solid rgba(239,68,68,.07);font-size:8px;color:var(--muted2);text-align:center;letter-spacing:.1em}
+
+/* ── TABS */
+.tab-bar{display:flex;gap:0;border:1px solid var(--red-border);border-radius:8px;overflow:hidden;margin-bottom:20px}
+.tab-btn{flex:1;padding:10px 8px;background:transparent;border:none;color:var(--muted);font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .15s;border-right:1px solid var(--red-border)}
+.tab-btn:last-child{border-right:none}
+.tab-btn.active{background:rgba(239,68,68,.15);color:var(--red)}
+.tab-btn:hover:not(.active){background:rgba(255,255,255,.03);color:var(--text)}
+
+/* ── HISTORY EDITOR */
+.he-entry{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:9px;overflow:hidden;margin-bottom:8px}
+.he-row{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;cursor:pointer;transition:background .15s}
+.he-row:hover{background:rgba(255,255,255,.02)}
+.he-left{display:flex;flex-direction:column;gap:3px}
+.he-date{font-size:11px;font-weight:700;color:var(--text)}
+.he-detail{font-size:8px;color:var(--muted);letter-spacing:.04em}
+.he-tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px}
+.he-tag{padding:2px 6px;border-radius:3px;font-size:8px;font-weight:700;text-transform:uppercase;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#fca5a5}
+.he-actions{display:flex;gap:5px;flex-shrink:0;align-items:center}
+.he-edit-btn{background:rgba(147,197,253,.08);border:1px solid rgba(147,197,253,.2);border-radius:5px;color:var(--blue);font-size:9px;padding:4px 9px;cursor:pointer;font-family:'Space Mono',monospace;transition:all .15s;white-space:nowrap}
+.he-edit-btn:hover{background:rgba(147,197,253,.14)}
+.he-del-btn{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:5px;color:#f87171;font-size:9px;padding:4px 9px;cursor:pointer;font-family:'Space Mono',monospace;transition:all .15s;white-space:nowrap}
+.he-del-btn:hover{background:rgba(239,68,68,.15)}
+.he-form{padding:13px;border-top:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.2)}
+.he-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.he-form-full{margin-bottom:10px}
+.muscle-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:5px}
+.mcheck{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:5px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);cursor:pointer;transition:all .12s}
+.mcheck.on{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3)}
+.mcheck input{display:none}
+.mcheck-lbl{font-size:9px;font-family:'Space Mono',monospace;text-transform:capitalize;color:var(--muted)}
+.mcheck.on .mcheck-lbl{color:#fca5a5;font-weight:700}
+.mcheck-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.1);flex-shrink:0;transition:background .12s}
+.mcheck.on .mcheck-dot{background:var(--red)}
+.he-save-row{display:flex;gap:6px;margin-top:12px}
 </style>
 </head>
 <body>
@@ -267,7 +301,10 @@ let S = {
 
   // Session-only (not persisted)
   keyOpen:false, histOpen:false, showImport:false, importText:'',
-  images:[], outputGenerated:false, outputText:''
+  images:[], outputGenerated:false, outputText:'', sessionSaved:false,
+
+  // History editor
+  activeTab:'session', editIdx:null, editBuf:{}
 };
 
 // ════════════════════════════════════════════════════════
@@ -611,10 +648,7 @@ function buildPacket(){
 
   const sore = Object.entries(S.soreness).filter(([,v])=>v!=='none');
 
-  // Auto-save to history
-  logSession(trained, allScans, duration);
-
-  // Build history block
+  // Build history block (uses existing history, does NOT auto-save)
   const histBlock = buildHistoryBlock();
 
   const L = [];
@@ -706,11 +740,204 @@ function buildPacket(){
 function generatePacket(){
   S.outputText = buildPacket();
   S.outputGenerated = true;
+  S.sessionSaved = false;
   render();
   setTimeout(()=>{
     const el = document.getElementById('out-sec');
     if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
   }, 120);
+}
+
+// ════════════════════════════════════════════════════════
+//  HISTORY EDITOR
+// ════════════════════════════════════════════════════════
+function startEdit(i){
+  S.editIdx = i;
+  const h = S.history[i];
+  S.editBuf = {
+    date: h.date || '',
+    dayType: h.dayType || 'gym',
+    energy: h.energy || 7,
+    muscles: [...(h.muscles||[])],
+    duration: h.duration || '',
+    scanText: h.scanText || ''
+  };
+  render();
+}
+function cancelEdit(){ S.editIdx=null; S.editBuf={}; render(); }
+function saveEdit(){
+  if(S.editIdx===null) return;
+  S.history[S.editIdx] = {
+    ...S.history[S.editIdx],
+    date: S.editBuf.date,
+    dayType: S.editBuf.dayType,
+    energy: parseInt(S.editBuf.energy)||7,
+    muscles: [...S.editBuf.muscles],
+    duration: S.editBuf.duration,
+    scanText: S.editBuf.scanText
+  };
+  S.history.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  persist();
+  S.editIdx=null; S.editBuf={};
+  render();
+}
+function toggleEditMuscle(m){
+  const arr = S.editBuf.muscles;
+  const idx = arr.indexOf(m);
+  if(idx>=0) arr.splice(idx,1); else arr.push(m);
+  render();
+}
+function addNewEntry(){
+  const entry = {
+    date: nowDT(),
+    dayType: 'gym',
+    energy: 7,
+    muscles: [],
+    duration: '',
+    scanText: ''
+  };
+  S.history.unshift(entry);
+  S.history.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  persist();
+  startEdit(0);
+}
+
+// ════════════════════════════════════════════════════════
+//  RENDER HISTORY EDITOR TAB
+// ════════════════════════════════════════════════════════
+function renderHistoryEditor(){
+  let h = '';
+
+  // Top bar — export / import / add
+  h += `<div style="margin-bottom:16px">
+    <div class="row-wrap" style="margin-bottom:10px">
+      <button class="btn-green" id="expBtn2" onclick="copyText(buildFullExport(),'expBtn2')">⬆ Export History</button>
+      <button class="btn-purple" id="rev4Btn2" onclick="copyText(build4WeekReview(),'rev4Btn2')">📊 4-Week Review</button>
+      <button class="btn-ghost" onclick="S.showImport=!S.showImport;render()">${S.showImport?'▲ Hide':'⬇ Import'}</button>
+    </div>
+    <div style="font-size:9px;color:var(--muted);line-height:1.65">
+      <strong style="color:var(--green)">Export</strong> → copy → paste into Notes (weekly backup) &nbsp;·&nbsp;
+      <strong style="color:var(--purple)">4-Week Review</strong> → paste into fresh APEX chat &nbsp;·&nbsp;
+      <strong style="color:#f87171">Import</strong> → restore after cache wipe
+    </div>
+    ${S.showImport?`<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07)">
+      <label class="lbl">Paste Exported History</label>
+      <textarea class="inp" placeholder="Paste your APEX_HISTORY_EXPORT block here..." oninput="S.importText=this.value" style="min-height:100px">${S.importText}</textarea>
+      <button class="btn" style="margin-top:8px" onclick="(function(){
+        const entries=parseImport(S.importText);
+        if(!entries.length){alert('No valid entries found. Make sure you copied the full export.');return;}
+        entries.forEach(e=>{
+          const k=dateKey(e.date);
+          S.history=S.history.filter(h=>dateKey(h.date)!==k);
+          S.history.push(e);
+        });
+        S.history.sort((a,b)=>new Date(b.date)-new Date(a.date));
+        persist();
+        S.importText='';S.showImport=false;
+        alert(entries.length+' sessions imported successfully.');
+        render();
+      })()">⬇ IMPORT ${S.importText?parseImport(S.importText).length+' SESSIONS':''}</button>
+    </div>`:''}
+  </div>`;
+
+  // Divider + count + add button
+  h += `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.06)">
+    <span style="font-size:10px;font-weight:700;color:var(--text)">${S.history.length} session${S.history.length!==1?'s':''} stored</span>
+    <button class="btn-ghost" onclick="addNewEntry()" style="font-size:9px;padding:6px 12px">+ Add Entry</button>
+  </div>`;
+
+  if(S.history.length===0){
+    h += `<div style="text-align:center;padding:30px 0;font-size:10px;color:var(--muted)">No sessions yet.<br>Generate your first packet to start tracking.</div>`;
+    return h;
+  }
+
+  // Entry list
+  S.history.forEach((entry, i) => {
+    const isEditing = S.editIdx === i;
+    const muscles = (entry.muscles||[]);
+    const typeColor = entry.dayType==='gym'?'var(--red)':entry.dayType==='cardio'?'var(--blue)':'var(--muted)';
+    const typeIcon = entry.dayType==='gym'?'🏋️':entry.dayType==='cardio'?'🏃':'😴';
+
+    h += `<div class="he-entry">
+      <div class="he-row" onclick="if(${isEditing})cancelEdit();else startEdit(${i})">
+        <div class="he-left">
+          <div class="he-date">${fmtDateShort(entry.date)} <span style="font-size:9px;color:var(--muted)">${(entry.date||'').slice(11,16)}</span></div>
+          <div class="he-detail">
+            <span style="color:${typeColor}">${typeIcon} ${entry.dayType.toUpperCase()}</span>
+            &nbsp;·&nbsp; E:${entry.energy}/10
+            ${entry.duration?` &nbsp;·&nbsp; ${entry.duration}`:''}
+            &nbsp;·&nbsp; <span style="color:var(--muted2)">${daysAgo(entry.date)}d ago</span>
+          </div>
+          ${muscles.length>0?`<div class="he-tags">${muscles.map(m=>`<span class="he-tag">${m}</span>`).join('')}</div>`:''}
+        </div>
+        <div class="he-actions">
+          <button class="he-edit-btn" onclick="event.stopPropagation();${isEditing?'cancelEdit()':'startEdit('+i+')'}">
+            ${isEditing?'✕ Cancel':'✏ Edit'}
+          </button>
+          <button class="he-del-btn" onclick="event.stopPropagation();if(confirm('Delete this entry?')){S.history.splice(${i},1);persist();if(S.editIdx===${i})S.editIdx=null;render()}">
+            🗑
+          </button>
+        </div>
+      </div>
+
+      ${isEditing?`<div class="he-form">
+        <div class="he-form-grid">
+          <div>
+            <label class="lbl">Date & Time</label>
+            <input type="datetime-local" class="inp" value="${S.editBuf.date}"
+              oninput="S.editBuf.date=this.value"/>
+          </div>
+          <div>
+            <label class="lbl">Energy</label>
+            <input type="number" class="inp" min="1" max="10" value="${S.editBuf.energy}"
+              oninput="S.editBuf.energy=parseInt(this.value)||7" style="text-align:center;font-size:14px"/>
+          </div>
+        </div>
+
+        <div class="he-form-full">
+          <label class="lbl">Day Type</label>
+          <div class="tog-row">
+            ${['gym','cardio','rest'].map(t=>`<button class="tog${S.editBuf.dayType===t?' on':''}"
+              onclick="S.editBuf.dayType='${t}';render()">
+              ${t==='gym'?'🏋️ GYM':t==='cardio'?'🏃 CARDIO':'😴 REST'}
+            </button>`).join('')}
+          </div>
+        </div>
+
+        <div class="he-form-full">
+          <label class="lbl">Muscles Trained</label>
+          <div class="muscle-check-grid">
+            ${MUSCLES.map(m=>{
+              const on = S.editBuf.muscles.includes(m);
+              return`<div class="mcheck${on?' on':''}" onclick="toggleEditMuscle('${m}')">
+                <div class="mcheck-dot"></div>
+                <span class="mcheck-lbl">${m}</span>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+
+        <div class="he-form-full">
+          <label class="lbl">Duration <span style="color:var(--muted);font-weight:400;text-transform:none">(optional)</span></label>
+          <input type="text" class="inp" placeholder="e.g. 52 min" value="${S.editBuf.duration}"
+            oninput="S.editBuf.duration=this.value"/>
+        </div>
+
+        <div class="he-form-full">
+          <label class="lbl">Scan / Exercise Notes <span style="color:var(--muted);font-weight:400;text-transform:none">(optional)</span></label>
+          <textarea class="inp" style="min-height:70px;font-size:9px" placeholder="Exercises, weights, sets..."
+            oninput="S.editBuf.scanText=this.value">${S.editBuf.scanText}</textarea>
+        </div>
+
+        <div class="he-save-row">
+          <button class="btn" style="flex:1;padding:10px" onclick="saveEdit()">💾 SAVE CHANGES</button>
+          <button class="btn-ghost" onclick="cancelEdit()">Cancel</button>
+        </div>
+      </div>`:''}
+    </div>`;
+  });
+
+  return h;
 }
 
 // ════════════════════════════════════════════════════════
@@ -745,6 +972,13 @@ function render(){
     <div class="vbadge">v1 · FULL HISTORY SYSTEM</div>
   </div>`;
 
+  // ── TAB BAR
+  h += `<div class="tab-bar">
+    <button class="tab-btn${S.activeTab==='session'?' active':''}" onclick="S.activeTab='session';S.editIdx=null;render()">⚡ Session</button>
+    <button class="tab-btn${S.activeTab==='history'?' active':''}" onclick="S.activeTab='history';render()">📋 History Editor ${S.history.length>0?`<span style="font-size:8px;opacity:.6">(${S.history.length})</span>`:''}
+    </button>
+  </div>`;
+
   // ── API KEY
   h += `<div class="key-box">
     <div class="key-toggle" onclick="S.keyOpen=!S.keyOpen;render()">
@@ -768,6 +1002,14 @@ function render(){
   h += `<div class="alert a-blue">Fill all 3 sections → scan screenshots → <strong>Generate Packet</strong> → open fresh APEX chat → paste.<br>
     <span style="color:rgba(147,197,253,.55);font-size:9px">History auto-saves on every packet generate. Static athlete profile lives in project instructions.</span>
   </div>`;
+
+  // ── If History Editor tab, render that and stop
+  if(S.activeTab === 'history'){
+    h += renderHistoryEditor();
+    h += `<div class="footer">APEX v4 · AUTO-HISTORY · EXPORT · IMPORT · 4-WEEK REVIEW</div>`;
+    app.innerHTML = h;
+    return;
+  }
 
   // ── SECTION 1: TODAY
   h += `<div class="section">
@@ -911,19 +1153,37 @@ function render(){
   if(S.outputGenerated){
     const esc = S.outputText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const tokens = Math.round(S.outputText.length/4);
+
+    // Derive trained/duration from current packet for save
+    const allScansNow = S.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\n\n');
+    const trainedNow = detectMuscles(allScansNow);
+    const durationNow = extractDuration(allScansNow);
+
     h += `<div id="out-sec">
       <div class="alert a-green">✓ Packet ready. Open a fresh APEX chat → paste this → get your plan.</div>
       <div class="token-bar">
         <div class="token-stat"><div class="token-val" style="color:var(--green)">~${tokens}</div><div class="token-lbl">Tokens</div></div>
         <div class="token-stat"><div class="token-val" style="color:var(--blue)">${S.outputText.length}</div><div class="token-lbl">Characters</div></div>
-        <div class="token-stat"><div class="token-val" style="color:var(--amber)">${S.history.length}</div><div class="token-lbl">Sessions logged</div></div>
+        <div class="token-stat"><div class="token-val" style="color:${S.sessionSaved?'var(--green)':'var(--amber)'}">${S.history.length}</div><div class="token-lbl">Sessions logged</div></div>
       </div>
       <div class="out-wrap">
         <div class="out-head"><span>APEX PACKET</span><span style="color:var(--muted)">copy → paste to new chat</span></div>
         <div class="out-body">${esc}</div>
       </div>
-      <button class="btn" id="cpyBtn" onclick="copyText(S.outputText,'cpyBtn')" style="margin-bottom:10px">📋 COPY FOR APEX CHAT</button>
-      <button class="btn-ghost" style="width:100%" onclick="S.outputGenerated=false;S.outputText='';S.images=[];S.sessionDT=nowDT();S.lastDT=yestDT();S.energy=7;S.soreness=Object.fromEntries(MUSCLES.map(m=>[m,'none']));render()">↺ RESET — NEW SESSION</button>
+      <button class="btn" id="cpyBtn" onclick="copyText(S.outputText,'cpyBtn')" style="margin-bottom:8px">📋 COPY FOR APEX CHAT</button>
+
+      ${S.sessionSaved
+        ? `<div class="alert a-green" style="margin-bottom:8px;display:flex;align-items:center;gap:8px">
+            <span style="font-size:14px">✓</span>
+            <span>Session saved to history — ${fmtDateShort(S.sessionDT)}${trainedNow.length>0?' · '+trainedNow.map(m=>m.toUpperCase()).join(', '):''}</span>
+          </div>`
+        : `<button class="btn-green" style="width:100%;margin-bottom:8px;padding:11px"
+            onclick="logSession(detectMuscles(S.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\\n\\n')),S.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\\n\\n'),extractDuration(S.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\\n\\n')));S.sessionSaved=true;render()">
+            💾 SAVE SESSION TO HISTORY
+          </button>`
+      }
+
+      <button class="btn-ghost" style="width:100%" onclick="S.outputGenerated=false;S.outputText='';S.sessionSaved=false;S.images=[];S.sessionDT=nowDT();S.lastDT=yestDT();S.energy=7;S.soreness=Object.fromEntries(MUSCLES.map(m=>[m,'none']));render()">↺ RESET — NEW SESSION</button>
     </div>`;
   }
 
