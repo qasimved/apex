@@ -21,52 +21,31 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   background-image:linear-gradient(rgba(239,68,68,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,.022) 1px,transparent 1px);
   background-size:44px 44px}
 .wrap{max-width:480px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1}
-
-/* ── HEADER */
-.logo{font-family:'Orbitron',sans-serif;font-size:1.7rem;font-weight:900;color:var(--red);letter-spacing:.18em}
+/* header */
+.logo{font-family:'Orbitron',sans-serif;font-size:1.8rem;font-weight:900;color:var(--red);letter-spacing:.18em}
 .logo span{color:rgba(239,68,68,.25)}
 .tagline{font-size:8px;color:var(--muted);letter-spacing:.18em;margin-top:2px;text-transform:uppercase}
-
-/* ── STEP INDICATOR */
-.step-bar{display:flex;align-items:center;gap:0;margin:20px 0 28px}
-.step-node{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
-.step-circle{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:'Orbitron',sans-serif;transition:all .3s}
-.step-circle.done{background:var(--green);color:#000;border:2px solid var(--green)}
-.step-circle.active{background:var(--red);color:#fff;border:2px solid var(--red);box-shadow:0 0 0 3px rgba(239,68,68,.2)}
-.step-circle.todo{background:transparent;color:var(--muted2);border:2px solid var(--muted2)}
-.step-lbl{font-size:7px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;text-align:center}
-.step-lbl.active{color:var(--red)}
-.step-lbl.done{color:var(--green)}
-.step-line{height:2px;flex:1;background:var(--muted2);margin-bottom:18px;transition:background .3s}
-.step-line.done{background:var(--green)}
-
-/* ── STEP SCREEN */
-.screen{animation:fadeIn .2s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.screen-title{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:4px;letter-spacing:.06em}
-.screen-sub{font-size:9px;color:var(--muted);margin-bottom:20px;line-height:1.5}
-
-/* ── CARDS */
-.card{background:var(--bg2);border:1px solid var(--red-border);border-radius:10px;padding:15px;margin-bottom:14px}
-.card-amber{background:rgba(251,191,36,.04);border:1px solid var(--amber-border);border-radius:10px;padding:15px;margin-bottom:14px}
-.card-green{background:var(--green-dim);border:1px solid var(--green-border);border-radius:10px;padding:15px;margin-bottom:14px}
-
-/* ── LABELS / INPUTS */
+/* section */
+.sec{margin-bottom:22px}
+.sec-head{display:flex;align-items:center;gap:9px;margin-bottom:11px}
+.sec-num{width:22px;height:22px;background:var(--red);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;font-family:'Orbitron',sans-serif}
+.sec-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em}
+.sec-sub{font-size:9px;color:var(--muted);margin-top:1px}
+/* card */
+.card{background:var(--bg2);border:1px solid var(--red-border);border-radius:10px;padding:15px}
+/* label / inputs */
 .lbl{display:block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--red);margin-bottom:6px}
 .inp{background:rgba(255,255,255,.04);border:1px solid var(--red-border);border-radius:6px;padding:9px 11px;color:var(--text);font-size:12px;width:100%;font-family:'Space Mono',monospace;outline:none;transition:border .15s;-webkit-appearance:none}
 .inp:focus{border-color:var(--red);background:rgba(239,68,68,.06)}
 .inp::placeholder{color:var(--muted)}
 input[type=range]{width:100%;accent-color:var(--red);cursor:pointer}
-textarea.inp{resize:vertical;min-height:80px;font-size:10px;line-height:1.6}
-
-/* ── TOGGLES */
-.tog-row{display:flex;gap:8px}
-.tog{flex:1;padding:14px 4px;border-radius:8px;border:1px solid var(--red-border);background:transparent;color:var(--muted);cursor:pointer;font-size:11px;font-family:'Space Mono',monospace;transition:all .15s;text-align:center}
+textarea.inp{resize:vertical;min-height:72px;font-size:10px;line-height:1.6}
+/* toggles */
+.tog-row{display:flex;gap:6px}
+.tog{flex:1;padding:9px 4px;border-radius:6px;border:1px solid var(--red-border);background:transparent;color:var(--muted);cursor:pointer;font-size:10px;font-family:'Space Mono',monospace;letter-spacing:.03em;transition:all .15s;text-align:center}
 .tog.on{background:rgba(239,68,68,.82);border-color:var(--red);color:#fff;font-weight:700}
 .tog:active{opacity:.8}
-.tog-big{font-size:22px;display:block;margin-bottom:4px}
-
-/* ── SORENESS */
+/* soreness */
 .sor-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .sor-item{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:7px;padding:8px 10px}
 .sor-pills{display:flex;gap:3px;margin-top:5px}
@@ -75,87 +54,111 @@ textarea.inp{resize:vertical;min-height:80px;font-size:10px;line-height:1.6}
 .pill.mild.on{background:rgba(251,191,36,.14);border-color:rgba(251,191,36,.4);color:var(--amber)}
 .pill.moderate.on{background:rgba(249,115,22,.14);border-color:rgba(249,115,22,.4);color:var(--orange)}
 .pill.severe.on{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.5);color:#f87171}
-
-/* ── TIMELINE */
-.tl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;margin-bottom:14px}
-.tl-track{display:flex;gap:6px;width:max-content;padding:2px 1px}
-.tl-day{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
-.tl-chip{width:42px;height:42px;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:16px;transition:all .15s;border:1.5px solid transparent}
-.tc-gym{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.35)}
-.tc-rest{background:rgba(107,114,128,.1);border-color:rgba(107,114,128,.2)}
-.tc-cardio{background:var(--blue-dim);border-color:var(--blue-border)}
-.tc-gap{background:rgba(251,191,36,.06);border:1.5px dashed rgba(251,191,36,.45)}
-.tc-today-ring{box-shadow:0 0 0 2.5px var(--red)}
-.tl-lbl{font-size:7px;color:var(--muted);letter-spacing:.03em;text-align:center;line-height:1.3}
-
-/* ── BADGES */
+/* badges */
 .badge{padding:3px 7px;border-radius:3px;font-size:8px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
 .badge-active{background:rgba(239,68,68,.18);border:1px solid rgba(239,68,68,.4);color:#fca5a5}
 .badge-clear{background:var(--green-dim);border:1px solid var(--green-border);color:var(--green)}
 .badge-unk{background:rgba(107,114,128,.08);border:1px solid rgba(107,114,128,.15);color:var(--muted)}
-
-/* ── SWITCH */
-.sw-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px dashed rgba(255,255,255,.07);border-radius:7px;cursor:pointer;transition:background .15s}
-.sw-box{width:36px;height:20px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);position:relative;transition:background .2s;flex-shrink:0}
-.sw-box.on{background:rgba(239,68,68,.65);border-color:var(--red)}
-.sw-knob{width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.4)}
-.sw-box.on .sw-knob{left:18px}
-.sw-lbl{font-size:10px;color:var(--muted);line-height:1.4}
-
-/* ── SCAN */
-.scan-zone{border:2px dashed rgba(239,68,68,.22);border-radius:8px;padding:18px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(239,68,68,.02)}
+.badge-due{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);color:var(--amber)}
+.badge-full{background:var(--purple-dim);border:1px solid var(--purple-border);color:var(--purple)}
+.badge-zero{background:rgba(107,114,128,.08);border:1px solid rgba(107,114,128,.15);color:var(--muted)}
+/* scan */
+.scan-zone{border:2px dashed rgba(239,68,68,.22);border-radius:8px;padding:16px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(239,68,68,.02)}
 .scan-zone:hover{border-color:rgba(239,68,68,.5);background:rgba(239,68,68,.04)}
 .img-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .img-card{background:rgba(0,0,0,.4);border:1px solid rgba(239,68,68,.18);border-radius:7px;overflow:hidden;position:relative}
-.img-card img{width:100%;max-height:110px;object-fit:cover;display:block}
-.img-card-body{padding:8px}
+.img-card img{width:100%;max-height:100px;object-fit:cover;display:block}
+.img-card-body{padding:7px}
 .img-rm{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.75);border:1px solid rgba(239,68,68,.4);border-radius:3px;color:#f87171;font-size:9px;padding:2px 6px;cursor:pointer;font-family:'Space Mono',monospace}
-.scan-mini{width:100%;margin-top:6px;padding:6px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:5px;color:#f87171;font-size:9px;cursor:pointer;font-family:'Space Mono',monospace;transition:all .15s}
+.scan-mini{width:100%;margin-top:5px;padding:5px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:5px;color:#f87171;font-size:9px;cursor:pointer;font-family:'Space Mono',monospace}
 .scan-mini:disabled{opacity:.4;cursor:not-allowed}
-
-/* ── ALERTS */
+/* alerts */
 .alert{border-radius:7px;padding:10px 13px;font-size:10px;line-height:1.65;margin-bottom:12px}
 .a-green{background:var(--green-dim);border:1px solid var(--green-border);color:var(--green)}
 .a-amber{background:var(--amber-dim);border:1px solid var(--amber-border);color:var(--amber)}
 .a-blue{background:var(--blue-dim);border:1px solid var(--blue-border);color:var(--blue)}
-
-/* ── SPINNER */
-.spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:sp .6s linear infinite;vertical-align:middle;margin-right:6px}
+.a-purple{background:var(--purple-dim);border:1px solid var(--purple-border);color:var(--purple)}
+/* spinner */
+.spin{display:inline-block;width:11px;height:11px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:sp .6s linear infinite;vertical-align:middle;margin-right:5px}
 @keyframes sp{to{transform:rotate(360deg)}}
-
-/* ── BUTTONS */
-.btn{background:linear-gradient(135deg,var(--red),var(--red-dark));border:none;border-radius:8px;padding:15px;color:#fff;font-weight:700;cursor:pointer;width:100%;font-size:13px;font-family:'Space Mono',monospace;letter-spacing:.06em;transition:opacity .15s}
+/* buttons */
+.btn{background:linear-gradient(135deg,var(--red),var(--red-dark));border:none;border-radius:8px;padding:14px;color:#fff;font-weight:700;cursor:pointer;width:100%;font-size:12px;font-family:'Space Mono',monospace;letter-spacing:.06em;transition:opacity .15s}
 .btn:active{opacity:.82}
 .btn:disabled{opacity:.5;cursor:not-allowed}
-.btn-secondary{background:transparent;border:1px solid var(--red-border);border-radius:7px;padding:11px;color:#f87171;font-size:11px;cursor:pointer;width:100%;font-family:'Space Mono',monospace;letter-spacing:.04em;transition:all .15s}
-.btn-secondary:hover{background:var(--red-dim)}
-.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:8px 13px;color:var(--muted);font-size:9px;cursor:pointer;font-family:'Space Mono',monospace;transition:all .15s;white-space:nowrap}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:8px 12px;color:var(--muted);font-size:9px;cursor:pointer;font-family:'Space Mono',monospace;transition:all .15s;white-space:nowrap}
 .btn-ghost:hover{background:rgba(255,255,255,.04);color:var(--text)}
-.btn-green{background:transparent;border:1px solid var(--green-border);border-radius:6px;padding:9px 13px;color:var(--green);font-size:10px;cursor:pointer;font-family:'Space Mono',monospace;transition:all .15s;white-space:nowrap}
+.btn-sm{background:transparent;border:1px solid var(--red-border);border-radius:5px;padding:6px 11px;color:#f87171;font-size:9px;cursor:pointer;font-family:'Space Mono',monospace;white-space:nowrap}
+.btn-sm:hover{background:var(--red-dim)}
+.btn-green{background:transparent;border:1px solid var(--green-border);border-radius:6px;padding:9px 13px;color:var(--green);font-size:10px;cursor:pointer;font-family:'Space Mono',monospace;white-space:nowrap}
 .btn-green:hover{background:var(--green-dim)}
-.btn-purple{background:transparent;border:1px solid var(--purple-border);border-radius:6px;padding:9px 13px;color:var(--purple);font-size:10px;cursor:pointer;font-family:'Space Mono',monospace;transition:all .15s;white-space:nowrap}
+.btn-purple{background:transparent;border:1px solid var(--purple-border);border-radius:6px;padding:9px 13px;color:var(--purple);font-size:10px;cursor:pointer;font-family:'Space Mono',monospace;white-space:nowrap}
 .btn-purple:hover{background:var(--purple-dim)}
-.btn-amber{background:linear-gradient(135deg,#78350f,#92400e);border:1px solid var(--amber-border);border-radius:8px;padding:15px;color:var(--amber);font-weight:700;cursor:pointer;width:100%;font-size:13px;font-family:'Space Mono',monospace;letter-spacing:.06em;transition:opacity .15s}
-.btn-amber:active{opacity:.82}
-.nav-row{display:flex;gap:8px;margin-top:6px}
-
-/* ── OUTPUT */
+/* ── CALENDAR */
+.cal-wrap{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.07);border-radius:12px;overflow:hidden}
+.cal-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.06)}
+.cal-title{font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:700;color:var(--text);letter-spacing:.06em}
+.cal-nav{background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:5px;color:var(--muted);font-size:14px;padding:4px 10px;cursor:pointer;font-family:'Space Mono',monospace}
+.cal-nav:hover{background:rgba(255,255,255,.06);color:var(--text)}
+.cal-dow{display:grid;grid-template-columns:repeat(7,1fr);padding:8px 8px 0}
+.cal-dow-cell{text-align:center;font-size:8px;font-weight:700;color:var(--muted2);padding:4px 0;letter-spacing:.06em;text-transform:uppercase}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;padding:6px 8px 10px}
+.cal-cell{aspect-ratio:1;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;position:relative;border:1.5px solid transparent}
+.cal-cell:hover{background:rgba(255,255,255,.06)}
+.cal-cell.other-month{opacity:.2;cursor:default}
+.cal-cell.other-month:hover{background:none}
+.cal-cell.is-today{border-color:var(--red)!important}
+.cal-cell.logged-gym{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.3)}
+.cal-cell.logged-gym:hover{background:rgba(239,68,68,.28)}
+.cal-cell.logged-cardio{background:rgba(59,130,246,.15);border-color:rgba(59,130,246,.25)}
+.cal-cell.logged-rest{background:rgba(107,114,128,.12);border-color:rgba(107,114,128,.18)}
+.cal-cell.unlogged{border:1.5px dashed rgba(255,255,255,.1)}
+.cal-cell.unlogged:hover{border-color:rgba(251,191,36,.5);background:rgba(251,191,36,.06)}
+.cal-cell.future{opacity:.25;cursor:default;pointer-events:none}
+.cal-num{font-size:10px;font-weight:700;line-height:1;font-family:'Orbitron',sans-serif}
+.cal-icon{font-size:12px;line-height:1;margin-top:2px}
+.cal-num-only{font-size:11px;font-weight:700;color:var(--muted2);line-height:1}
+/* ── LOG SCREEN (full-page) */
+.ls-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.07)}
+.ls-back{background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:var(--muted);font-size:11px;padding:7px 12px;cursor:pointer;font-family:'Space Mono',monospace}
+.ls-back:hover{background:rgba(255,255,255,.05);color:var(--text)}
+.ls-title{font-family:'Orbitron',sans-serif;font-size:.95rem;font-weight:700;color:var(--text)}
+.ls-subtitle{font-size:9px;color:var(--muted);margin-top:2px}
+/* ── quick-log overlay removed */
+/* ── LAST SESSION MODE */
+.lsm-row{display:flex;gap:6px;margin-bottom:14px}
+.lsm-btn{flex:1;padding:10px 4px;border-radius:7px;border:1px solid rgba(255,255,255,.08);background:transparent;color:var(--muted);cursor:pointer;font-size:9px;font-family:'Space Mono',monospace;text-align:center;transition:all .15s;line-height:1.5}
+.lsm-btn.on-gym{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3);color:#fca5a5;font-weight:700}
+.lsm-btn.on-rest{background:rgba(107,114,128,.12);border-color:rgba(107,114,128,.25);color:var(--muted);font-weight:700}
+.lsm-btn.on-unk{background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.2);color:var(--amber);font-weight:700}
+/* ── output */
 .out-wrap{background:#000;border:1px solid rgba(239,68,68,.3);border-radius:9px;overflow:hidden;margin-bottom:12px}
 .out-head{background:rgba(239,68,68,.1);padding:8px 13px;font-size:9px;font-weight:700;letter-spacing:.12em;color:var(--red);text-transform:uppercase;display:flex;justify-content:space-between}
-.out-body{padding:14px;font-size:10px;color:#86efac;line-height:1.8;word-break:break-word;white-space:pre-wrap;font-family:'Space Mono',monospace;max-height:460px;overflow-y:auto}
+.out-body{padding:14px;font-size:10px;color:#86efac;line-height:1.8;word-break:break-word;white-space:pre-wrap;font-family:'Space Mono',monospace;max-height:440px;overflow-y:auto}
 .out-body::-webkit-scrollbar{width:3px}
 .out-body::-webkit-scrollbar-thumb{background:rgba(239,68,68,.3);border-radius:2px}
 .token-bar{display:flex;gap:0;border:1px solid rgba(255,255,255,.06);border-radius:7px;overflow:hidden;margin-bottom:12px}
-.token-stat{flex:1;text-align:center;padding:10px 8px;background:rgba(0,0,0,.3)}
+.token-stat{flex:1;text-align:center;padding:9px 8px;background:rgba(0,0,0,.3)}
 .token-stat+.token-stat{border-left:1px solid rgba(255,255,255,.06)}
 .token-val{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;line-height:1}
 .token-lbl{font-size:8px;color:var(--muted);margin-top:3px;letter-spacing:.04em;text-transform:uppercase}
-
-/* ── HISTORY EDITOR */
-.he-entry{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:9px;overflow:hidden;margin-bottom:8px}
-.he-row{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;cursor:pointer}
-.he-edit-btn{background:rgba(147,197,253,.08);border:1px solid rgba(147,197,253,.2);border-radius:5px;color:var(--blue);font-size:9px;padding:4px 9px;cursor:pointer;font-family:'Space Mono',monospace}
-.he-del-btn{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:5px;color:#f87171;font-size:9px;padding:4px 9px;cursor:pointer;font-family:'Space Mono',monospace}
+/* backup panel */
+.bk-panel{background:rgba(167,139,250,.04);border:1px solid var(--purple-border);border-radius:10px;overflow:hidden}
+.bk-header{padding:12px 15px;cursor:pointer;user-select:none;display:flex;align-items:center;justify-content:space-between}
+.bk-chev{color:var(--muted);font-size:10px;transition:transform .2s}
+.bk-chev.open{transform:rotate(180deg)}
+.bk-body{padding:0 15px 15px;border-top:1px solid rgba(167,139,250,.12)}
+/* api key */
+.key-box{background:rgba(251,191,36,.04);border:1px solid rgba(251,191,36,.18);border-radius:9px;padding:13px;margin-bottom:20px}
+/* tabs */
+.tab-bar{display:flex;gap:0;border:1px solid var(--red-border);border-radius:8px;overflow:hidden;margin-bottom:20px}
+.tab-btn{flex:1;padding:10px 8px;background:transparent;border:none;color:var(--muted);font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .15s;border-right:1px solid var(--red-border)}
+.tab-btn:last-child{border-right:none}
+.tab-btn.active{background:rgba(239,68,68,.15);color:var(--red)}
+/* history editor */
+.he-entry{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:9px;overflow:hidden;margin-bottom:7px}
+.he-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;cursor:pointer}
+.he-edit-btn{background:rgba(147,197,253,.08);border:1px solid rgba(147,197,253,.2);border-radius:5px;color:var(--blue);font-size:9px;padding:4px 8px;cursor:pointer;font-family:'Space Mono',monospace}
+.he-del-btn{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:5px;color:#f87171;font-size:9px;padding:4px 8px;cursor:pointer;font-family:'Space Mono',monospace}
 .he-form{padding:13px;border-top:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.2)}
 .mcheck-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:5px}
 .mcheck{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:5px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);cursor:pointer}
@@ -164,35 +167,19 @@ textarea.inp{resize:vertical;min-height:80px;font-size:10px;line-height:1.6}
 .mcheck.on .mcheck-dot{background:var(--red)}
 .mcheck-lbl{font-size:9px;font-family:'Space Mono',monospace;text-transform:capitalize;color:var(--muted)}
 .mcheck.on .mcheck-lbl{color:#fca5a5;font-weight:700}
-
-/* ── API KEY */
-.key-box{background:rgba(251,191,36,.04);border:1px solid rgba(251,191,36,.18);border-radius:9px;padding:13px;margin-bottom:20px}
-
-/* ── TABS */
-.tab-bar{display:flex;gap:0;border:1px solid var(--red-border);border-radius:8px;overflow:hidden;margin-bottom:20px}
-.tab-btn{flex:1;padding:10px 8px;background:transparent;border:none;color:var(--muted);font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .15s;border-right:1px solid var(--red-border)}
-.tab-btn:last-child{border-right:none}
-.tab-btn.active{background:rgba(239,68,68,.15);color:var(--red)}
-
-/* ── MISC */
-.gym-ref-scan{margin-top:8px;padding:8px 10px;background:rgba(0,0,0,.35);border-radius:5px;font-size:8px;color:var(--green);line-height:1.65;font-family:'Space Mono',monospace;white-space:pre-wrap;max-height:90px;overflow:hidden;position:relative}
-.gym-ref-scan::after{content:'';position:absolute;bottom:0;left:0;right:0;height:28px;background:linear-gradient(transparent,rgba(0,0,0,.8))}
-hr{border:none;border-top:1px solid rgba(239,68,68,.1);margin:12px 0}
+.gym-ref-scan{margin-top:8px;padding:8px 10px;background:rgba(0,0,0,.35);border-radius:5px;font-size:8px;color:var(--green);line-height:1.65;font-family:'Space Mono',monospace;white-space:pre-wrap;max-height:80px;overflow:hidden;position:relative}
+.gym-ref-scan::after{content:'';position:absolute;bottom:0;left:0;right:0;height:24px;background:linear-gradient(transparent,rgba(0,0,0,.8))}
+hr{border:none;border-top:1px solid rgba(239,68,68,.1);margin:11px 0}
 .row-wrap{display:flex;gap:6px;flex-wrap:wrap}
 .footer{margin-top:32px;padding-top:14px;border-top:1px solid rgba(239,68,68,.07);font-size:8px;color:var(--muted2);text-align:center;letter-spacing:.1em}
-.summary-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:4px;font-size:9px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.15);color:var(--muted)}
 </style>
 </head>
 <body>
 <div class="wrap" id="app"></div>
 <script>
-// ════════════════════════════════════════════════════════
-//  CONSTANTS
-// ════════════════════════════════════════════════════════
 const MUSCLES=['chest','back','shoulders','biceps','triceps','forearms','legs','calves'];
 const MPS_H={chest:48,back:48,shoulders:36,biceps:36,triceps:36,forearms:24,legs:48,calves:36};
-const HISTORY_KEEP_DAYS=84;
-const HISTORY_PACKET_DAYS=14;
+const HISTORY_KEEP_DAYS=84,HISTORY_PACKET_DAYS=14;
 const MUSCLE_KW={
   chest:['chest press','bench press','pec deck','chest fly','cable fly','incline press','decline press','dumbbell press','db press','push up','pushup','chest'],
   back:['lat pulldown','pull-down','pulldown','seated row','cable row','t-bar row','barbell row','db row','dumbbell row','pull up','pullup','chin up','chinup','deadlift','back extension','back'],
@@ -203,8 +190,6 @@ const MUSCLE_KW={
   legs:['squat','leg press','lunge','leg curl','leg extension','romanian deadlift','rdl','hip thrust','glute bridge','hack squat','bulgarian','step up','hamstring','quad','glute','leg day'],
   calves:['standing calf','seated calf','donkey calf','calf raise','calf press','calf']
 };
-// Steps: 0=catchup(if gaps), 1=today, 2=body, 3=reference, 4=output
-const STEP_CATCHUP=0, STEP_TODAY=1, STEP_BODY=2, STEP_REF=3, STEP_OUTPUT=4;
 
 // ── TIME
 const pad=n=>String(n).padStart(2,'0');
@@ -220,18 +205,16 @@ function dateKey(s){return(s||'').slice(0,10);}
 function todayKey(){return dateKey(nowDT());}
 function keyToISO(k){return k+'T12:00';}
 function eLbl(v){if(v<=2)return'DEAD';if(v<=4)return'LOW';if(v<=6)return'OK';if(v<=8)return'GOOD';return'FIRED UP';}
-function hCol(h){if(h===null)return'var(--muted)';if(h<24)return'#f87171';if(h<36)return'var(--amber)';if(h<48)return'var(--orange)';return'var(--green)';}
 
-// ── MUSCLE HELPERS
-function detectMuscles(text){if(!text)return[];const low=text.toLowerCase();return MUSCLES.filter(m=>MUSCLE_KW[m].some(kw=>low.includes(kw)));}
-function extractDuration(text){if(!text)return null;const m=text.match(/DURATION[:\s]+([^\n]+)/i);return m?m[1].trim():null;}
+// ── MUSCLES
+function detectMuscles(t){if(!t)return[];const l=t.toLowerCase();return MUSCLES.filter(m=>MUSCLE_KW[m].some(kw=>l.includes(kw)));}
+function extractDuration(t){if(!t)return null;const m=t.match(/DURATION[:\s]+([^\n]+)/i);return m?m[1].trim():null;}
 function allScansText(){return S.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\n\n');}
 function getEffectiveMuscles(){
   if(S.manualMuscles!==null)return S.manualMuscles;
   const cm=S.images.filter(i=>i.detectedMuscles&&i.detectedMuscles.length>0).flatMap(i=>i.detectedMuscles);
   const u=[...new Set(cm)].filter(m=>MUSCLES.includes(m));
-  if(u.length>0)return u;
-  return detectMuscles(allScansText());
+  return u.length>0?u:detectMuscles(allScansText());
 }
 function toggleManualMuscle(m){
   if(S.manualMuscles===null)S.manualMuscles=[...getEffectiveMuscles()];
@@ -244,63 +227,50 @@ function toggleManualMuscle(m){
 let S={
   apiKey:'',dayType:'gym',energy:7,
   soreness:Object.fromEntries(MUSCLES.map(m=>[m,'none'])),
-  lastUnknown:false,history:[],
-  // session
-  step:STEP_TODAY,keyOpen:false,
-  showImport:false,importText:'',histOpen:false,
-  images:[],outputText:'',sessionSaved:false,
+  lastSessionMode:'gym', // 'gym'|'rest'|'unknown'
+  history:[],
+  // session only
+  keyOpen:false,bkOpen:false,showImport:false,importText:'',
+  images:[],outputGenerated:false,outputText:'',sessionSaved:false,
   manualMuscles:null,
+  cardioNotes:'', // notes for today's cardio session
+  // calendar
+  calYear:new Date().getFullYear(),calMonth:new Date().getMonth(),
+  // full log screen (from calendar tap OR adding new entry)
+  // {key, dayType, energy, images, manualMuscles, notes, inputMode, isEdit, editIdx}
+  logScreen:null,
   activeTab:'session',editIdx:null,editBuf:{}
 };
 
 // ── STORAGE
 function loadStorage(){
-  // Try current key first, then migrate from older versions
-  const KEYS=['apex_v6','apex_v5','apex_v4'];
-  const FIELDS=['apiKey','dayType','energy','soreness','lastUnknown','history'];
+  const KEYS=['apex_v9','apex_v8','apex_v7','apex_v6','apex_v5','apex_v4'];
   for(const key of KEYS){
     try{
-      const r=localStorage.getItem(key);
-      if(!r)continue;
+      const r=localStorage.getItem(key);if(!r)continue;
       const d=JSON.parse(r);
-      FIELDS.forEach(f=>{if(d[f]!==undefined)S[f]=d[f];});
-      // If loaded from an old key, immediately re-save under new key
-      if(key!=='apex_v6')persist();
+      ['apiKey','dayType','energy','soreness','history'].forEach(f=>{if(d[f]!==undefined)S[f]=d[f];});
+      if(d.lastSessionMode!==undefined)S.lastSessionMode=d.lastSessionMode;
+      else if(d.lastUnknown===true)S.lastSessionMode='unknown';
+      if(key!=='apex_v9')persist();
       break;
     }catch(e){}
   }
   pruneHistory();
-  S.step=getGapDays().length>0?STEP_CATCHUP:STEP_TODAY;
 }
 function persist(){
   pruneHistory();
-  try{localStorage.setItem('apex_v6',JSON.stringify({apiKey:S.apiKey,dayType:S.dayType,energy:S.energy,soreness:S.soreness,lastUnknown:S.lastUnknown,history:S.history}));}catch(e){}
+  try{localStorage.setItem('apex_v9',JSON.stringify({apiKey:S.apiKey,dayType:S.dayType,energy:S.energy,soreness:S.soreness,lastSessionMode:S.lastSessionMode,history:S.history}));}catch(e){}
 }
 function pruneHistory(){const c=new Date();c.setDate(c.getDate()-HISTORY_KEEP_DAYS);S.history=S.history.filter(h=>new Date(h.date)>c);}
 
 // ── HISTORY HELPERS
 function getLastGymSession(){return S.history.find(h=>h.dayType==='gym')||null;}
-function getGapDays(){
-  const gaps=[];
-  for(let i=1;i<=60;i++){
-    const d=new Date();d.setDate(d.getDate()-i);
-    const key=dateKey(d.toISOString());
-    if(!S.history.find(h=>dateKey(h.date)===key)){gaps.push(key);}
-    else break;
-  }
-  return gaps.reverse();
-}
-function fillGapsAsRest(){
-  const gaps=getGapDays();
-  if(!gaps.length)return;
-  gaps.forEach(key=>{
-    S.history=S.history.filter(h=>dateKey(h.date)!==key);
-    S.history.unshift({date:keyToISO(key),dayType:'rest',energy:5,muscles:[],scanText:'',duration:''});
-  });
+function logEntry(key,type,energy,muscles,scanText,duration){
+  S.history=S.history.filter(h=>dateKey(h.date)!==key);
+  S.history.unshift({date:keyToISO(key),dayType:type,energy:energy||5,muscles:muscles||[],scanText:scanText||'',duration:duration||''});
   S.history.sort((a,b)=>new Date(b.date)-new Date(a.date));
   persist();
-  S.step=STEP_TODAY;
-  render();
 }
 function logToday(){
   const key=todayKey();
@@ -311,19 +281,42 @@ function logToday(){
 }
 function attachScanToLastGym(){
   const scans=allScansText();if(!scans)return;
-  const muscles=getEffectiveMuscles();const duration=extractDuration(scans)||'';
-  const lastGym=getLastGymSession();
-  if(lastGym){lastGym.scanText=scans;lastGym.muscles=muscles;if(duration)lastGym.duration=duration;persist();}
+  const muscles=getEffectiveMuscles(),duration=extractDuration(scans)||'';
+  const lg=getLastGymSession();
+  if(lg){lg.scanText=scans;lg.muscles=muscles;if(duration)lg.duration=duration;persist();}
   else{
     const d=new Date();d.setDate(d.getDate()-1);
     const key=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
-    S.history=S.history.filter(h=>dateKey(h.date)!==key);
-    S.history.unshift({date:keyToISO(key),dayType:'gym',energy:S.energy,muscles,scanText:scans,duration});
-    S.history.sort((a,b)=>new Date(b.date)-new Date(a.date));persist();
+    logEntry(key,'gym',S.energy,muscles,scans,duration);
   }
 }
-function saveAll(){logToday();if(allScansText())attachScanToLastGym();S.sessionSaved=true;render();}
-function goStep(s){S.step=s;render();window.scrollTo({top:0,behavior:'smooth'});}
+function saveAll(){
+  const scans=allScansText();
+  const duration=extractDuration(scans)||'';
+  const key=todayKey();
+  // For cardio: store notes in scanText. For gym: store scan. For rest: empty.
+  const scanText=S.dayType==='gym'?scans:S.dayType==='cardio'?S.cardioNotes:'';
+  S.history=S.history.filter(h=>dateKey(h.date)!==key);
+  S.history.unshift({
+    date:nowDT(),dayType:S.dayType,energy:S.energy,
+    muscles:S.dayType==='gym'?(scans?getEffectiveMuscles():[]):[],
+    scanText:scanText,
+    duration:duration
+  });
+  // If today is rest/cardio but we have gym scan, attach to last gym entry
+  if(S.dayType!=='gym'&&scans){
+    const lg=S.history.find(h=>h.dayType==='gym'&&dateKey(h.date)!==key);
+    if(lg){lg.scanText=scans;lg.muscles=getEffectiveMuscles();if(duration)lg.duration=duration;}
+    else{
+      const d=new Date();d.setDate(d.getDate()-1);
+      const k=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+      logEntry(k,'gym',S.energy,getEffectiveMuscles(),scans,duration);
+    }
+  }
+  S.history.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  persist();
+  S.sessionSaved=true;S.cardioNotes='';render();
+}
 
 // ── FREQUENCY
 function getFrequency(){
@@ -338,20 +331,30 @@ function getFrequency(){
 
 // ── EXPORT / IMPORT
 function buildFullExport(){
-  const L=['APEX_HISTORY_EXPORT','v:6 exported:'+fmtDF(nowDT())+' entries:'+S.history.length,''];
+  const L=['APEX_HISTORY_EXPORT','v:8 exported:'+fmtDF(nowDT())+' entries:'+S.history.length,''];
   S.history.forEach(h=>{L.push('---','DATE:'+h.date,'TYPE:'+h.dayType,'ENERGY:'+h.energy,'MUSCLES:'+(h.muscles||[]).join(','));if(h.duration)L.push('DURATION:'+h.duration);if(h.scanText)L.push('SCAN:\n'+h.scanText);});
   L.push('---');return L.join('\n');
 }
 function parseImport(text){
   const entries=[];
   text.split(/\n---\n?/).filter(b=>b.includes('DATE:')).forEach(block=>{
-    try{const lines=block.split('\n');const get=k=>{const l=lines.find(l=>l.startsWith(k+':'));return l?l.slice(k.length+1).trim():'';};
-    const si=block.indexOf('\nSCAN:\n');const scanText=si>=0?block.slice(si+7).trim():'';
-    const muscles=(get('MUSCLES')||'').split(',').filter(Boolean);
-    const entry={date:get('DATE'),dayType:get('TYPE')||'gym',energy:parseInt(get('ENERGY'))||7,muscles,duration:get('DURATION'),scanText};
-    if(entry.date)entries.push(entry);}catch(e){}
+    try{
+      const lines=block.split('\n');
+      const get=k=>{const l=lines.find(l=>l.startsWith(k+':'));return l?l.slice(k.length+1).trim():'';};
+      const si=block.indexOf('\nSCAN:\n');const scanText=si>=0?block.slice(si+7).trim():'';
+      const entry={date:get('DATE'),dayType:get('TYPE')||'gym',energy:parseInt(get('ENERGY'))||7,muscles:(get('MUSCLES')||'').split(',').filter(Boolean),duration:get('DURATION'),scanText};
+      if(entry.date)entries.push(entry);
+    }catch(e){}
   });
   return entries;
+}
+function doImport(){
+  const entries=parseImport(S.importText);
+  if(!entries.length){alert('No valid entries found — copy the full export block.');return;}
+  entries.forEach(e=>{const k=dateKey(e.date);S.history=S.history.filter(h=>dateKey(h.date)!==k);S.history.push(e);});
+  S.history.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  persist();S.importText='';S.showImport=false;
+  alert(entries.length+' sessions imported.');render();
 }
 function build4WeekReview(){
   const cutoff=new Date();cutoff.setDate(cutoff.getDate()-28);
@@ -361,10 +364,10 @@ function build4WeekReview(){
   const fc=Object.fromEntries(MUSCLES.map(m=>[m,0]));
   gym.forEach(h=>(h.muscles||[]).forEach(m=>{fc[m]++;}));
   const L=['APEX 4-WEEK PROGRAMME REVIEW','Period: '+fmtDF(entries[entries.length-1]?.date)+' — '+fmtDF(entries[0]?.date),'Total gym sessions: '+gym.length,'','━━ SESSION LOG ━━━━━━━━━━━━━━━━━━━━━━━━━━'];
-  gym.forEach(h=>{const ms=(h.muscles||[]).length>0?h.muscles.map(m=>m.toUpperCase()).join(', '):'unknown';L.push(fmtDF(h.date)+' | E:'+h.energy+'/10'+(h.duration?' | '+h.duration:'')+' | '+ms);if(h.scanText)h.scanText.split('\n').forEach(line=>{if(line.trim())L.push('  '+line);});L.push('');});
+  gym.forEach(h=>{const ms=(h.muscles||[]).length>0?h.muscles.map(m=>m.toUpperCase()).join(', '):'unknown';L.push(fmtDF(h.date)+' | E:'+h.energy+'/10'+(h.duration?' | '+h.duration:'')+' | '+ms);if(h.scanText)h.scanText.split('\n').forEach(l=>{if(l.trim())L.push('  '+l);});L.push('');});
   L.push('━━ FREQUENCY (4 weeks) ━━━━━━━━━━');
   MUSCLES.forEach(m=>{const c=fc[m];L.push('  '+m.toUpperCase().padEnd(12)+': '+c+'x ('+( c/4).toFixed(1)+'x/week) — '+(c>=8?'✓ on target':c>=6?'~ slightly under':'✗ undertrained'));});
-  L.push('','━━ REVIEW REQUEST ━━━━━━━━━━━━━━━━━━━━━━━','Please analyse this 4-week training block and provide:','1. Muscle groups undertrained — causes and fixes','2. Strength progression per exercise — PRs and stalls','3. Volume assessment — MEV/MAV/MRV per muscle','4. Recovery patterns — soreness/performance correlations','5. Energy trend per week','6. Recommended split adjustments for next block','7. One priority focus area');
+  L.push('','━━ REVIEW REQUEST ━━━━━━━━━━━━━━━━━━━━━━━','Please analyse this 4-week training block:','1. Muscle groups undertrained — causes and fixes','2. Strength progression — PRs and stalls','3. Volume — MEV/MAV/MRV per muscle','4. Recovery patterns','5. Energy trend','6. Recommended split for next block','7. One priority focus area');
   return L.join('\n');
 }
 
@@ -379,22 +382,22 @@ function handleFiles(files){
   Array.from(files).forEach(file=>{
     if(!file||!file.type.startsWith('image/'))return;
     const reader=new FileReader();
-    reader.onload=e=>{S.images.push({dataUrl:e.target.result,file,fileName:file.name,scanning:false,scanResult:null,scanError:null,detectedMuscles:null});render();};
+    reader.onload=e=>{S.images.push({dataUrl:e.target.result,file,fileName:file.name,scanning:false,scanResult:null,scanError:null,detectedMuscles:null});S.outputGenerated=false;render();};
     reader.readAsDataURL(file);
   });
 }
-function removeImg(i){S.images.splice(i,1);render();}
+function removeImg(i){S.images.splice(i,1);S.outputGenerated=false;render();}
 async function scanOne(idx){
   const img=S.images[idx];if(!img)return;
-  if(!S.apiKey.trim()){img.scanError='No API key.';render();return;}
+  if(!S.apiKey.trim()){img.scanError='No API key set.';render();return;}
   img.scanning=true;img.scanResult=null;img.scanError=null;img.detectedMuscles=null;render();
   try{
-    const base64=img.dataUrl.split(',')[1];const mtype=img.file.type||'image/jpeg';
+    const base64=img.dataUrl.split(',')[1],mtype=img.file.type||'image/jpeg';
     const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':S.apiKey.trim(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:[
         {type:'image',source:{type:'base64',media_type:mtype,data:base64}},
-        {type:'text',text:'Extract ALL workout data from this gym app screenshot.\nReturn ONLY plain text — no markdown, no backticks, no asterisks.\n\nFormat:\nMUSCLES_WORKED: [comma-separated from: chest, back, shoulders, biceps, triceps, forearms, legs, calves]\nSESSION: [name if visible]\nDURATION: [time if visible]\n\nEXERCISES:\n[Exercise Name] ([equipment]): [weightxreps], ...\n\nNOTES: [volume, calories, heart rate]\n\nInclude weight units. Skip fields not visible. Be precise.'}
+        {type:'text',text:'Extract ALL workout data from this gym app screenshot.\nReturn ONLY plain text — no markdown, no backticks.\n\nFormat:\nMUSCLES_WORKED: [comma-separated from: chest, back, shoulders, biceps, triceps, forearms, legs, calves]\nSESSION: [name if visible]\nDURATION: [time if visible]\n\nEXERCISES:\n[Exercise Name] ([equipment]): [weightxreps], ...\n\nNOTES: [volume, calories, heart rate]\n\nInclude weight units. Skip invisible fields. Be precise.'}
       ]}]})
     });
     const data=await res.json();if(data.error)throw new Error(data.error.message);
@@ -404,14 +407,14 @@ async function scanOne(idx){
     img.scanResult=fullText.replace(/MUSCLES_WORKED:[^\n]*\n?/i,'').trim();
     S.manualMuscles=null;
   }catch(e){img.scanError=e.message||'Scan failed.';}
-  img.scanning=false;render();
+  img.scanning=false;S.outputGenerated=false;render();
 }
 async function scanAll(){
   const pending=S.images.map((_,i)=>i).filter(i=>!S.images[i].scanResult&&!S.images[i].scanning);
   for(const i of pending)await scanOne(i);
 }
 
-// ── BUILD PACKET
+// ── PACKET
 function buildHistoryBlock(){
   const cutoff=new Date();cutoff.setDate(cutoff.getDate()-HISTORY_PACKET_DAYS);
   const tk=todayKey();
@@ -421,185 +424,525 @@ function buildHistoryBlock(){
   const due=MUSCLES.filter(m=>freq[m]===1&&lastTrained[m]);
   const zero=MUSCLES.filter(m=>freq[m]===0);
   const complete=MUSCLES.filter(m=>freq[m]>=2);
-  const L=['— TRAINING HISTORY (14 days) ——————————'];
-  entries.forEach(h=>{const ms=(h.muscles||[]).length>0?h.muscles.map(m=>m.toUpperCase()).join(', '):h.dayType==='rest'?'REST':'CARDIO';L.push(fmtDS(h.date)+' → '+ms+(h.duration?' | '+h.duration:'')+' | E:'+h.energy);});
-  L.push('','WEEKLY FREQUENCY (rolling 7 days):');
-  MUSCLES.forEach(m=>{const f=freq[m];const last=lastTrained[m]?' — last '+fmtDS(lastTrained[m])+' ('+daysAgo(lastTrained[m])+'d ago)':' — not trained';L.push('  '+m.toUpperCase().padEnd(12)+': '+f+'x'+last+(f===0?' ← not trained':f===1?' ← due 2nd session':' ✓ target met'));});
-  if(due.length)L.push('\nMUSCLES DUE 2ND SESSION: '+due.map(m=>m.toUpperCase()).join(', '));
-  if(zero.length)L.push('NOT TRAINED THIS WEEK:   '+zero.map(m=>m.toUpperCase()).join(', '));
-  if(complete.length)L.push('TARGET MET (2x+):        '+complete.map(m=>m.toUpperCase()).join(', '));
-  L.push('————————————————————————————————————————');
+  const L=['━━ TRAINING HISTORY — LAST 14 DAYS ━━━━━━━'];
+  entries.forEach(h=>{
+    if(h.dayType==='rest'){
+      L.push(fmtDS(h.date)+' — REST');
+      return;
+    }
+    if(h.dayType==='cardio'){
+      L.push(fmtDS(h.date)+' — CARDIO'+(h.duration?' | '+h.duration:'')+(h.energy?' | E:'+h.energy+'/10':''));
+      if(h.scanText&&h.scanText.trim())L.push('  '+h.scanText.split('\n').join('\n  '));
+      return;
+    }
+    // Gym session
+    const ms=(h.muscles||[]).length>0?h.muscles.map(m=>m.toUpperCase()).join(', '):'(muscles unknown)';
+    L.push('');
+    L.push(fmtDS(h.date)+' — GYM | '+ms+(h.duration?' | '+h.duration:'')+' | E:'+h.energy+'/10');
+    if(h.scanText&&h.scanText.trim()){
+      // Include exercises — indent each line
+      const lines=h.scanText.split('\n').filter(l=>l.trim());
+      lines.forEach(line=>{
+        // Skip header-only lines like "SESSION:" / "DURATION:" already shown, keep exercises
+        if(!/^SESSION:|^DURATION:/i.test(line))L.push('  '+line);
+      });
+    }else{
+      L.push('  (no scan — upload screenshot to see exercises)');
+    }
+  });
+  L.push('');
+  L.push('━━ WEEKLY FREQUENCY (rolling 7 days) ━━━━━');
+  MUSCLES.forEach(m=>{
+    const f=freq[m],last=lastTrained[m]?' — last '+fmtDS(lastTrained[m])+' ('+daysAgo(lastTrained[m])+'d ago)':' — not trained';
+    L.push('  '+m.toUpperCase().padEnd(12)+': '+f+'x'+last+(f===0?' ← NOT TRAINED':f===1?' ← DUE 2ND SESSION':' ✓ target met'));
+  });
+  if(due.length)L.push('');
+  if(due.length)L.push('DUE 2ND SESSION: '+due.map(m=>m.toUpperCase()).join(', '));
+  if(zero.length)L.push('NOT TRAINED:     '+zero.map(m=>m.toUpperCase()).join(', '));
+  if(complete.length)L.push('TARGET MET:      '+complete.map(m=>m.toUpperCase()).join(', '));
+  L.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   return L.join('\n');
 }
 function buildPacket(){
   const nowV=nowDT();
-  const lastGym=S.lastUnknown?null:getLastGymSession();
-  const lastV=lastGym?.date||null;
-  const hrs=hDiff(lastV,nowV);
+  const lg=S.lastSessionMode==='gym'?getLastGymSession():null;
+  const lastV=lg?.date||null,hrs=hDiff(lastV,nowV);
   const uploadedScans=S.images.filter(i=>i.scanResult).map((img,i)=>(S.images.length>1?'[Screenshot '+(i+1)+']\n':'')+img.scanResult).join('\n\n');
-  const allScans=uploadedScans||(lastGym?.scanText)||'';
-  const trainedRaw=getEffectiveMuscles();
-  const trained=trainedRaw.length>0?trainedRaw:(lastGym?.muscles||[]);
+  const allScans=uploadedScans||(lg?.scanText)||'';
+  const trainedRaw=getEffectiveMuscles(),trained=trainedRaw.length>0?trainedRaw:(lg?.muscles||[]);
   let mps={};
-  if(!S.lastUnknown&&hrs!==null&&trained.length>0)trained.forEach(m=>{mps[m]=hrs<MPS_H[m]?'active':'clear';});
-  const mpsActive=trained.filter(m=>mps[m]==='active');
-  const mpsClear=trained.filter(m=>mps[m]==='clear');
+  if(S.lastSessionMode==='gym'&&hrs!==null&&trained.length>0)trained.forEach(m=>{mps[m]=hrs<MPS_H[m]?'active':'clear';});
+  const mpsActive=trained.filter(m=>mps[m]==='active'),mpsClear=trained.filter(m=>mps[m]==='clear');
   const sore=Object.entries(S.soreness).filter(([,v])=>v!=='none');
   const histBlock=buildHistoryBlock();
   const L=[];
   L.push('DATE: '+fmtDT(nowV),'DAY: '+S.dayType.toUpperCase()+' | ENERGY: '+S.energy+'/10 ['+eLbl(S.energy)+']','');
   if(!sore.length){L.push('SORENESS: none');}else{L.push('SORENESS:');sore.forEach(([m,v])=>L.push('  '+m.toUpperCase()+': '+v.toUpperCase()));}
   L.push('');
-  if(S.lastUnknown){L.push('LAST SESSION: unknown — use conservative baseline');}
-  else if(lastGym){
+  if(S.lastSessionMode==='unknown'){
+    L.push('LAST SESSION: unknown — use conservative baseline');
+  }else if(S.lastSessionMode==='rest'){
+    L.push('LAST SESSION: rest/cardio — no gym data, MPS cleared, programme fresh session');
+  }else if(lg){
     L.push('LAST SESSION: '+fmtDT(lastV)+(hrs!==null?' ('+hrs+'h ago)':''));
     if(trained.length>0){
       if(mpsActive.length>0){L.push('MPS ACTIVE — avoid retraining:');mpsActive.forEach(m=>{const rem=Math.max(0,MPS_H[m]-hrs).toFixed(0);L.push('  '+m.toUpperCase()+': '+rem+'h remaining');});}
       if(mpsClear.length>0)L.push('MPS CLEAR — safe to train: '+mpsClear.map(m=>m.toUpperCase()).join(', '));
       const nt=MUSCLES.filter(m=>!trained.includes(m));if(nt.length)L.push('NOT TRAINED LAST SESSION: '+nt.map(m=>m.toUpperCase()).join(', '));
-    }else{L.push('MPS: muscle groups unknown — assess from exercises below');}
-  }else{L.push('LAST SESSION: no gym sessions logged yet — use conservative baseline');}
+    }else{L.push('MPS: muscle groups not detected — assess from exercises below');}
+  }else{L.push('LAST SESSION: no gym sessions in history — use conservative baseline');}
   L.push('');
   const flags=[];
-  if(S.energy<=4)flags.push('LOW ENERGY ('+S.energy+'/10) — reduce volume ~25%');
-  else if(S.energy>=9)flags.push('PEAK ENERGY ('+S.energy+'/10) — attempt +5% load');
-  const sevSore=MUSCLES.filter(m=>S.soreness[m]==='severe');
-  const modSore=MUSCLES.filter(m=>S.soreness[m]==='moderate');
+  if(S.energy<=4)flags.push('LOW ENERGY ('+S.energy+'/10) — reduce volume ~25%, drop isolation');
+  else if(S.energy>=9)flags.push('PEAK ENERGY ('+S.energy+'/10) — attempt +5% load or extra compound set');
+  const sevSore=MUSCLES.filter(m=>S.soreness[m]==='severe'),modSore=MUSCLES.filter(m=>S.soreness[m]==='moderate');
   if(sevSore.length)flags.push('SEVERE SORENESS ['+sevSore.map(m=>m.toUpperCase()).join(', ')+'] — avoid training');
   if(modSore.length)flags.push('MODERATE SORENESS ['+modSore.map(m=>m.toUpperCase()).join(', ')+'] — reduce load');
-  if(S.soreness.shoulders==='moderate'||S.soreness.shoulders==='severe')flags.push('SHOULDER PROTOCOL — no overhead press');
+  if(S.soreness.shoulders==='moderate'||S.soreness.shoulders==='severe')flags.push('SHOULDER PROTOCOL — no overhead press, cable laterals only');
   if(S.soreness.back==='severe')flags.push('BACK SEVERE — no deadlifts or heavy rows');
   mpsActive.forEach(m=>{if(hrs!==null){const rem=Math.max(0,MPS_H[m]-hrs).toFixed(0);flags.push('MPS BLOCK ['+m.toUpperCase()+'] — '+rem+'h left, skip or MEV only');}});
   if(hrs!==null&&hrs<20)flags.push('SHORT RECOVERY — '+hrs+'h only, consider cardio/mobility');
   if(flags.length){L.push('FLAGS:');flags.forEach(f=>L.push('  ⚠ '+f));L.push('');}
-  if(S.lastUnknown){L.push('LAST WORKOUT: unknown — set moderate weights, RPE 7, log as baseline');}
+  if(S.lastSessionMode==='unknown'){L.push('LAST WORKOUT: unknown — set moderate weights, RPE 7, log as baseline');}
+  else if(S.lastSessionMode==='rest'){L.push('LAST WORKOUT: N/A — last activity was rest/cardio, no previous weights to reference');}
   else if(allScans){L.push('LAST WORKOUT:');L.push(allScans);}
-  else if(lastGym){L.push('LAST WORKOUT: '+fmtDS(lastGym.date)+' — no scan data (upload screenshot for progressive overload targets)');}
+  else if(lg){L.push('LAST WORKOUT: '+fmtDS(lg.date)+' — no scan data (upload screenshot for progressive overload targets)');}
   else{L.push('LAST WORKOUT: no data — progressive overload targets unknown');}
   if(histBlock){L.push('');L.push(histBlock);}
   return L.join('\n');
 }
-function generatePacket(){
-  S.outputText=buildPacket();
-  S.sessionSaved=false;
-  S.step=STEP_OUTPUT;
-  render();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
+function generatePacket(){S.outputText=buildPacket();S.outputGenerated=true;S.sessionSaved=false;render();setTimeout(()=>{const el=document.getElementById('out-sec');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},120);}
 
 // ── HISTORY EDITOR
-function startEdit(i){S.editIdx=i;const h=S.history[i];S.editBuf={date:h.date||'',dayType:h.dayType||'gym',energy:h.energy||7,muscles:[...(h.muscles||[])],duration:h.duration||'',scanText:h.scanText||''};render();}
-function cancelEdit(){S.editIdx=null;S.editBuf={};render();}
+function startEdit(i){openEditLogScreen(i);}
+function cancelEdit(){S.logScreen=null;S.editIdx=null;S.editBuf={};render();}
 function saveEdit(){
   if(S.editIdx===null)return;
   S.history[S.editIdx]={...S.history[S.editIdx],date:S.editBuf.date,dayType:S.editBuf.dayType,energy:parseInt(S.editBuf.energy)||7,muscles:[...S.editBuf.muscles],duration:S.editBuf.duration,scanText:S.editBuf.scanText};
   S.history.sort((a,b)=>new Date(b.date)-new Date(a.date));persist();S.editIdx=null;S.editBuf={};render();
 }
 function toggleEditMuscle(m){const arr=S.editBuf.muscles;const idx=arr.indexOf(m);if(idx>=0)arr.splice(idx,1);else arr.push(m);render();}
-function addNewEntry(){S.history.unshift({date:nowDT(),dayType:'gym',energy:7,muscles:[],duration:'',scanText:''});S.history.sort((a,b)=>new Date(b.date)-new Date(a.date));persist();startEdit(0);}
+function addNewEntry(){openAddLogScreen();}
 
-// ══════════════════════════════════════════════════════
-//  STEP RENDERERS
-// ══════════════════════════════════════════════════════
+// ── LOG SCREEN (full-page log from calendar OR add new entry)
+function openLogScreen(key){
+  S.logScreen={key,dayType:'rest',energy:5,images:[],manualMuscles:null,notes:'',inputMode:'screenshot',isEdit:false,editIdx:null};
+  render();
+}
+function openEditLogScreen(idx){
+  const entry=S.history[idx];
+  if(!entry)return;
+  S.logScreen={
+    key:dateKey(entry.date),
+    dayType:entry.dayType,
+    energy:entry.energy,
+    images:[],
+    manualMuscles:entry.muscles&&entry.muscles.length?[...entry.muscles]:null,
+    notes:entry.dayType==='cardio'?entry.scanText||'':'',
+    inputMode: entry.scanText&&entry.dayType==='gym'?'text':'screenshot',
+    existingScanText: entry.dayType==='gym'?entry.scanText||'':'',
+    isEdit:true,
+    editIdx:idx
+  };
+  S.activeTab='history';
+  render();
+}
+function openAddLogScreen(){
+  const key=todayKey();
+  S.logScreen={key,dayType:'gym',energy:7,images:[],manualMuscles:null,notes:'',inputMode:'screenshot',isEdit:false,editIdx:null};
+  S.activeTab='history';
+  render();
+}
+function closeLogScreen(){S.logScreen=null;render();}
 
-function renderStepBar(){
-  // Which named steps are showing? Always 1-3, prepend catchup if active
-  const gaps=getGapDays();
-  const hasCatchup=gaps.length>0||S.step===STEP_CATCHUP;
-  const steps=hasCatchup
-    ?[{n:0,l:'Catch Up'},{n:1,l:'Today'},{n:2,l:'Body'},{n:3,l:'Reference'}]
-    :[{n:1,l:'Today'},{n:2,l:'Body'},{n:3,l:'Reference'}];
-  const activeStep=S.step===STEP_OUTPUT?STEP_REF:S.step;
-  let h='<div class="step-bar">';
-  steps.forEach((s,i)=>{
-    const isDone=activeStep>s.n;
-    const isActive=activeStep===s.n;
-    const cls=isDone?'done':isActive?'active':'todo';
-    h+='<div class="step-node">'
-      +'<div class="step-circle '+cls+'">'+(isDone?'✓':s.n===0?'!':String(hasCatchup?s.n:s.n))+'</div>'
-      +'<div class="step-lbl '+cls+'">'+s.l+'</div>'
-      +'</div>';
-    if(i<steps.length-1)h+='<div class="step-line'+(isDone?' done':'')+'"></div>';
+function handleLogFiles(files){
+  if(!S.logScreen)return;
+  Array.from(files).forEach(file=>{
+    if(!file||!file.type.startsWith('image/'))return;
+    const reader=new FileReader();
+    reader.onload=e=>{S.logScreen.images.push({dataUrl:e.target.result,file,fileName:file.name,scanning:false,scanResult:null,scanError:null,detectedMuscles:null});render();};
+    reader.readAsDataURL(file);
   });
-  return h+'</div>';
 }
-
-function stepCatchup(){
-  const gaps=getGapDays();
-  if(!gaps.length){S.step=STEP_TODAY;render();return'';}
-  const lastLogged=S.history.length?fmtDS(S.history[0].date):null;
-  const oldest=fmtDS(keyToISO(gaps[0]));
-  const newest=gaps.length>1?fmtDS(keyToISO(gaps[gaps.length-1])):null;
-  // Build timeline: show last 10 days
-  let tlChips='';
-  for(let i=9;i>=0;i--){
-    const d=new Date();d.setDate(d.getDate()-i);
-    const key=dateKey(d.toISOString());
-    const isToday=i===0;
-    const entry=S.history.find(h=>dateKey(h.date)===key);
-    let chipCls='tl-chip';let icon='·';
-    if(isToday){chipCls+=' tc-today-ring '+(S.dayType==='gym'?'tc-gym':S.dayType==='cardio'?'tc-cardio':'tc-rest');icon=S.dayType==='gym'?'🏋':S.dayType==='cardio'?'🏃':'😴';}
-    else if(entry){chipCls+=' '+(entry.dayType==='gym'?'tc-gym':entry.dayType==='cardio'?'tc-cardio':'tc-rest');icon=entry.dayType==='gym'?'🏋':entry.dayType==='cardio'?'🏃':'😴';}
-    else{chipCls+=' tc-gap';icon='?';}
-    tlChips+='<div class="tl-day"><div class="'+chipCls+'">'+icon+'</div><div class="tl-lbl">'+DAYS[d.getDay()].slice(0,2)+'<br>'+pad(d.getDate())+'</div></div>';
+function removeLogImg(i){if(S.logScreen){S.logScreen.images.splice(i,1);render();}}
+function getLogMuscles(){
+  if(!S.logScreen)return[];
+  if(S.logScreen.manualMuscles!==null)return S.logScreen.manualMuscles;
+  const cm=S.logScreen.images.filter(i=>i.detectedMuscles&&i.detectedMuscles.length>0).flatMap(i=>i.detectedMuscles);
+  const u=[...new Set(cm)].filter(m=>MUSCLES.includes(m));
+  if(u.length>0)return u;
+  // Also detect from text notes
+  const textScan=S.logScreen.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\n\n')+(S.logScreen.notes||'');
+  return detectMuscles(textScan);
+}
+function toggleLogMuscle(m){
+  if(!S.logScreen)return;
+  if(S.logScreen.manualMuscles===null)S.logScreen.manualMuscles=[...getLogMuscles()];
+  const idx=S.logScreen.manualMuscles.indexOf(m);
+  if(idx>=0)S.logScreen.manualMuscles.splice(idx,1);else S.logScreen.manualMuscles.push(m);
+  render();
+}
+async function scanLogOne(idx){
+  if(!S.logScreen)return;
+  const img=S.logScreen.images[idx];if(!img)return;
+  if(!S.apiKey.trim()){img.scanError='No API key set.';render();return;}
+  img.scanning=true;img.scanResult=null;img.scanError=null;img.detectedMuscles=null;render();
+  try{
+    const base64=img.dataUrl.split(',')[1],mtype=img.file.type||'image/jpeg';
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':S.apiKey.trim(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:[
+        {type:'image',source:{type:'base64',media_type:mtype,data:base64}},
+        {type:'text',text:'Extract ALL workout data from this gym app screenshot.\nReturn ONLY plain text — no markdown, no backticks.\n\nFormat:\nMUSCLES_WORKED: [comma-separated from: chest, back, shoulders, biceps, triceps, forearms, legs, calves]\nSESSION: [name if visible]\nDURATION: [time if visible]\n\nEXERCISES:\n[Exercise Name] ([equipment]): [weightxreps], ...\n\nNOTES: [volume, calories, heart rate]\n\nInclude weight units. Skip invisible fields. Be precise.'}
+      ]}]})
+    });
+    const data=await res.json();if(data.error)throw new Error(data.error.message);
+    const fullText=data.content.map(b=>b.text||'').join('').trim();
+    const mm=fullText.match(/MUSCLES_WORKED:\s*([^\n]+)/i);
+    img.detectedMuscles=mm?mm[1].split(',').map(s=>s.trim().toLowerCase()).filter(m=>MUSCLES.includes(m)):[];
+    img.scanResult=fullText.replace(/MUSCLES_WORKED:[^\n]*\n?/i,'').trim();
+    S.logScreen.manualMuscles=null;
+  }catch(e){img.scanError=e.message||'Scan failed.';}
+  img.scanning=false;render();
+}
+async function scanLogAll(){
+  if(!S.logScreen)return;
+  const pending=S.logScreen.images.map((_,i)=>i).filter(i=>!S.logScreen.images[i].scanResult&&!S.logScreen.images[i].scanning);
+  for(const i of pending)await scanLogOne(i);
+}
+function saveLogScreen(){
+  if(!S.logScreen)return;
+  const ls=S.logScreen;
+  const imgScans=ls.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\n\n');
+  let scanText='';
+  if(ls.dayType==='gym'){
+    // Gym: screenshot scan takes priority, then manual text notes
+    scanText=imgScans||ls.notes||'';
+    // If editing and no new scan, keep existing
+    if(!scanText&&ls.isEdit)scanText=ls.existingScanText||'';
+  }else if(ls.dayType==='cardio'){
+    scanText=ls.notes||'';
   }
-  return '<div class="screen">'
-    +'<div class="screen-title">Welcome back 👋</div>'
-    +'<div class="screen-sub">'+(lastLogged?'Last logged: '+lastLogged+' · ':'')+'<strong style="color:var(--amber)">'+gaps.length+' day'+(gaps.length>1?'s':'')+' not recorded</strong></div>'
-    +'<div class="tl-wrap"><div class="tl-track">'+tlChips+'</div></div>'
-    +'<div class="card-amber">'
-    +'<div style="font-size:10px;font-weight:700;color:var(--amber);margin-bottom:3px">'+gaps.length+' unlogged day'+(gaps.length>1?'s':'')+' detected</div>'
-    +'<div style="font-size:9px;color:var(--muted);margin-bottom:14px;line-height:1.6">'+oldest+(newest?' → '+newest:'')+'<br>'+(gaps.length===1?'Mark this day before generating your packet.':'Injury, travel, or just life. Fill them all as REST in one tap — you can correct individual days in History afterwards.')+'</div>'
-    +'<button class="btn-amber" onclick="fillGapsAsRest()">😴 FILL '+gaps.length+' DAY'+(gaps.length>1?'S':'')+' AS REST  →</button>'
+  const muscles=ls.dayType==='gym'?getLogMuscles():[];
+  const duration=extractDuration(scanText)||'';
+  if(ls.isEdit&&ls.editIdx!==null){
+    S.history[ls.editIdx]={...S.history[ls.editIdx],
+      dayType:ls.dayType,energy:ls.energy,
+      muscles:muscles,scanText:scanText,duration:duration
+    };
+    S.history.sort((a,b)=>new Date(b.date)-new Date(a.date));
+    persist();
+  }else{
+    logEntry(ls.key,ls.dayType,ls.energy,muscles,scanText,duration);
+  }
+  S.logScreen=null;
+  render();
+}
+
+// ── CALENDAR RENDER
+function renderCalendar(){
+  const yr=S.calYear,mo=S.calMonth;
+  const today=new Date();
+  const todayK=todayKey();
+  // First day of month, find preceding Sunday
+  const firstDay=new Date(yr,mo,1);
+  const startDate=new Date(firstDay);
+  startDate.setDate(startDate.getDate()-firstDay.getDay()); // back to Sunday
+  // Build 42 cells (6 weeks)
+  const cells=[];
+  for(let i=0;i<42;i++){
+    const d=new Date(startDate);
+    d.setDate(startDate.getDate()+i);
+    cells.push(d);
+  }
+  // Build lookup
+  const logMap={};
+  S.history.forEach(h=>{logMap[dateKey(h.date)]=h;});
+
+  let h='<div class="cal-wrap">';
+  // Header
+  h+='<div class="cal-header">'
+    +'<button class="cal-nav" onclick="S.calMonth--;if(S.calMonth<0){S.calMonth=11;S.calYear--;}render()">‹</button>'
+    +'<div class="cal-title">'+MONS[mo]+' '+yr+'</div>'
+    +'<button class="cal-nav" onclick="S.calMonth++;if(S.calMonth>11){S.calMonth=0;S.calYear++;}render()">›</button>'
+    +'</div>';
+  // DOW headers
+  h+='<div class="cal-dow">'+['SUN','MON','TUE','WED','THU','FRI','SAT'].map(d=>'<div class="cal-dow-cell">'+d+'</div>').join('')+'</div>';
+  // Grid
+  h+='<div class="cal-grid">';
+  cells.forEach(d=>{
+    const key=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+    const isThisMonth=d.getMonth()===mo;
+    const isToday=key===todayK;
+    const isFuture=d>today&&!isToday;
+    const entry=logMap[key];
+    let cls='cal-cell';
+    if(!isThisMonth)cls+=' other-month';
+    else if(isFuture)cls+=' future';
+    else if(entry){
+      cls+=' logged-'+entry.dayType;
+    }else{
+      cls+=' unlogged';
+    }
+    if(isToday)cls+=' is-today';
+    let inner='';
+    if(entry&&isThisMonth&&!isFuture){
+      const icon=entry.dayType==='gym'?'🏋':entry.dayType==='cardio'?'🏃':'😴';
+      inner='<span class="cal-num" style="color:'+(entry.dayType==='gym'?'#fca5a5':entry.dayType==='cardio'?'var(--blue)':'var(--muted)')+'">'+d.getDate()+'</span><span class="cal-icon">'+icon+'</span>';
+    }else{
+      inner='<span class="cal-num-only">'+d.getDate()+'</span>';
+    }
+    const clickable=isThisMonth&&!isFuture&&!entry;
+    const editIdx=entry&&isThisMonth?S.history.findIndex(hh=>dateKey(hh.date)===key):-1;
+    h+='<div class="'+cls+'"'+(clickable?' onclick="openLogScreen(\''+key+'\')"':'')+(editIdx>=0?' onclick="startEdit('+editIdx+')"':'')+'>'
+      +inner+'</div>';
+  });
+  h+='</div></div>';
+  return h;
+}
+
+// ── BACKUP PANEL
+function renderBackupPanel(id1,id2){
+  return '<div class="bk-panel">'
+    +'<div class="bk-header" onclick="S.bkOpen=!S.bkOpen;render()">'
+    +'<div style="display:flex;align-items:center;gap:8px">'
+    +'<span style="font-size:13px">💾</span>'
+    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--purple)">Backup &amp; Restore</div>'
+    +'<div style="font-size:8px;color:var(--muted);margin-top:1px">Export · Import · 4-Week Review</div>'
+    +'</div></div>'
+    +'<span class="bk-chev'+(S.bkOpen?' open':'')+'">▼</span>'
     +'</div>'
-    +'<button class="btn-ghost" style="width:100%" onclick="goStep(STEP_TODAY)">Skip — I\'ll fix history later</button>'
+    +(S.bkOpen?'<div class="bk-body" style="padding-top:14px">'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">'
+      +'<button class="btn-green" id="'+id1+'" onclick="copyText(buildFullExport(),\''+id1+'\')">⬆ Export History</button>'
+      +'<button class="btn-purple" id="'+id2+'" onclick="copyText(build4WeekReview(),\''+id2+'\')">📊 4-Week Review</button>'
+      +'</div>'
+      +'<div style="font-size:9px;color:var(--muted);line-height:1.7;margin-bottom:12px">'
+      +'<strong style="color:var(--green)">Export</strong> → paste into Notes app weekly (permanent backup)<br>'
+      +'<strong style="color:var(--purple)">4-Week Review</strong> → paste into fresh APEX chat for programme analysis<br>'
+      +'<strong style="color:#f87171">Import</strong> → restore after cache wipe or new device'
+      +'</div>'
+      +'<button class="btn-sm" style="width:100%;margin-bottom:10px" onclick="S.showImport=!S.showImport;render()">'+(S.showImport?'▲ Hide Import':'⬇ Import from Backup')+'</button>'
+      +(S.showImport?'<div>'
+        +'<label class="lbl">Paste Exported History</label>'
+        +'<textarea class="inp" placeholder="Paste full APEX_HISTORY_EXPORT block here..." oninput="S.importText=this.value" style="min-height:90px">'+S.importText+'</textarea>'
+        +'<button class="btn" style="margin-top:8px" onclick="doImport()">⬇ IMPORT '+(S.importText?parseImport(S.importText).length+' SESSIONS':'')+'</button>'
+        +'</div>':'')
+      +'</div>':'')
     +'</div>';
 }
 
-function stepToday(){
-  return '<div class="screen">'
-    +'<div class="screen-title">What\'s today?</div>'
-    +'<div class="screen-sub">'+['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date().getDay()]+', '+new Date().getDate()+' '+MONS[new Date().getMonth()]+'</div>'
-    +'<div class="tog-row" style="margin-bottom:16px">'
-    +['gym','cardio','rest'].map(t=>'<button class="tog'+(S.dayType===t?' on':'')+'" onclick="S.dayType=\''+t+'\';persist();render()">'
-      +'<span class="tog-big">'+(t==='gym'?'🏋️':t==='cardio'?'🏃':'😴')+'</span>'+(t==='gym'?'GYM':t==='cardio'?'CARDIO':'REST')+'</button>').join('')
-    +'</div>'
-    +(S.dayType!=='rest'
-      ?'<div class="card"><label class="lbl">Energy: <span style="color:var(--amber)">'+S.energy+'/10 — '+eLbl(S.energy)+'</span></label>'
-        +'<input type="range" min="1" max="10" step="1" value="'+S.energy+'" oninput="S.energy=parseInt(this.value);persist();render()" style="margin:8px 0"/>'
-        +'<div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted2)"><span>Dead 😵</span><span>OK 😐</span><span>Fired 🔥</span></div>'
-        +'</div>'
-      :'<div class="card" style="font-size:9px;color:var(--muted);padding:14px 15px">Recovery is part of the programme. Log it and move on.</div>')
-    +'<button class="btn" onclick="goStep(STEP_BODY)">Continue →</button>'
-    +'</div>';
-}
-
-function stepBody(){
-  const lastGym=S.lastUnknown?null:getLastGymSession();
-  const lastV=lastGym?.date||null;
-  const hrs=hDiff(lastV,nowDT());
-  const trainedRaw=getEffectiveMuscles();
-  const trained=trainedRaw.length>0?trainedRaw:(lastGym?.muscles||[]);
+// ── MAIN RENDER
+function render(){
+  const app=document.getElementById('app');if(!app)return;
+  const lg=S.lastSessionMode==='gym'?getLastGymSession():null;
+  const lastV=lg?.date||null,hrs=hDiff(lastV,nowDT());
+  const scanned=S.images.filter(i=>i.scanResult).length;
+  const anyScanning=S.images.some(i=>i.scanning);
+  const unscanned=S.images.filter(i=>!i.scanResult&&!i.scanning).length;
+  const trained=getEffectiveMuscles().length>0?getEffectiveMuscles():(lg?.muscles||[]);
   let mps={};
-  if(!S.lastUnknown&&hrs!==null&&trained.length>0)trained.forEach(m=>{mps[m]=hrs<MPS_H[m]?'active':'clear';});
-  const mpsActive=trained.filter(m=>mps[m]==='active');
-  const mpsClear=trained.filter(m=>mps[m]==='clear');
-  const hasSoreness=Object.values(S.soreness).some(v=>v!=='none');
-  let mpsRow='';
-  if(trained.length>0&&lastV){
-    mpsRow='<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.05)">'
-      +'<div style="font-size:9px;color:var(--muted);margin-bottom:6px">MPS · '+hrs+'h since last session</div>'
-      +'<div style="display:flex;flex-wrap:wrap;gap:4px">'
-      +mpsActive.map(m=>'<span class="badge badge-active">⚡ '+m+' '+(Math.max(0,MPS_H[m]-hrs)).toFixed(0)+'h</span>').join('')
-      +mpsClear.map(m=>'<span class="badge badge-clear">✓ '+m+'</span>').join('')
-      +MUSCLES.filter(mu=>!trained.includes(mu)).map(m=>'<span class="badge badge-unk">— '+m+'</span>').join('')
-      +'</div></div>';
+  if(S.lastSessionMode==='gym'&&hrs!==null&&trained.length>0)trained.forEach(m=>{mps[m]=hrs<MPS_H[m]?'active':'clear';});
+  const mpsActive=trained.filter(m=>mps[m]==='active'),mpsClear=trained.filter(m=>mps[m]==='clear');
+  const{freq}=getFrequency();
+  let h='';
+
+  // Header
+  h+='<div style="margin-bottom:20px">'
+    +'<div class="logo">⚡ AP<span>E</span>X</div>'
+    +'<div class="tagline">Adaptive Performance Engine · v8</div>'
+    +'</div>';
+
+  // Tabs
+  h+='<div class="tab-bar">'
+    +'<button class="tab-btn'+(S.activeTab==='session'?' active':'')+'" onclick="S.activeTab=\'session\';S.editIdx=null;render()">⚡ Session</button>'
+    +'<button class="tab-btn'+(S.activeTab==='history'?' active':'')+'" onclick="S.activeTab=\'history\';render()">📅 History '+(S.history.length?'('+S.history.length+')':'')+'</button>'
+    +'</div>';
+
+  // API Key
+  h+='<div class="key-box">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none" onclick="S.keyOpen=!S.keyOpen;render()">'
+    +'<span style="font-size:9px;font-weight:700;color:var(--amber);letter-spacing:.08em;text-transform:uppercase">'+(S.apiKey?'🔑 API Key ✓':'🔑 API Key — required for scanning')+'</span>'
+    +'<span style="color:var(--muted);font-size:10px">▼</span></div>'
+    +(S.keyOpen?'<div style="margin-top:10px"><div style="font-size:9px;color:var(--muted);margin-bottom:8px">Get at <span style="color:var(--amber)">console.anthropic.com → API Keys</span></div>'
+      +'<div style="display:flex;gap:8px"><input type="password" class="inp" style="flex:1;font-size:11px" placeholder="sk-ant-api03-..." value="'+S.apiKey+'" oninput="S.apiKey=this.value;persist()"/>'
+      +'<button class="btn-ghost" onclick="S.keyOpen=false;render()">Done</button></div>'
+      +(S.apiKey?'<div style="font-size:9px;color:var(--green);margin-top:6px">✓ Saved</div>':'')
+      +'</div>':'')
+    +'</div>';
+
+  // ─── HISTORY TAB ───────────────────────────────────
+  if(S.activeTab==='history'){
+
+    // ── FULL LOG SCREEN (replaces calendar when active)
+    if(S.logScreen){
+      const ls=S.logScreen;
+      const lsScanned=ls.images.filter(i=>i.scanResult).length;
+      const lsAnyScanning=ls.images.some(i=>i.scanning);
+      const lsUnscanned=ls.images.filter(i=>!i.scanResult&&!i.scanning).length;
+      const lsMuscles=getLogMuscles();
+      const isEdit=ls.isEdit;
+      h+='<div class="ls-header">'
+        +'<button class="ls-back" onclick="closeLogScreen()">← Back</button>'
+        +'<div><div class="ls-title">'+(isEdit?'Edit Session':'Log Session')+'</div>'
+        +'<div class="ls-subtitle">'+fmtDS(keyToISO(ls.key))+(isEdit?' · updating entry':' · '+daysAgo(keyToISO(ls.key))+'d ago')+'</div></div>'
+        +'</div>';
+
+      // Day type selector
+      h+='<div style="margin-bottom:16px"><label class="lbl">Type</label>'
+        +'<div class="tog-row">'
+        +['gym','cardio','rest'].map(t=>'<button class="tog'+(ls.dayType===t?' on':'')+'" onclick="S.logScreen.dayType=\''+t+'\';render()">'+(t==='gym'?'🏋️ GYM':t==='cardio'?'🏃 CARDIO':'😴 REST')+'</button>').join('')
+        +'</div></div>';
+
+      // Energy (not for rest)
+      if(ls.dayType!=='rest'){
+        h+='<div class="card" style="margin-bottom:16px"><label class="lbl">Energy: <span style="color:var(--amber)">'+ls.energy+'/10</span></label>'
+          +'<input type="range" min="1" max="10" step="1" value="'+ls.energy+'" oninput="S.logScreen.energy=parseInt(this.value);render()" style="margin:8px 0"/>'
+          +'<div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted2)"><span>Dead</span><span>OK</span><span>Fired Up</span></div></div>';
+      }
+
+      // ── CARDIO: notes field
+      if(ls.dayType==='cardio'){
+        h+='<div class="card" style="margin-bottom:16px">'
+          +'<label class="lbl">What did you do? <span style="color:var(--muted);font-weight:400;text-transform:none">— optional</span></label>'
+          +'<textarea class="inp" placeholder="e.g. 30 min treadmill 5km, 20 min elliptical, cycling 45 min..." oninput="S.logScreen.notes=this.value" style="min-height:80px">'+( ls.notes||'')+'</textarea>'
+          +'<div style="font-size:8px;color:var(--muted);margin-top:5px">This gets included in your APEX packet so your coach knows your cardio load.</div>'
+          +'</div>';
+      }
+
+      // ── GYM: existing scan preview + input mode toggle + upload/text
+      if(ls.dayType==='gym'){
+        // Show existing scan data when editing
+        if(isEdit&&ls.existingScanText&&!lsScanned){
+          h+='<div style="margin-bottom:14px">'
+            +'<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--green);margin-bottom:6px">📋 Saved Session Data</div>'
+            +'<div style="background:rgba(0,0,0,.4);border:1px solid rgba(134,239,172,.15);border-radius:8px;padding:11px 13px;font-size:9px;color:var(--green);font-family:\'Space Mono\',monospace;line-height:1.7;white-space:pre-wrap;max-height:160px;overflow-y:auto">'
+            +ls.existingScanText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            +'</div>'
+            +'<div style="font-size:8px;color:var(--muted);margin-top:5px">Upload a new screenshot or paste text below to replace this data.</div>'
+            +'</div>';
+        }
+
+        // Input mode toggle
+        h+='<div style="display:flex;gap:6px;margin-bottom:14px">'
+          +'<button style="flex:1;padding:9px;border-radius:7px;font-size:10px;font-family:\'Space Mono\',monospace;cursor:pointer;border:1px solid '+(ls.inputMode==='screenshot'?'var(--red)':'rgba(255,255,255,.1)')+';background:'+(ls.inputMode==='screenshot'?'rgba(239,68,68,.12)':'transparent')+';color:'+(ls.inputMode==='screenshot'?'#fca5a5':'var(--muted)')+'" onclick="S.logScreen.inputMode=\'screenshot\';render()">📷 Screenshot</button>'
+          +'<button style="flex:1;padding:9px;border-radius:7px;font-size:10px;font-family:\'Space Mono\',monospace;cursor:pointer;border:1px solid '+(ls.inputMode==='text'?'var(--red)':'rgba(255,255,255,.1)')+';background:'+(ls.inputMode==='text'?'rgba(239,68,68,.12)':'transparent')+';color:'+(ls.inputMode==='text'?'#fca5a5':'var(--muted)')+'" onclick="S.logScreen.inputMode=\'text\';render()">✏️ Type / Paste</button>'
+          +'</div>';
+
+        if(ls.inputMode==='screenshot'){
+          h+='<div class="card" style="margin-bottom:14px">';
+          if(ls.images.length>0){
+            h+='<div class="img-grid">'+ls.images.map((img,i)=>'<div class="img-card"><img src="'+img.dataUrl+'" alt=""/>'
+              +'<button class="img-rm" onclick="removeLogImg('+i+')">✕</button>'
+              +'<div class="img-card-body">'
+              +'<div style="font-size:8px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+img.fileName+'</div>'
+              +'<div style="font-size:8px;margin-top:2px">'+(img.scanning?'<span class="spin"></span>scanning...':img.scanResult?'<span style="color:var(--green)">✓ '+img.scanResult.split('\n').filter(l=>l.trim()).length+' lines</span>':img.scanError?'<span style="color:#fca5a5">✗ error</span>':'<span style="color:var(--muted)">not scanned</span>')+'</div>'
+              +(!img.scanResult&&!img.scanning?'<button class="scan-mini" onclick="scanLogOne('+i+')" '+(S.apiKey?'':'disabled')+'>⚡ Scan</button>':'')
+              +(img.scanResult?'<button class="scan-mini" onclick="scanLogOne('+i+')" style="color:var(--muted);border-color:rgba(255,255,255,.08)">↺ Re-scan</button>':'')
+              +(img.scanError?'<div style="font-size:8px;color:#fca5a5;margin-top:2px">'+img.scanError.slice(0,55)+'</div>':'')
+              +'</div></div>').join('')+'</div>';
+          }
+          h+='<div class="scan-zone" onclick="document.getElementById(\'lsFileInp\').click()" ondragover="event.preventDefault()" ondrop="event.preventDefault();handleLogFiles(event.dataTransfer.files)">'
+            +'<div style="font-size:18px;margin-bottom:3px">📷</div>'
+            +'<div style="font-size:10px;color:#9ca3af;margin-bottom:2px">'+(ls.images.length?'Add more screenshots':'Tap to upload workout screenshot')+'</div>'
+            +'<div style="font-size:8px;color:var(--muted2)">Gymshark · Strong · any gym app · drag &amp; drop</div></div>'
+            +'<input type="file" id="lsFileInp" accept="image/*" multiple style="display:none" onchange="handleLogFiles(this.files);this.value=\'\'"/>';
+          if(lsUnscanned>1)h+='<button class="btn-sm" style="width:100%;margin-top:8px" onclick="scanLogAll()" '+(lsAnyScanning||!S.apiKey?'disabled':'')+'>'+(lsAnyScanning?'<span class="spin"></span>Scanning...':'⚡ SCAN ALL '+lsUnscanned+' IMAGES')+'</button>';
+          h+='</div>';
+        } else {
+          // Text / paste mode
+          h+='<div class="card" style="margin-bottom:14px">'
+            +'<label class="lbl">Exercise Data <span style="color:var(--muted);font-weight:400;text-transform:none">— paste or type</span></label>'
+            +'<textarea class="inp" placeholder="Paste your workout data here, e.g.:\n\nSESSION: Push Day\nDURATION: 55 min\n\nEXERCISES:\nChest Press (machine): 24kg×10, 26kg×8\nShoulder Press (machine): 14kg×10, 14kg×9\nTricep Pushdown (cable): 22kg×12" oninput="S.logScreen.notes=this.value" style="min-height:160px;font-size:9px">'+( ls.notes||ls.existingScanText||'')+'</textarea>'
+            +'<div style="font-size:8px;color:var(--muted);margin-top:5px">Paste an APEX packet, your own notes, or any workout log. Format doesn\'t matter — APEX will use whatever you write.</div>'
+            +'</div>';
+        }
+
+        // Muscle confirm (after scan OR after text entry with content)
+        const hasScanOrText=lsScanned>0||(ls.inputMode==='text'&&ls.notes&&ls.notes.trim().length>10);
+        if(hasScanOrText){
+          const lmNow=getLogMuscles();
+          h+='<div style="margin-bottom:14px;padding:11px;background:rgba(167,139,250,.05);border:1px solid rgba(167,139,250,.2);border-radius:8px">'
+            +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">'
+            +'<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--purple)">✏ Muscles Trained</span>'
+            +(ls.manualMuscles!==null?'<button onclick="S.logScreen.manualMuscles=null;render()" style="background:none;border:none;font-size:8px;color:var(--muted);cursor:pointer;font-family:\'Space Mono\',monospace;text-decoration:underline">↺ auto</button>':'<span style="font-size:8px;color:var(--muted)">auto-detected · tap to adjust</span>')
+            +'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'
+            +MUSCLES.map(m=>{const on=lmNow.includes(m);return'<div onclick="toggleLogMuscle(\''+m+'\')" style="display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:6px;border:1px solid '+(on?'rgba(239,68,68,.4)':'rgba(255,255,255,.06)')+';background:'+(on?'rgba(239,68,68,.1)':'rgba(255,255,255,.02)')+';cursor:pointer"><div style="width:7px;height:7px;border-radius:50%;background:'+(on?'var(--red)':'rgba(255,255,255,.12)')+';flex-shrink:0"></div><span style="font-size:9px;font-family:\'Space Mono\',monospace;text-transform:capitalize;color:'+(on?'#fca5a5':'var(--muted)')+(on?';font-weight:700':'')+'">'+ m+'</span></div>';}).join('')
+            +'</div></div>';
+        }else if(isEdit&&ls.dayType==='gym'){
+          // Always show muscle grid when editing gym entry
+          const lmNow=ls.manualMuscles||[];
+          h+='<div style="margin-bottom:14px;padding:11px;background:rgba(167,139,250,.05);border:1px solid rgba(167,139,250,.2);border-radius:8px">'
+            +'<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--purple);margin-bottom:7px">✏ Muscles Trained</div>'
+            +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'
+            +MUSCLES.map(m=>{const on=lmNow.includes(m);return'<div onclick="toggleLogMuscle(\''+m+'\')" style="display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:6px;border:1px solid '+(on?'rgba(239,68,68,.4)':'rgba(255,255,255,.06)')+';background:'+(on?'rgba(239,68,68,.1)':'rgba(255,255,255,.02)')+';cursor:pointer"><div style="width:7px;height:7px;border-radius:50%;background:'+(on?'var(--red)':'rgba(255,255,255,.12)')+';flex-shrink:0"></div><span style="font-size:9px;font-family:\'Space Mono\',monospace;text-transform:capitalize;color:'+(on?'#fca5a5':'var(--muted)')+(on?';font-weight:700':'')+'">'+ m+'</span></div>';}).join('')
+            +'</div></div>';
+        }
+      }
+
+      // Save / Cancel
+      h+='<button class="btn" style="margin-bottom:10px" onclick="saveLogScreen()">💾 '+(isEdit?'UPDATE SESSION':'SAVE SESSION')+'</button>'
+        +'<button class="btn-ghost" style="width:100%" onclick="closeLogScreen()">Cancel</button>';
+      h+='<div class="footer">APEX v9</div>';
+      app.innerHTML=h;return;
+    }
+
+    // ── CALENDAR VIEW
+    h+='<div style="margin-bottom:14px">'+renderCalendar()+'</div>';
+    h+='<div style="display:flex;gap:10px;margin-bottom:18px;font-size:8px;color:var(--muted)">'
+      +'<span>🏋 gym</span><span>🏃 cardio</span><span>😴 rest</span>'
+      +'<span style="margin-left:4px">— tap empty day to log · tap logged day to edit</span>'
+      +'</div>';
+    h+=renderBackupPanel('expBtn','rev4Btn');
+    h+='<div style="margin-top:18px"></div>';
+    h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'
+      +'<span style="font-size:10px;font-weight:700;color:var(--text)">'+S.history.length+' sessions</span>'
+      +'<button class="btn-sm" onclick="addNewEntry()">+ Add Entry</button></div>';
+    if(!S.history.length){h+='<div style="text-align:center;padding:24px 0;font-size:10px;color:var(--muted)">No sessions yet.</div>';}
+    S.history.forEach((entry,i)=>{
+      const tc=entry.dayType==='gym'?'var(--red)':entry.dayType==='cardio'?'var(--blue)':'var(--muted)';
+      const ti=entry.dayType==='gym'?'🏋️':entry.dayType==='cardio'?'🏃':'😴';
+      h+='<div class="he-entry">'
+        +'<div class="he-row" onclick="openEditLogScreen('+i+')">'
+        +'<div style="flex:1;display:flex;flex-direction:column;gap:3px">'
+        +'<div style="font-size:11px;font-weight:700">'+fmtDS(entry.date)+' <span style="font-size:9px;color:var(--muted)">'+(entry.date||'').slice(11,16)+'</span></div>'
+        +'<div style="font-size:8px;color:var(--muted)"><span style="color:'+tc+'">'+ti+' '+entry.dayType.toUpperCase()+'</span> · E:'+entry.energy+'/10'+(entry.duration?' · '+entry.duration:'')+' · '+daysAgo(entry.date)+'d ago</div>'
+        +((entry.muscles||[]).length?'<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px">'+entry.muscles.map(m=>'<span style="padding:2px 6px;border-radius:3px;font-size:8px;font-weight:700;text-transform:uppercase;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#fca5a5">'+m+'</span>').join('')+'</div>':'')
+        +(entry.scanText&&entry.dayType==='cardio'?'<div style="font-size:8px;color:var(--blue);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">🏃 '+entry.scanText.slice(0,60)+'</div>':'')
+        +'</div>'
+        +'<div style="display:flex;gap:5px;flex-shrink:0">'
+        +'<button class="he-edit-btn" onclick="event.stopPropagation();openEditLogScreen('+i+')">✏</button>'
+        +'<button class="he-del-btn" onclick="event.stopPropagation();if(confirm(\'Delete?\'))'+'{S.history.splice('+i+',1);persist();render()}">🗑</button>'
+        +'</div></div></div>';
+    });
+    h+='<div class="footer">APEX v9 · CALENDAR · HISTORY · EXPORT</div>';
+    app.innerHTML=h;
+    return;
   }
-  return '<div class="screen">'
-    +'<div class="screen-title">Body Check</div>'
-    +'<div class="screen-sub">How are you feeling? Mark any soreness.</div>'
+
+  // ─── SESSION TAB ──────────────────────────────────
+  h+='<div class="alert a-blue" style="font-size:9px">Fill all sections → Generate → paste into fresh APEX chat.</div>';
+
+  // ── SECTION 1: TODAY
+  h+='<div class="sec"><div class="sec-head"><div class="sec-num">1</div>'
+    +'<div><div class="sec-title">Today</div><div class="sec-sub">'+fmtDS(nowDT())+' · type &amp; energy</div></div></div>'
     +'<div class="card">'
-    +'<div class="sor-grid">'
+    +'<div style="margin-bottom:14px"><label class="lbl">Day Type</label><div class="tog-row">'
+    +['gym','cardio','rest'].map(t=>'<button class="tog'+(S.dayType===t?' on':'')+'" onclick="S.dayType=\''+t+'\';persist();render()">'+(t==='gym'?'🏋️ GYM':t==='cardio'?'🏃 CARDIO':'😴 REST')+'</button>').join('')
+    +'</div></div>'
+    +(S.dayType!=='rest'
+      ?'<div><label class="lbl">Energy: <span style="color:var(--amber)">'+S.energy+'/10 — '+eLbl(S.energy)+'</span></label>'
+        +'<input type="range" min="1" max="10" step="1" value="'+S.energy+'" oninput="S.energy=parseInt(this.value);persist();render()" style="margin:8px 0"/>'
+        +'<div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted2)"><span>Dead</span><span>OK</span><span>Fired Up</span></div>'
+        +(S.dayType==='cardio'?'<div style="margin-top:12px"><label class="lbl">What did you do? <span style="color:var(--muted);font-weight:400;text-transform:none">— optional</span></label><textarea class="inp" placeholder="e.g. 30 min treadmill 5km, cycling 45 min, swimming..." oninput="S.cardioNotes=this.value" style="min-height:70px;margin-top:2px">'+S.cardioNotes+'</textarea></div>':'')
+        +'</div>'
+      :'<div style="font-size:9px;color:var(--muted);padding:4px 0">Rest day — recovery is part of the programme.</div>')
+    +'</div></div>';
+
+  // ── SECTION 2: BODY CHECK
+  h+='<div class="sec"><div class="sec-head"><div class="sec-num">2</div>'
+    +'<div><div class="sec-title">Body Check</div><div class="sec-sub">Soreness per muscle</div></div></div>'
+    +'<div class="card"><div class="sor-grid">'
     +MUSCLES.map(m=>'<div class="sor-item">'
       +'<div style="display:flex;justify-content:space-between;align-items:center">'
       +'<span style="font-size:9px;color:#9ca3af;text-transform:capitalize">'+m+'</span>'
@@ -607,208 +950,122 @@ function stepBody(){
       +'</div><div class="sor-pills">'
       +['none','mild','moderate','severe'].map(o=>'<button class="pill '+o+(S.soreness[m]===o?' on':'')+'" onclick="S.soreness[\''+m+'\']=\''+o+'\';persist();render()">'+(o==='none'?'—':o.slice(0,3))+'</button>').join('')
       +'</div></div>').join('')
-    +'</div>'+mpsRow+'</div>'
-    +'<div class="nav-row">'
-    +'<button class="btn-secondary" style="width:auto;padding:11px 18px" onclick="goStep(STEP_TODAY)">← Back</button>'
-    +'<button class="btn" onclick="goStep(STEP_REF)">'+(hasSoreness?'Continue →':'All fine — Continue →')+'</button>'
+    +'</div>'
+    +(trained.length>0&&lastV&&S.lastSessionMode==='gym'
+      ?'<div style="margin-top:13px;padding-top:12px;border-top:1px solid rgba(255,255,255,.05)">'
+        +'<div style="font-size:9px;color:var(--muted);margin-bottom:6px">MPS · '+hrs+'h since last gym session</div>'
+        +'<div style="display:flex;flex-wrap:wrap;gap:4px">'
+        +mpsActive.map(m=>'<span class="badge badge-active">⚡ '+m+' '+(Math.max(0,MPS_H[m]-hrs)).toFixed(0)+'h</span>').join('')
+        +mpsClear.map(m=>'<span class="badge badge-clear">✓ '+m+'</span>').join('')
+        +MUSCLES.filter(mu=>!trained.includes(mu)).map(m=>'<span class="badge badge-unk">— '+m+'</span>').join('')
+        +'</div></div>'
+      :S.history.length
+        ?'<div style="margin-top:13px;padding-top:12px;border-top:1px solid rgba(255,255,255,.05)">'
+          +'<div style="font-size:9px;color:var(--muted);margin-bottom:6px">Weekly frequency:</div>'
+          +'<div style="display:flex;flex-wrap:wrap;gap:4px">'+MUSCLES.map(m=>{const f=freq[m];const c=f===0?'badge-zero':f===1?'badge-due':f>=2?'badge-full':'badge-zero';return'<span class="badge '+c+'">'+m+' '+f+'x</span>';}).join('')+'</div></div>'
+        :'')
     +'</div></div>';
-}
 
-function stepReference(){
-  const lastGym=S.lastUnknown?null:getLastGymSession();
-  const hasStoredScan=!!(lastGym&&lastGym.scanText);
-  const hasUploadedScan=S.images.some(i=>i.scanResult);
-  const scanned=S.images.filter(i=>i.scanResult).length;
-  const anyScanning=S.images.some(i=>i.scanning);
-  const unscanned=S.images.filter(i=>!i.scanResult&&!i.scanning).length;
-  const trained=getEffectiveMuscles();
-  let inner='';
-  inner+='<div class="sw-row" style="margin-bottom:12px" onclick="S.lastUnknown=!S.lastUnknown;persist();render()">'
-    +'<div class="sw-box'+(S.lastUnknown?' on':'')+'"><div class="sw-knob"></div></div>'
-    +'<span class="sw-lbl">'+(S.lastUnknown?'<span style="color:var(--amber)">Last session unknown</span> — APEX uses conservative baseline':'Mark last session as unknown')+'</span></div>';
-  if(!S.lastUnknown){
-    if(lastGym){
-      const da=daysAgo(lastGym.date);
-      inner+='<div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:11px 13px;margin-bottom:12px">'
+  // ── SECTION 3: LAST SESSION
+  const hasStoredScan=!!(lg&&lg.scanText),hasUploadedScan=scanned>0;
+  h+='<div class="sec"><div class="sec-head"><div class="sec-num">3</div>'
+    +'<div><div class="sec-title">Last Session</div><div class="sec-sub">Tell APEX what happened before today</div></div></div>'
+    +'<div class="card">'
+    // 3-way mode selector
+    +'<div style="margin-bottom:14px"><label class="lbl">What was your last session?</label>'
+    +'<div class="lsm-row">'
+    +'<button class="lsm-btn'+(S.lastSessionMode==='gym'?' on-gym':'')+'" onclick="S.lastSessionMode=\'gym\';persist();render()">🏋️<br>Had a<br>gym session</button>'
+    +'<button class="lsm-btn'+(S.lastSessionMode==='rest'?' on-rest':'')+'" onclick="S.lastSessionMode=\'rest\';persist();render()">😴<br>Was rest<br>or cardio</button>'
+    +'<button class="lsm-btn'+(S.lastSessionMode==='unknown'?' on-unk':'')+'" onclick="S.lastSessionMode=\'unknown\';persist();render()">❓<br>Don\'t<br>remember</button>'
+    +'</div></div>';
+
+  if(S.lastSessionMode==='gym'){
+    if(lg){
+      const da=daysAgo(lg.date);
+      h+='<div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:11px 13px;margin-bottom:12px">'
         +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">'
-        +'<div><div style="font-size:11px;font-weight:700">'+fmtDS(lastGym.date)+'</div>'
-        +'<div style="font-size:8px;color:var(--muted);margin-top:2px">'+da+'d ago'+(da===0?' (today)':da===1?' (yesterday)':'')+(lastGym.duration?' · '+lastGym.duration:'')+'</div></div>'
-        +'<div>'+(hasStoredScan?'<span style="font-size:8px;color:var(--green)">✓ scan saved</span>':hasUploadedScan?'':'<span style="font-size:8px;color:var(--amber)">no scan</span>')+'</div></div>'
-        +((lastGym.muscles||[]).length?'<div style="display:flex;flex-wrap:wrap;gap:3px">'+lastGym.muscles.map(m=>'<span style="padding:2px 7px;border-radius:3px;font-size:8px;font-weight:700;text-transform:uppercase;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#fca5a5">'+m+'</span>').join('')+'</div>':'')
-        +(hasStoredScan&&!hasUploadedScan?'<div class="gym-ref-scan">'+lastGym.scanText.split('\n').filter(l=>l.trim()).slice(0,5).join('\n')+'</div>':'')
+        +'<div><div style="font-size:11px;font-weight:700">'+fmtDS(lg.date)+'</div>'
+        +'<div style="font-size:8px;color:var(--muted);margin-top:2px">'+da+'d ago'+(da===0?' (today)':da===1?' (yesterday)':'')+(lg.duration?' · '+lg.duration:'')+'</div></div>'
+        +'<div style="font-size:8px">'+(hasStoredScan?'<span style="color:var(--green)">✓ scan saved</span>':hasUploadedScan?'':'<span style="color:var(--amber)">no scan</span>')+'</div>'
+        +'</div>'
+        +((lg.muscles||[]).length?'<div style="display:flex;flex-wrap:wrap;gap:3px">'+lg.muscles.map(m=>'<span style="padding:2px 7px;border-radius:3px;font-size:8px;font-weight:700;text-transform:uppercase;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#fca5a5">'+m+'</span>').join('')+'</div>':'')
+        +(hasStoredScan&&!hasUploadedScan?'<div class="gym-ref-scan">'+lg.scanText.split('\n').filter(l=>l.trim()).slice(0,5).join('\n')+'</div>':'')
         +(!hasStoredScan&&!hasUploadedScan?'<div class="alert a-amber" style="margin-top:8px;margin-bottom:0;font-size:9px">Upload screenshot for progressive overload targets</div>':'')
         +'</div>';
     }else{
-      inner+='<div class="alert a-amber" style="margin-bottom:12px">No gym sessions in history. Upload a screenshot or mark as unknown.</div>';
+      h+='<div class="alert a-amber" style="margin-bottom:12px">No gym sessions in history. Upload a screenshot or change the option above.</div>';
     }
-    // Upload section
-    inner+='<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:9px">'+(hasStoredScan&&!hasUploadedScan?'Override scan — optional':'Upload workout screenshot')+'</div>';
+    h+='<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:9px">'+(hasStoredScan&&!hasUploadedScan?'Override with new screenshot — optional':'Upload workout screenshot')+'</div>';
     if(S.images.length>0){
-      inner+='<div class="img-grid">'+S.images.map((img,i)=>'<div class="img-card"><img src="'+img.dataUrl+'" alt=""/>'
+      h+='<div class="img-grid">'+S.images.map((img,i)=>'<div class="img-card"><img src="'+img.dataUrl+'" alt=""/>'
         +'<button class="img-rm" onclick="removeImg('+i+')">✕</button>'
         +'<div class="img-card-body">'
         +'<div style="font-size:8px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+img.fileName+'</div>'
-        +'<div style="font-size:8px;margin-top:3px">'+(img.scanning?'<span class="spin"></span>scanning...':img.scanResult?'<span style="color:var(--green)">✓ '+img.scanResult.split('\n').filter(l=>l.trim()).length+' lines</span>':img.scanError?'<span style="color:#fca5a5">✗ error</span>':'<span style="color:var(--muted)">not scanned</span>')+'</div>'
+        +'<div style="font-size:8px;margin-top:2px">'+(img.scanning?'<span class="spin"></span>scanning...':img.scanResult?'<span style="color:var(--green)">✓ '+img.scanResult.split('\n').filter(l=>l.trim()).length+' lines</span>':img.scanError?'<span style="color:#fca5a5">✗ error</span>':'<span style="color:var(--muted)">not scanned</span>')+'</div>'
         +(!img.scanResult&&!img.scanning?'<button class="scan-mini" onclick="scanOne('+i+')" '+(S.apiKey?'':'disabled')+'>⚡ Scan</button>':'')
         +(img.scanResult?'<button class="scan-mini" onclick="scanOne('+i+')" style="color:var(--muted);border-color:rgba(255,255,255,.08)">↺ Re-scan</button>':'')
-        +(img.scanError?'<div style="font-size:8px;color:#fca5a5;margin-top:3px">'+img.scanError.slice(0,50)+'</div>':'')
+        +(img.scanError?'<div style="font-size:8px;color:#fca5a5;margin-top:2px">'+img.scanError.slice(0,55)+'</div>':'')
         +'</div></div>').join('')+'</div>';
     }
-    inner+='<div class="scan-zone" onclick="document.getElementById(\'fileInp\').click()" ondragover="event.preventDefault()" ondrop="event.preventDefault();handleFiles(event.dataTransfer.files)">'
+    h+='<div class="scan-zone" onclick="document.getElementById(\'fileInp\').click()" ondragover="event.preventDefault()" ondrop="event.preventDefault();handleFiles(event.dataTransfer.files)">'
       +'<div style="font-size:18px;margin-bottom:3px">📷</div>'
       +'<div style="font-size:10px;color:#9ca3af;margin-bottom:2px">'+(S.images.length?'Add more screenshots':'Tap to upload screenshot')+'</div>'
-      +'<div style="font-size:8px;color:var(--muted2)">Gymshark · Strong · any gym app · drag & drop</div></div>';
-    inner+='<input type="file" id="fileInp" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files);this.value=\'\'"/>';
-    if(unscanned>1){
-      inner+='<button class="btn-ghost" style="width:100%;margin-top:8px" onclick="scanAll()" '+(anyScanning||!S.apiKey?'disabled':'')+'>'+(anyScanning?'<span class="spin"></span>Scanning...':'⚡ SCAN ALL '+unscanned+' IMAGES')+'</button>';
-    }
+      +'<div style="font-size:8px;color:var(--muted2)">Gymshark · Strong · any app · drag &amp; drop</div></div>';
+    h+='<input type="file" id="fileInp" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files);this.value=\'\'"/>';
+    if(unscanned>1)h+='<button class="btn-sm" style="width:100%;margin-top:8px" onclick="scanAll()" '+(anyScanning||!S.apiKey?'disabled':'')+'>'+(anyScanning?'<span class="spin"></span>Scanning...':'⚡ SCAN ALL '+unscanned+' IMAGES')+'</button>';
     if(scanned>0){
-      inner+='<div style="margin-top:12px;padding:11px;background:rgba(167,139,250,.05);border:1px solid rgba(167,139,250,.2);border-radius:8px">'
+      const trainedNow=getEffectiveMuscles();
+      h+='<div style="margin-top:12px;padding:11px;background:rgba(167,139,250,.05);border:1px solid rgba(167,139,250,.2);border-radius:8px">'
         +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">'
         +'<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--purple)">✏ Confirm Muscles</span>'
         +(S.manualMuscles!==null?'<button onclick="S.manualMuscles=null;render()" style="background:none;border:none;font-size:8px;color:var(--muted);cursor:pointer;font-family:\'Space Mono\',monospace;text-decoration:underline">↺ auto</button>':'<span style="font-size:8px;color:var(--muted)">tap to adjust</span>')
         +'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'
-        +MUSCLES.map(m=>{const on=trained.includes(m);return'<div onclick="toggleManualMuscle(\''+m+'\')" style="display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:6px;border:1px solid '+(on?'rgba(239,68,68,.4)':'rgba(255,255,255,.06)')+';background:'+(on?'rgba(239,68,68,.1)':'rgba(255,255,255,.02)')+';cursor:pointer"><div style="width:7px;height:7px;border-radius:50%;background:'+(on?'var(--red)':'rgba(255,255,255,.12)')+';flex-shrink:0"></div><span style="font-size:9px;font-family:\'Space Mono\',monospace;text-transform:capitalize;color:'+(on?'#fca5a5':'var(--muted)')+(on?';font-weight:700':'')+'">'+ m+'</span></div>';}).join('')
+        +MUSCLES.map(m=>{const on=trainedNow.includes(m);return'<div onclick="toggleManualMuscle(\''+m+'\')" style="display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:6px;border:1px solid '+(on?'rgba(239,68,68,.4)':'rgba(255,255,255,.06)')+';background:'+(on?'rgba(239,68,68,.1)':'rgba(255,255,255,.02)')+';cursor:pointer"><div style="width:7px;height:7px;border-radius:50%;background:'+(on?'var(--red)':'rgba(255,255,255,.12)')+';flex-shrink:0"></div><span style="font-size:9px;font-family:\'Space Mono\',monospace;text-transform:capitalize;color:'+(on?'#fca5a5':'var(--muted)')+(on?';font-weight:700':'')+'">'+ m+'</span></div>';}).join('')
         +'</div></div>';
     }
+  } else if(S.lastSessionMode==='rest'){
+    h+='<div class="alert a-green" style="margin-bottom:0">APEX will programme a fresh session — all MPS windows cleared, no previous weights to reference. If you have recent gym data in history, it will still appear in the 14-day block.</div>';
+  } else {
+    h+='<div class="alert a-amber" style="margin-bottom:0">APEX will use conservative baseline weights, RPE 7 across all exercises.</div>';
   }
-  return '<div class="screen">'
-    +'<div class="screen-title">Last Gym Session</div>'
-    +'<div class="screen-sub">Reference data for MPS &amp; progressive overload targets</div>'
-    +'<div class="card">'+inner+'</div>'
-    +'<button class="btn" style="margin-bottom:10px" onclick="generatePacket()">⚡ GENERATE APEX PACKET</button>'
-    +'<button class="btn-secondary" onclick="goStep(STEP_BODY)">← Back</button>'
-    +'</div>';
-}
+  h+='</div></div>';
 
-function stepOutput(){
-  const esc=S.outputText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const tokens=Math.round(S.outputText.length/4);
-  const lastGymNow=getLastGymSession();
-  const scansPresent=allScansText().length>0;
-  const trainedNow=getEffectiveMuscles();
-  let saveLbl='💾 Save Today to History';
-  if(scansPresent&&lastGymNow)saveLbl='💾 Save Today + Attach Scan to '+fmtDS(lastGymNow.date);
-  // Session summary chips
-  const soreSummary=Object.entries(S.soreness).filter(([,v])=>v!=='none').map(([m,v])=>m+':'+v).join(', ')||'none';
-  return '<div class="screen">'
-    +'<div class="screen-title">Packet Ready ⚡</div>'
-    +'<div style="font-size:9px;color:var(--muted);margin-bottom:14px;display:flex;flex-wrap:wrap;gap:5px">'
-    +'<span class="summary-chip">'+S.dayType.toUpperCase()+'</span>'
-    +'<span class="summary-chip">E: '+S.energy+'/10</span>'
-    +'<span class="summary-chip">Soreness: '+soreSummary+'</span>'
-    +(S.history.length?'<span class="summary-chip">'+S.history.length+' sessions logged</span>':'')
-    +'</div>'
-    +'<div class="token-bar">'
-    +'<div class="token-stat"><div class="token-val" style="color:var(--green)">~'+tokens+'</div><div class="token-lbl">Tokens</div></div>'
-    +'<div class="token-stat"><div class="token-val" style="color:var(--blue)">'+S.outputText.length+'</div><div class="token-lbl">Chars</div></div>'
-    +'<div class="token-stat"><div class="token-val" style="color:var(--amber)">'+S.history.length+'</div><div class="token-lbl">Sessions</div></div>'
-    +'</div>'
-    +'<div class="out-wrap"><div class="out-head"><span>APEX PACKET</span><span style="color:var(--muted)">copy → paste to new chat</span></div>'
-    +'<div class="out-body">'+esc+'</div></div>'
-    +'<button class="btn" id="cpyBtn" onclick="copyText(S.outputText,\'cpyBtn\')" style="margin-bottom:8px">📋 COPY FOR APEX CHAT</button>'
-    +(S.sessionSaved
-      ?'<div class="alert a-green" style="margin-bottom:8px">✓ Saved to history.</div>'
-      :'<button class="btn-green" style="width:100%;margin-bottom:8px;padding:12px" onclick="saveAll()">'+saveLbl+'</button>')
-    +'<div class="nav-row">'
-    +'<button class="btn-ghost" onclick="goStep(STEP_REF)">← Edit Reference</button>'
-    +'<button class="btn-ghost" onclick="S.step=STEP_TODAY;S.images=[];S.manualMuscles=null;S.outputText=\'\';S.sessionSaved=false;render()">↺ New Session</button>'
-    +'</div></div>';
-}
+  // ── GENERATE
+  h+='<button class="btn" style="font-size:13px;padding:15px;margin-bottom:20px" onclick="generatePacket()">'+(S.outputGenerated?'↺ REGENERATE PACKET':'⚡ GENERATE APEX PACKET')+'</button>';
 
-function renderHistoryEditor(){
-  const importBlock=S.showImport
-    ?'<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07)">'
-      +'<label class="lbl">Paste Exported History</label>'
-      +'<textarea class="inp" placeholder="Paste APEX_HISTORY_EXPORT here..." oninput="S.importText=this.value" style="min-height:90px">'+S.importText+'</textarea>'
-      +'<button class="btn" style="margin-top:8px" onclick="(function(){var e=parseImport(S.importText);if(!e.length){alert(\'No valid entries found.\');return;}e.forEach(function(x){var k=dateKey(x.date);S.history=S.history.filter(function(h){return dateKey(h.date)!==k;});S.history.push(x);});S.history.sort(function(a,b){return new Date(b.date)-new Date(a.date);});persist();S.importText=\'\';S.showImport=false;alert(e.length+\' sessions imported.\');render();})()">⬇ IMPORT</button></div>'
-    :'';
-  let h='<div style="margin-bottom:16px">'
-    +'<div class="row-wrap" style="margin-bottom:10px">'
-    +'<button class="btn-green" id="expBtn" onclick="copyText(buildFullExport(),\'expBtn\')">⬆ Export History</button>'
-    +'<button class="btn-purple" id="rev4Btn" onclick="copyText(build4WeekReview(),\'rev4Btn\')">📊 4-Week Review</button>'
-    +'<button class="btn-ghost" onclick="S.showImport=!S.showImport;render()">'+(S.showImport?'▲ Hide':'⬇ Import')+'</button>'
-    +'</div>'
-    +'<div style="font-size:9px;color:var(--muted);line-height:1.65"><strong style="color:var(--green)">Export</strong> → Notes weekly &nbsp;·&nbsp; <strong style="color:var(--purple)">4-Week</strong> → fresh APEX chat &nbsp;·&nbsp; <strong style="color:#f87171">Import</strong> → restore</div>'
-    +importBlock+'</div>'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">'
-    +'<span style="font-size:10px;font-weight:700">'+S.history.length+' sessions stored</span>'
-    +'<button class="btn-ghost" onclick="addNewEntry()">+ Add Entry</button></div>';
-  if(!S.history.length){h+='<div style="text-align:center;padding:30px 0;font-size:10px;color:var(--muted)">No sessions yet.</div>';return h;}
-  S.history.forEach((entry,i)=>{
-    const isEditing=S.editIdx===i;
-    const tc=entry.dayType==='gym'?'var(--red)':entry.dayType==='cardio'?'var(--blue)':'var(--muted)';
-    const ti=entry.dayType==='gym'?'🏋️':entry.dayType==='cardio'?'🏃':'😴';
-    h+='<div class="he-entry">'
-      +'<div class="he-row">'
-      +'<div style="flex:1;display:flex;flex-direction:column;gap:3px" onclick="'+(isEditing?'cancelEdit()':'startEdit('+i+')')+'">'
-      +'<div style="font-size:11px;font-weight:700">'+fmtDS(entry.date)+' <span style="font-size:9px;color:var(--muted)">'+(entry.date||'').slice(11,16)+'</span></div>'
-      +'<div style="font-size:8px;color:var(--muted)"><span style="color:'+tc+'">'+ti+' '+entry.dayType.toUpperCase()+'</span> · E:'+entry.energy+'/10'+(entry.duration?' · '+entry.duration:'')+'</div>'
-      +((entry.muscles||[]).length?'<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:2px">'+entry.muscles.map(m=>'<span style="padding:2px 6px;border-radius:3px;font-size:8px;font-weight:700;text-transform:uppercase;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#fca5a5">'+m+'</span>').join('')+'</div>':'')
+  // ── OUTPUT
+  if(S.outputGenerated){
+    const esc=S.outputText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const tokens=Math.round(S.outputText.length/4);
+    const lgNow=getLastGymSession(),scansPresent=allScansText().length>0,trainedNow=getEffectiveMuscles();
+    let saveLbl='💾 SAVE TODAY TO HISTORY';
+    if(scansPresent&&lgNow)saveLbl='💾 SAVE TODAY + ATTACH SCAN TO '+fmtDS(lgNow.date).toUpperCase();
+    let savedMsg='Today logged as '+S.dayType.toUpperCase()+'.';
+    if(scansPresent&&lgNow)savedMsg+=' Scan attached to '+fmtDS(lgNow.date)+(trainedNow.length>0?' ('+trainedNow.map(m=>m.toUpperCase()).join(', ')+')':'')+'.';
+    h+='<div id="out-sec">'
+      +'<div class="alert a-green">✓ Packet ready — open fresh APEX chat → paste → get your plan.</div>'
+      +'<div class="token-bar">'
+      +'<div class="token-stat"><div class="token-val" style="color:var(--green)">~'+tokens+'</div><div class="token-lbl">Tokens</div></div>'
+      +'<div class="token-stat"><div class="token-val" style="color:var(--blue)">'+S.outputText.length+'</div><div class="token-lbl">Chars</div></div>'
+      +'<div class="token-stat"><div class="token-val" style="color:'+(S.sessionSaved?'var(--green)':'var(--amber)')+'">'+S.history.length+'</div><div class="token-lbl">Sessions</div></div>'
       +'</div>'
-      +'<div style="display:flex;gap:5px;flex-shrink:0">'
-      +'<button class="he-edit-btn" onclick="event.stopPropagation();'+(isEditing?'cancelEdit()':'startEdit('+i+')')+'">'+( isEditing?'✕':'✏')+'</button>'
-      +'<button class="he-del-btn" onclick="event.stopPropagation();if(confirm(\'Delete?\'))'+'{S.history.splice('+i+',1);persist();if(S.editIdx==='+i+')S.editIdx=null;render()}">🗑</button>'
-      +'</div></div>';
-    if(isEditing){
-      h+='<div class="he-form">'
-        +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">'
-        +'<div><label class="lbl">Date &amp; Time</label><input type="datetime-local" class="inp" value="'+S.editBuf.date+'" oninput="S.editBuf.date=this.value"/></div>'
-        +'<div><label class="lbl">Energy</label><input type="number" class="inp" min="1" max="10" value="'+S.editBuf.energy+'" oninput="S.editBuf.energy=parseInt(this.value)||7" style="text-align:center;font-size:14px"/></div>'
-        +'</div>'
-        +'<div style="margin-bottom:10px"><label class="lbl">Day Type</label><div class="tog-row">'+['gym','cardio','rest'].map(t=>'<button class="tog'+(S.editBuf.dayType===t?' on':'')+'" onclick="S.editBuf.dayType=\''+t+'\';render()">'+(t==='gym'?'🏋️ GYM':t==='cardio'?'🏃 CARDIO':'😴 REST')+'</button>').join('')+'</div></div>'
-        +'<div style="margin-bottom:10px"><label class="lbl">Muscles Trained</label><div class="mcheck-grid">'+MUSCLES.map(m=>{const on=S.editBuf.muscles.includes(m);return'<div class="mcheck'+(on?' on':'')+'" onclick="toggleEditMuscle(\''+m+'\')"><div class="mcheck-dot"></div><span class="mcheck-lbl">'+m+'</span></div>';}).join('')+'</div></div>'
-        +'<div style="margin-bottom:10px"><label class="lbl">Duration</label><input type="text" class="inp" placeholder="e.g. 52 min" value="'+S.editBuf.duration+'" oninput="S.editBuf.duration=this.value"/></div>'
-        +'<div style="margin-bottom:10px"><label class="lbl">Scan / Notes</label><textarea class="inp" style="min-height:70px;font-size:9px" placeholder="Exercises, weights..." oninput="S.editBuf.scanText=this.value">'+S.editBuf.scanText+'</textarea></div>'
-        +'<div style="display:flex;gap:6px"><button class="btn" style="flex:1;padding:10px" onclick="saveEdit()">💾 SAVE</button><button class="btn-ghost" onclick="cancelEdit()">Cancel</button></div>'
-        +'</div>';
-    }
-    h+='</div>';
-  });
-  return h;
-}
-
-// ── MAIN RENDER
-function render(){
-  const app=document.getElementById('app');if(!app)return;
-  let h='';
-
-  // Header
-  h+='<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">'
-    +'<div><div class="logo">⚡ AP<span>E</span>X</div><div class="tagline">Adaptive Performance Engine</div></div>'
-    +'<button class="btn-ghost" onclick="S.activeTab=S.activeTab===\'history\'?\'session\':\'history\';S.editIdx=null;render()" style="margin-top:4px">'+(S.activeTab==='history'?'⚡ Session':'📋 History'+(S.history.length?' ('+S.history.length+')':''))+'</button>'
-    +'</div>';
-
-  // API Key
-  h+='<div class="key-box" style="margin-top:16px">'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none" onclick="S.keyOpen=!S.keyOpen;render()">'
-    +'<span style="font-size:9px;font-weight:700;color:var(--amber);letter-spacing:.08em;text-transform:uppercase">'+(S.apiKey?'🔑 API Key ✓':'🔑 API Key — set for scanning')+'</span>'
-    +'<span style="color:var(--muted);font-size:10px;transition:transform .2s'+(S.keyOpen?';transform:rotate(180deg)':'')+'">▼</span></div>'
-    +(S.keyOpen?'<div style="margin-top:10px"><div style="font-size:9px;color:var(--muted);margin-bottom:8px">Get at <span style="color:var(--amber)">console.anthropic.com → API Keys</span>. Stored in browser only.</div>'
-      +'<div style="display:flex;gap:8px;align-items:center"><input type="password" class="inp" style="flex:1;font-size:11px" placeholder="sk-ant-api03-..." value="'+S.apiKey+'" oninput="S.apiKey=this.value;persist()"/>'
-      +'<button class="btn-ghost" onclick="S.keyOpen=false;render()">Done</button></div>'
-      +(S.apiKey?'<div style="font-size:9px;color:var(--green);margin-top:6px">✓ Key saved — scanning enabled</div>':'')
-      +'</div>':'')
-    +'</div>';
-
-  // History tab
-  if(S.activeTab==='history'){
-    h+=renderHistoryEditor();
-    h+='<div class="footer">APEX v6 · WIZARD FLOW</div>';
-    app.innerHTML=h;return;
+      +'<div class="out-wrap"><div class="out-head"><span>APEX PACKET</span><span style="color:var(--muted)">copy → paste to new chat</span></div><div class="out-body">'+esc+'</div></div>'
+      +'<button class="btn" id="cpyBtn" onclick="copyText(S.outputText,\'cpyBtn\')" style="margin-bottom:8px">📋 COPY FOR APEX CHAT</button>'
+      +(S.sessionSaved
+        ?'<div class="alert a-green" style="margin-bottom:8px;display:flex;align-items:center;gap:8px"><span>✓</span><span>'+savedMsg+'</span></div>'
+        :'<button class="btn-green" style="width:100%;margin-bottom:8px;padding:12px" onclick="saveAll()">'+saveLbl+'</button>')
+      +'<button class="btn-ghost" style="width:100%" onclick="S.outputGenerated=false;S.outputText=\'\';S.sessionSaved=false;S.images=[];S.manualMuscles=null;render()">↺ RESET — NEW SESSION</button>'
+      +'</div>';
   }
 
-  // Step bar + current step
-  if(S.step!==STEP_OUTPUT)h+=renderStepBar();
+  // ── BACKUP PANEL (bottom of session tab)
+  h+='<div style="margin-top:24px">'+renderBackupPanel('expBtn2','rev4Btn2')+'</div>';
 
-  if(S.step===STEP_CATCHUP)h+=stepCatchup();
-  else if(S.step===STEP_TODAY)h+=stepToday();
-  else if(S.step===STEP_BODY)h+=stepBody();
-  else if(S.step===STEP_REF)h+=stepReference();
-  else if(S.step===STEP_OUTPUT)h+=stepOutput();
-
-  h+='<div class="footer">APEX v6 · WIZARD FLOW · HISTORY SYSTEM</div>';
+  h+='<div class="footer">APEX v9 · CALENDAR · HISTORY · EXPORT · IMPORT</div>';
   app.innerHTML=h;
+
+  // Quick log overlay (from session tab — shouldn't normally be open here but guard)
+  if(S.ql&&S.activeTab==='session'){S.activeTab='history';render();}
 }
 
 loadStorage();render();
