@@ -289,6 +289,31 @@ function extractDuration(text){
   return m ? m[1].trim() : null;
 }
 
+// Helper used in onclick handlers for save operations
+function allScansForSave(){
+  return S.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\n\n');
+}
+
+// Single save entry point — called from the save button
+function saveToHistory(){
+  const scans = allScansForSave();
+  const hasScans = scans.length > 0;
+  const isRestCardio = S.dayType === 'rest' || S.dayType === 'cardio';
+  if(isRestCardio && hasScans){
+    // Save yesterday's gym session + today's rest/cardio
+    logSession(getEffectiveMuscles(), scans, extractDuration(scans));
+    logTodayDay();
+  } else if(isRestCardio){
+    // No scan — just log today as rest/cardio
+    logTodayDay();
+  } else {
+    // Gym day — save the last workout from scan
+    logSession(getEffectiveMuscles(), scans, extractDuration(scans));
+  }
+  S.sessionSaved = true;
+  render();
+}
+
 // Returns muscles to use — manual override takes priority over auto-detection
 function getEffectiveMuscles(){
   if(S.manualMuscles !== null) return S.manualMuscles;
@@ -367,20 +392,35 @@ function pruneHistory(){
 //  HISTORY MANAGEMENT
 // ════════════════════════════════════════════════════════
 
-// Called when packet is generated — saves LAST workout to history (not today's session)
+// Saves the LAST GYM WORKOUT to history (from scan data)
 function logSession(muscles, scanText, duration){
-  // The scan data belongs to the LAST workout date, not today's check-in date
-  // If last workout is unknown, fall back to session date
   const entryDate = (!S.lastUnknown && S.lastDT) ? S.lastDT : S.sessionDT;
+  const entryDayType = scanText ? 'gym' : S.dayType;
   const key = dateKey(entryDate);
   S.history = S.history.filter(h => dateKey(h.date) !== key);
   S.history.unshift({
     date: entryDate,
-    dayType: S.dayType,
+    dayType: entryDayType,
     energy: S.energy,
     muscles: muscles,
     scanText: scanText || '',
     duration: duration || ''
+  });
+  S.history.sort((a,b) => new Date(b.date) - new Date(a.date));
+  persist();
+}
+
+// Saves TODAY as a rest or cardio day (no scan needed)
+function logTodayDay(){
+  const key = dateKey(S.sessionDT);
+  S.history = S.history.filter(h => dateKey(h.date) !== key);
+  S.history.unshift({
+    date: S.sessionDT,
+    dayType: S.dayType, // rest or cardio
+    energy: S.energy,
+    muscles: [],
+    scanText: '',
+    duration: ''
   });
   S.history.sort((a,b) => new Date(b.date) - new Date(a.date));
   persist();
@@ -1130,9 +1170,25 @@ function render(){
   h += `<div class="section">
     <div class="sec-head">
       <div class="sec-num">3</div>
-      <div><div class="sec-title">Last Workout</div><div class="sec-sub">Date, time & screenshots for progressive overload</div></div>
+      <div><div class="sec-title">${S.dayType==='gym'?'Last Workout':'Last Gym Session'}</div>
+      <div class="sec-sub">${S.dayType==='gym'?'Date, time & screenshots for progressive overload':'Reference data for MPS — upload last gym screenshot if you have it'}</div></div>
     </div>
     <div class="card">
+
+      ${S.dayType!=='gym'?`
+      <div style="background:${S.dayType==='rest'?'rgba(107,114,128,.06)':'rgba(59,130,246,.06)'};border:1px solid ${S.dayType==='rest'?'rgba(107,114,128,.2)':'rgba(59,130,246,.2)'};border-radius:8px;padding:11px 13px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px">
+        <span style="font-size:18px;line-height:1">${S.dayType==='rest'?'😴':'🏃'}</span>
+        <div>
+          <div style="font-size:10px;font-weight:700;color:${S.dayType==='rest'?'var(--muted)':'var(--blue)'};margin-bottom:3px;text-transform:uppercase;letter-spacing:.08em">
+            ${S.dayType==='rest'?'Rest Day':'Cardio Day'} — ${fmtDateShort(S.sessionDT)}
+          </div>
+          <div style="font-size:9px;color:var(--muted);line-height:1.6">
+            ${S.dayType==='rest'
+              ?'Uploading yesterday\'s gym screenshot below is optional but recommended — APEX uses it for progressive overload targets tomorrow.'
+              :'Log your cardio session below, or just generate the packet. Upload a gym screenshot if your last gym session is recent.'}
+          </div>
+        </div>
+      </div>`:''}
       <div class="sw-row mb12" onclick="S.lastUnknown=!S.lastUnknown;persist();render()">
         <div class="sw-box${S.lastUnknown?' on':''}"><div class="sw-knob"></div></div>
         <span class="sw-lbl">${S.lastUnknown
@@ -1217,8 +1273,26 @@ function render(){
 
     // Derive trained/duration from current packet for save
     const allScansNow = S.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\n\n');
-    const trainedNow = detectMuscles(allScansNow);
-    const durationNow = extractDuration(allScansNow);
+    const trainedNow = getEffectiveMuscles();
+    const hasScans = allScansNow.length > 0;
+    const isRestCardio = S.dayType === 'rest' || S.dayType === 'cardio';
+    const lastDateLabel = (!S.lastUnknown && S.lastDT) ? fmtDateShort(S.lastDT) : fmtDateShort(S.sessionDT);
+    const todayLabel = fmtDateShort(S.sessionDT);
+
+    let saveBtnLabel;
+    if(isRestCardio && hasScans) saveBtnLabel = 'SAVE BOTH — '+lastDateLabel+' (GYM) + '+todayLabel+' ('+S.dayType.toUpperCase()+')';
+    else if(isRestCardio)        saveBtnLabel = 'LOG '+todayLabel+' AS '+S.dayType.toUpperCase();
+    else                         saveBtnLabel = 'SAVE SESSION TO HISTORY';
+
+    let savedMsg;
+    if(isRestCardio && hasScans){
+      savedMsg = 'Saved: <strong>'+lastDateLabel+' — GYM</strong>'+(trainedNow.length>0?' ('+trainedNow.map(m=>m.toUpperCase()).join(', ')+')':'')
+               + '<br><span style="opacity:.8;font-size:9px">+ '+todayLabel+' — '+S.dayType.toUpperCase()+' also saved</span>';
+    } else if(isRestCardio){
+      savedMsg = 'Saved: <strong>'+todayLabel+' — '+S.dayType.toUpperCase()+'</strong>';
+    } else {
+      savedMsg = 'Saved: <strong>'+lastDateLabel+' — GYM</strong>'+(trainedNow.length>0?' ('+trainedNow.map(m=>m.toUpperCase()).join(', ')+')':'');
+    }
 
     h += `<div id="out-sec">
       <div class="alert a-green">✓ Packet ready. Open a fresh APEX chat → paste this → get your plan.</div>
@@ -1235,13 +1309,11 @@ function render(){
 
       ${S.sessionSaved
         ? `<div class="alert a-green" style="margin-bottom:8px;display:flex;align-items:center;gap:8px">
-            <span style="font-size:14px">✓</span>
-            <span>Session saved to history — ${fmtDateShort(S.sessionDT)}${trainedNow.length>0?' · '+trainedNow.map(m=>m.toUpperCase()).join(', '):''}</span>
-          </div>`
-        : `<button class="btn-green" style="width:100%;margin-bottom:8px;padding:11px"
-            onclick="logSession(detectMuscles(S.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\\n\\n')),S.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\\n\\n'),extractDuration(S.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\\n\\n')));S.sessionSaved=true;render()">
-            💾 SAVE SESSION TO HISTORY
-          </button>`
+            <span style="font-size:16px">✓</span><span>${savedMsg}</span>
+           </div>`
+        : `<button class="btn-green" style="width:100%;margin-bottom:8px;padding:11px" onclick="saveToHistory()">
+            💾 ${saveBtnLabel}
+           </button>`
       }
 
       <button class="btn-ghost" style="width:100%" onclick="S.outputGenerated=false;S.outputText='';S.sessionSaved=false;S.images=[];S.manualMuscles=null;S.sessionDT=nowDT();S.lastDT=yestDT();S.energy=7;S.soreness=Object.fromEntries(MUSCLES.map(m=>[m,'none']));render()">↺ RESET — NEW SESSION</button>
