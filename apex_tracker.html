@@ -289,6 +289,31 @@ function extractDuration(text){
   return m ? m[1].trim() : null;
 }
 
+// Returns muscles to use — manual override takes priority over auto-detection
+function getEffectiveMuscles(){
+  if(S.manualMuscles !== null) return S.manualMuscles;
+  const allScans = S.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\n\n');
+  // First try Claude-detected muscles from scan
+  const claudeMuscles = S.images
+    .filter(i=>i.detectedMuscles && i.detectedMuscles.length>0)
+    .flatMap(i=>i.detectedMuscles);
+  const unique = [...new Set(claudeMuscles)].filter(m=>MUSCLES.includes(m));
+  if(unique.length > 0) return unique;
+  // Fall back to keyword detection
+  return detectMuscles(allScans);
+}
+
+function toggleManualMuscle(m){
+  // If currently on auto, initialise from current effective list
+  if(S.manualMuscles === null){
+    S.manualMuscles = [...getEffectiveMuscles()];
+  }
+  const idx = S.manualMuscles.indexOf(m);
+  if(idx >= 0) S.manualMuscles.splice(idx, 1);
+  else S.manualMuscles.push(m);
+  render();
+}
+
 // ════════════════════════════════════════════════════════
 //  STATE
 // ════════════════════════════════════════════════════════
@@ -302,6 +327,7 @@ let S = {
   // Session-only (not persisted)
   keyOpen:false, histOpen:false, showImport:false, importText:'',
   images:[], outputGenerated:false, outputText:'', sessionSaved:false,
+  manualMuscles: null, // null = auto-detect, array = user override
 
   // History editor
   activeTab:'session', editIdx:null, editBuf:{}
@@ -341,13 +367,15 @@ function pruneHistory(){
 //  HISTORY MANAGEMENT
 // ════════════════════════════════════════════════════════
 
-// Called when packet is generated — saves current session
+// Called when packet is generated — saves LAST workout to history (not today's session)
 function logSession(muscles, scanText, duration){
-  // One entry per calendar day — overwrite if same day
-  const key = dateKey(S.sessionDT);
+  // The scan data belongs to the LAST workout date, not today's check-in date
+  // If last workout is unknown, fall back to session date
+  const entryDate = (!S.lastUnknown && S.lastDT) ? S.lastDT : S.sessionDT;
+  const key = dateKey(entryDate);
   S.history = S.history.filter(h => dateKey(h.date) !== key);
   S.history.unshift({
-    date: S.sessionDT,
+    date: entryDate,
     dayType: S.dayType,
     energy: S.energy,
     muscles: muscles,
@@ -576,7 +604,7 @@ async function scanOne(idx){
     img.scanError = 'No API key — expand the API Key section above.';
     render(); return;
   }
-  img.scanning=true; img.scanResult=null; img.scanError=null; render();
+  img.scanning=true; img.scanResult=null; img.scanError=null; img.detectedMuscles=null; render();
   try{
     const base64 = img.dataUrl.split(',')[1];
     const mtype = img.file.type || 'image/jpeg';
@@ -597,6 +625,7 @@ async function scanOne(idx){
 Return ONLY plain text — no markdown, no backticks, no asterisks, no ## headers.
 
 Format:
+MUSCLES_WORKED: [comma-separated subset of ONLY these options: chest, back, shoulders, biceps, triceps, forearms, legs, calves]
 SESSION: [workout name if visible]
 DURATION: [total time if visible]
 
@@ -605,13 +634,26 @@ EXERCISES:
 
 NOTES: [total volume, calories, heart rate, any other visible metrics]
 
-Rules: include weight units (kg or lbs). Skip fields not visible. Be precise — do not estimate.`}
+Rules: include weight units (kg or lbs). Skip fields not visible. Be precise — do not estimate.
+For MUSCLES_WORKED: infer from the actual exercises performed — be accurate, only list muscles directly trained.`}
         ]}]
       })
     });
     const data = await res.json();
     if(data.error) throw new Error(data.error.message);
-    img.scanResult = data.content.map(b=>b.text||'').join('').trim();
+    const fullText = data.content.map(b=>b.text||'').join('').trim();
+    // Parse and strip the MUSCLES_WORKED line
+    const musclesMatch = fullText.match(/MUSCLES_WORKED:\s*([^\n]+)/i);
+    if(musclesMatch){
+      const rawList = musclesMatch[1].split(',').map(s=>s.trim().toLowerCase()).filter(m=>MUSCLES.includes(m));
+      img.detectedMuscles = rawList;
+    } else {
+      img.detectedMuscles = [];
+    }
+    // Store scan result without the MUSCLES_WORKED line (keep packet clean)
+    img.scanResult = fullText.replace(/MUSCLES_WORKED:[^\n]*\n?/i,'').trim();
+    // Reset manual override when new scan comes in so user sees fresh suggestion
+    S.manualMuscles = null;
   }catch(e){
     img.scanError = e.message || 'Scan failed — check API key and try again.';
   }
@@ -635,7 +677,7 @@ function buildPacket(){
     return pre + img.scanResult;
   }).join('\n\n');
 
-  const trained = detectMuscles(allScans);
+  const trained = getEffectiveMuscles();
   const duration = extractDuration(allScans);
 
   // MPS — only for muscles detected in scan
@@ -951,7 +993,7 @@ function render(){
   const lastV = S.lastUnknown ? null : S.lastDT;
   const hrs = hDiff(lastV, nowV);
   const allScans = S.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\n\n');
-  const trained = detectMuscles(allScans);
+  const trained = getEffectiveMuscles();
   let mps = {};
   if(!S.lastUnknown && hrs!==null && trained.length>0){
     trained.forEach(m=>{ mps[m] = hrs<MPS_H[m]?'active':'clear'; });
@@ -1140,6 +1182,25 @@ function render(){
         </button>`:''}
         ${scanned>0&&trained.length>0?`<div class="alert a-green" style="margin-top:10px;margin-bottom:0">✓ Muscles detected: <strong>${trained.map(m=>m.toUpperCase()).join(', ')}</strong></div>`:''}
         ${scanned>0&&trained.length===0?`<div class="alert a-amber" style="margin-top:10px;margin-bottom:0">⚠ Muscle groups not auto-detected — APEX will assess from exercise list.</div>`:''}
+
+        ${scanned>0?`<div style="margin-top:12px;padding:11px;background:rgba(167,139,250,.05);border:1px solid rgba(167,139,250,.2);border-radius:8px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--purple)">
+              ✏ Confirm Muscles Trained
+            </span>
+            ${S.manualMuscles!==null?`<button onclick="S.manualMuscles=null;render()" style="background:none;border:none;font-size:8px;color:var(--muted);cursor:pointer;font-family:'Space Mono',monospace;text-decoration:underline">↺ Reset to auto</button>`:'<span style="font-size:8px;color:var(--muted)">Auto-detected — tap to adjust</span>'}
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+            ${MUSCLES.map(m=>{
+              const on = trained.includes(m);
+              return`<div onclick="toggleManualMuscle('${m}')" style="display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:6px;border:1px solid ${on?'rgba(239,68,68,.4)':'rgba(255,255,255,.06)'};background:${on?'rgba(239,68,68,.1)':'rgba(255,255,255,.02)'};cursor:pointer;transition:all .12s">
+                <div style="width:7px;height:7px;border-radius:50%;background:${on?'var(--red)':'rgba(255,255,255,.12)'};flex-shrink:0;transition:background .12s"></div>
+                <span style="font-size:9px;font-family:'Space Mono',monospace;text-transform:capitalize;color:${on?'#fca5a5':'var(--muted)'}${on?';font-weight:700':''}">${m}</span>
+              </div>`;
+            }).join('')}
+          </div>
+          <div style="font-size:8px;color:var(--muted2);margin-top:7px">Tap to add/remove · Used for MPS + history · ${S.manualMuscles!==null?'<span style="color:var(--purple)">Manual override active</span>':'Claude-detected'}</div>
+        </div>`:''}
       </div>`:''}
     </div>
   </div>`;
@@ -1183,7 +1244,7 @@ function render(){
           </button>`
       }
 
-      <button class="btn-ghost" style="width:100%" onclick="S.outputGenerated=false;S.outputText='';S.sessionSaved=false;S.images=[];S.sessionDT=nowDT();S.lastDT=yestDT();S.energy=7;S.soreness=Object.fromEntries(MUSCLES.map(m=>[m,'none']));render()">↺ RESET — NEW SESSION</button>
+      <button class="btn-ghost" style="width:100%" onclick="S.outputGenerated=false;S.outputText='';S.sessionSaved=false;S.images=[];S.manualMuscles=null;S.sessionDT=nowDT();S.lastDT=yestDT();S.energy=7;S.soreness=Object.fromEntries(MUSCLES.map(m=>[m,'none']));render()">↺ RESET — NEW SESSION</button>
     </div>`;
   }
 
