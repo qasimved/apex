@@ -209,35 +209,35 @@ function eLbl(v){if(v<=2)return'DEAD';if(v<=4)return'LOW';if(v<=6)return'OK';if(
 // ── MUSCLES
 function detectMuscles(t){if(!t)return[];const l=t.toLowerCase();return MUSCLES.filter(m=>MUSCLE_KW[m].some(kw=>l.includes(kw)));}
 function extractDuration(t){if(!t)return null;const m=t.match(/DURATION[:\s]+([^\n]+)/i);return m?m[1].trim():null;}
-function allScansText(){return S.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\n\n');}
-function getEffectiveMuscles(){
-  if(S.manualMuscles!==null)return S.manualMuscles;
-  const cm=S.images.filter(i=>i.detectedMuscles&&i.detectedMuscles.length>0).flatMap(i=>i.detectedMuscles);
-  const u=[...new Set(cm)].filter(m=>MUSCLES.includes(m));
-  return u.length>0?u:detectMuscles(allScansText());
-}
-function toggleManualMuscle(m){
-  if(S.manualMuscles===null)S.manualMuscles=[...getEffectiveMuscles()];
-  const idx=S.manualMuscles.indexOf(m);
-  if(idx>=0)S.manualMuscles.splice(idx,1);else S.manualMuscles.push(m);
-  render();
+// ── SAVE TODAY'S CHECK-IN
+function saveAll(){
+  const key=dateKey(S.sessionDT);
+  S.history=S.history.filter(h=>dateKey(h.date)!==key);
+  S.history.unshift({
+    date:S.sessionDT,dayType:S.dayType,energy:S.energy,
+    muscles:[],
+    scanText:S.dayType==='cardio'?S.cardioNotes:'',
+    duration:''
+  });
+  S.history.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  persist();
+  S.sessionSaved=true;S.cardioNotes='';render();
 }
 
 // ── STATE
 let S={
   apiKey:'',dayType:'gym',energy:7,
   soreness:Object.fromEntries(MUSCLES.map(m=>[m,'none'])),
-  lastSessionMode:'gym', // 'gym'|'rest'|'unknown'
+  lastSessionMode:'gym', // kept for migration compat only — packet now always reads from history
   history:[],
   // session only
   keyOpen:false,bkOpen:false,showImport:false,importText:'',
-  images:[],outputGenerated:false,outputText:'',sessionSaved:false,
-  manualMuscles:null,
-  cardioNotes:'', // notes for today's cardio session
+  outputGenerated:false,outputText:'',sessionSaved:false,
+  cardioNotes:'',
+  sessionDT:nowDT(),
   // calendar
   calYear:new Date().getFullYear(),calMonth:new Date().getMonth(),
-  // full log screen (from calendar tap OR adding new entry)
-  // {key, dayType, energy, images, manualMuscles, notes, inputMode, isEdit, editIdx}
+  // full log screen {key, dayType, energy, datetime, images, manualMuscles, notes, inputMode, isEdit, editIdx, existingScanText}
   logScreen:null,
   activeTab:'session',editIdx:null,editBuf:{}
 };
@@ -266,56 +266,11 @@ function pruneHistory(){const c=new Date();c.setDate(c.getDate()-HISTORY_KEEP_DA
 
 // ── HISTORY HELPERS
 function getLastGymSession(){return S.history.find(h=>h.dayType==='gym')||null;}
-function logEntry(key,type,energy,muscles,scanText,duration){
+function logEntry(key,type,energy,muscles,scanText,duration,datetime){
   S.history=S.history.filter(h=>dateKey(h.date)!==key);
-  S.history.unshift({date:keyToISO(key),dayType:type,energy:energy||5,muscles:muscles||[],scanText:scanText||'',duration:duration||''});
+  S.history.unshift({date:datetime||keyToISO(key),dayType:type,energy:energy||5,muscles:muscles||[],scanText:scanText||'',duration:duration||''});
   S.history.sort((a,b)=>new Date(b.date)-new Date(a.date));
   persist();
-}
-function logToday(){
-  const key=todayKey();
-  S.history=S.history.filter(h=>dateKey(h.date)!==key);
-  S.history.unshift({date:nowDT(),dayType:S.dayType,energy:S.energy,muscles:S.dayType==='gym'?getEffectiveMuscles():[],scanText:'',duration:''});
-  S.history.sort((a,b)=>new Date(b.date)-new Date(a.date));
-  persist();
-}
-function attachScanToLastGym(){
-  const scans=allScansText();if(!scans)return;
-  const muscles=getEffectiveMuscles(),duration=extractDuration(scans)||'';
-  const lg=getLastGymSession();
-  if(lg){lg.scanText=scans;lg.muscles=muscles;if(duration)lg.duration=duration;persist();}
-  else{
-    const d=new Date();d.setDate(d.getDate()-1);
-    const key=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
-    logEntry(key,'gym',S.energy,muscles,scans,duration);
-  }
-}
-function saveAll(){
-  const scans=allScansText();
-  const duration=extractDuration(scans)||'';
-  const key=todayKey();
-  // For cardio: store notes in scanText. For gym: store scan. For rest: empty.
-  const scanText=S.dayType==='gym'?scans:S.dayType==='cardio'?S.cardioNotes:'';
-  S.history=S.history.filter(h=>dateKey(h.date)!==key);
-  S.history.unshift({
-    date:nowDT(),dayType:S.dayType,energy:S.energy,
-    muscles:S.dayType==='gym'?(scans?getEffectiveMuscles():[]):[],
-    scanText:scanText,
-    duration:duration
-  });
-  // If today is rest/cardio but we have gym scan, attach to last gym entry
-  if(S.dayType!=='gym'&&scans){
-    const lg=S.history.find(h=>h.dayType==='gym'&&dateKey(h.date)!==key);
-    if(lg){lg.scanText=scans;lg.muscles=getEffectiveMuscles();if(duration)lg.duration=duration;}
-    else{
-      const d=new Date();d.setDate(d.getDate()-1);
-      const k=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
-      logEntry(k,'gym',S.energy,getEffectiveMuscles(),scans,duration);
-    }
-  }
-  S.history.sort((a,b)=>new Date(b.date)-new Date(a.date));
-  persist();
-  S.sessionSaved=true;S.cardioNotes='';render();
 }
 
 // ── FREQUENCY
@@ -377,43 +332,6 @@ function copyText(text,btnId){
   navigator.clipboard.writeText(text).then(flash).catch(()=>{const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0;top:0;left:0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);flash();});
 }
 
-// ── IMAGE / SCAN
-function handleFiles(files){
-  Array.from(files).forEach(file=>{
-    if(!file||!file.type.startsWith('image/'))return;
-    const reader=new FileReader();
-    reader.onload=e=>{S.images.push({dataUrl:e.target.result,file,fileName:file.name,scanning:false,scanResult:null,scanError:null,detectedMuscles:null});S.outputGenerated=false;render();};
-    reader.readAsDataURL(file);
-  });
-}
-function removeImg(i){S.images.splice(i,1);S.outputGenerated=false;render();}
-async function scanOne(idx){
-  const img=S.images[idx];if(!img)return;
-  if(!S.apiKey.trim()){img.scanError='No API key set.';render();return;}
-  img.scanning=true;img.scanResult=null;img.scanError=null;img.detectedMuscles=null;render();
-  try{
-    const base64=img.dataUrl.split(',')[1],mtype=img.file.type||'image/jpeg';
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':S.apiKey.trim(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:[
-        {type:'image',source:{type:'base64',media_type:mtype,data:base64}},
-        {type:'text',text:'Extract ALL workout data from this gym app screenshot.\nReturn ONLY plain text — no markdown, no backticks.\n\nFormat:\nMUSCLES_WORKED: [comma-separated from: chest, back, shoulders, biceps, triceps, forearms, legs, calves]\nSESSION: [name if visible]\nDURATION: [time if visible]\n\nEXERCISES:\n[Exercise Name] ([equipment]): [weightxreps], ...\n\nNOTES: [volume, calories, heart rate]\n\nInclude weight units. Skip invisible fields. Be precise.'}
-      ]}]})
-    });
-    const data=await res.json();if(data.error)throw new Error(data.error.message);
-    const fullText=data.content.map(b=>b.text||'').join('').trim();
-    const mm=fullText.match(/MUSCLES_WORKED:\s*([^\n]+)/i);
-    img.detectedMuscles=mm?mm[1].split(',').map(s=>s.trim().toLowerCase()).filter(m=>MUSCLES.includes(m)):[];
-    img.scanResult=fullText.replace(/MUSCLES_WORKED:[^\n]*\n?/i,'').trim();
-    S.manualMuscles=null;
-  }catch(e){img.scanError=e.message||'Scan failed.';}
-  img.scanning=false;S.outputGenerated=false;render();
-}
-async function scanAll(){
-  const pending=S.images.map((_,i)=>i).filter(i=>!S.images[i].scanResult&&!S.images[i].scanning);
-  for(const i of pending)await scanOne(i);
-}
-
 // ── PACKET
 function buildHistoryBlock(){
   const cutoff=new Date();cutoff.setDate(cutoff.getDate()-HISTORY_PACKET_DAYS);
@@ -464,34 +382,33 @@ function buildHistoryBlock(){
   return L.join('\n');
 }
 function buildPacket(){
-  const nowV=nowDT();
-  const lg=S.lastSessionMode==='gym'?getLastGymSession():null;
-  const lastV=lg?.date||null,hrs=hDiff(lastV,nowV);
-  const uploadedScans=S.images.filter(i=>i.scanResult).map((img,i)=>(S.images.length>1?'[Screenshot '+(i+1)+']\n':'')+img.scanResult).join('\n\n');
-  const allScans=uploadedScans||(lg?.scanText)||'';
-  const trainedRaw=getEffectiveMuscles(),trained=trainedRaw.length>0?trainedRaw:(lg?.muscles||[]);
+  const nowV=S.sessionDT||nowDT();
+  // All data comes from history — no session-tab scan state
+  const lg=getLastGymSession(); // most recent gym entry in history
+  const lastV=lg?.date||null;
+  const hrs=hDiff(lastV,nowV);
+  const allScans=lg?.scanText||'';
+  const trained=lg?.muscles||[];
   let mps={};
-  if(S.lastSessionMode==='gym'&&hrs!==null&&trained.length>0)trained.forEach(m=>{mps[m]=hrs<MPS_H[m]?'active':'clear';});
+  if(lg&&hrs!==null&&trained.length>0)trained.forEach(m=>{mps[m]=hrs<MPS_H[m]?'active':'clear';});
   const mpsActive=trained.filter(m=>mps[m]==='active'),mpsClear=trained.filter(m=>mps[m]==='clear');
   const sore=Object.entries(S.soreness).filter(([,v])=>v!=='none');
   const histBlock=buildHistoryBlock();
   const L=[];
   L.push('DATE: '+fmtDT(nowV),'DAY: '+S.dayType.toUpperCase()+' | ENERGY: '+S.energy+'/10 ['+eLbl(S.energy)+']','');
-  if(!sore.length){L.push('SORENESS: none');}else{L.push('SORENESS:');sore.forEach(([m,v])=>L.push('  '+m.toUpperCase()+': '+v.toUpperCase()));}
+  if(!sore.length){L.push('SORENESS: none');}
+  else{L.push('SORENESS:');sore.forEach(([m,v])=>L.push('  '+m.toUpperCase()+': '+v.toUpperCase()));}
   L.push('');
-  if(S.lastSessionMode==='unknown'){
-    L.push('LAST SESSION: unknown — use conservative baseline');
-  }else if(S.lastSessionMode==='rest'){
-    L.push('LAST SESSION: rest/cardio — no gym data, MPS cleared, programme fresh session');
-  }else if(lg){
-    L.push('LAST SESSION: '+fmtDT(lastV)+(hrs!==null?' ('+hrs+'h ago)':''));
+  if(lg){
+    L.push('LAST GYM SESSION: '+fmtDT(lastV)+(hrs!==null?' ('+hrs+'h ago)':''));
     if(trained.length>0){
       if(mpsActive.length>0){L.push('MPS ACTIVE — avoid retraining:');mpsActive.forEach(m=>{const rem=Math.max(0,MPS_H[m]-hrs).toFixed(0);L.push('  '+m.toUpperCase()+': '+rem+'h remaining');});}
       if(mpsClear.length>0)L.push('MPS CLEAR — safe to train: '+mpsClear.map(m=>m.toUpperCase()).join(', '));
       const nt=MUSCLES.filter(m=>!trained.includes(m));if(nt.length)L.push('NOT TRAINED LAST SESSION: '+nt.map(m=>m.toUpperCase()).join(', '));
-    }else{L.push('MPS: muscle groups not detected — assess from exercises below');}
-  }else{L.push('LAST SESSION: no gym sessions in history — use conservative baseline');}
+    }else{L.push('MPS: muscle groups not detected — see exercises below');}
+  }else{L.push('LAST GYM SESSION: none in history — use conservative baseline');}
   L.push('');
+  // FLAGS
   const flags=[];
   if(S.energy<=4)flags.push('LOW ENERGY ('+S.energy+'/10) — reduce volume ~25%, drop isolation');
   else if(S.energy>=9)flags.push('PEAK ENERGY ('+S.energy+'/10) — attempt +5% load or extra compound set');
@@ -503,11 +420,10 @@ function buildPacket(){
   mpsActive.forEach(m=>{if(hrs!==null){const rem=Math.max(0,MPS_H[m]-hrs).toFixed(0);flags.push('MPS BLOCK ['+m.toUpperCase()+'] — '+rem+'h left, skip or MEV only');}});
   if(hrs!==null&&hrs<20)flags.push('SHORT RECOVERY — '+hrs+'h only, consider cardio/mobility');
   if(flags.length){L.push('FLAGS:');flags.forEach(f=>L.push('  ⚠ '+f));L.push('');}
-  if(S.lastSessionMode==='unknown'){L.push('LAST WORKOUT: unknown — set moderate weights, RPE 7, log as baseline');}
-  else if(S.lastSessionMode==='rest'){L.push('LAST WORKOUT: N/A — last activity was rest/cardio, no previous weights to reference');}
-  else if(allScans){L.push('LAST WORKOUT:');L.push(allScans);}
-  else if(lg){L.push('LAST WORKOUT: '+fmtDS(lg.date)+' — no scan data (upload screenshot for progressive overload targets)');}
-  else{L.push('LAST WORKOUT: no data — progressive overload targets unknown');}
+  // LAST WORKOUT DATA
+  if(allScans){L.push('LAST WORKOUT:');L.push(allScans);}
+  else if(lg){L.push('LAST WORKOUT: '+fmtDS(lg.date)+' — no exercise data (log this session in History tab with screenshot or notes)');}
+  else{L.push('LAST WORKOUT: no history — log your first session in the History tab');}
   if(histBlock){L.push('');L.push(histBlock);}
   return L.join('\n');
 }
@@ -526,7 +442,10 @@ function addNewEntry(){openAddLogScreen();}
 
 // ── LOG SCREEN (full-page log from calendar OR add new entry)
 function openLogScreen(key){
-  S.logScreen={key,dayType:'rest',energy:5,images:[],manualMuscles:null,notes:'',inputMode:'screenshot',isEdit:false,editIdx:null};
+  // Default to that date at current time
+  const now=new Date();
+  const dt=key+'T'+pad(now.getHours())+':'+pad(now.getMinutes());
+  S.logScreen={key,dayType:'rest',energy:5,datetime:dt,images:[],manualMuscles:null,notes:'',inputMode:'screenshot',isEdit:false,editIdx:null,existingScanText:''};
   render();
 }
 function openEditLogScreen(idx){
@@ -536,11 +455,12 @@ function openEditLogScreen(idx){
     key:dateKey(entry.date),
     dayType:entry.dayType,
     energy:entry.energy,
+    datetime:entry.date||keyToISO(dateKey(entry.date)),
     images:[],
     manualMuscles:entry.muscles&&entry.muscles.length?[...entry.muscles]:null,
     notes:entry.dayType==='cardio'?entry.scanText||'':'',
-    inputMode: entry.scanText&&entry.dayType==='gym'?'text':'screenshot',
-    existingScanText: entry.dayType==='gym'?entry.scanText||'':'',
+    inputMode:entry.scanText&&entry.dayType==='gym'?'text':'screenshot',
+    existingScanText:entry.dayType==='gym'?entry.scanText||'':'',
     isEdit:true,
     editIdx:idx
   };
@@ -548,8 +468,21 @@ function openEditLogScreen(idx){
   render();
 }
 function openAddLogScreen(){
-  const key=todayKey();
-  S.logScreen={key,dayType:'gym',energy:7,images:[],manualMuscles:null,notes:'',inputMode:'screenshot',isEdit:false,editIdx:null};
+  // Default to tomorrow after the last logged entry, or today
+  let dt=nowDT();
+  if(S.history.length){
+    const last=new Date(S.history[0].date);
+    const candidate=new Date(last);
+    candidate.setDate(candidate.getDate()+1);
+    const now=new Date();
+    // Use candidate date if it's in the past or today, otherwise use today
+    if(candidate<=now){
+      dt=candidate.getFullYear()+'-'+pad(candidate.getMonth()+1)+'-'+pad(candidate.getDate())
+        +'T'+pad(last.getHours())+':'+pad(last.getMinutes());
+    }
+  }
+  const key=dateKey(dt);
+  S.logScreen={key,dayType:'gym',energy:7,datetime:dt,images:[],manualMuscles:null,notes:'',inputMode:'screenshot',isEdit:false,editIdx:null,existingScanText:''};
   S.activeTab='history';
   render();
 }
@@ -616,24 +549,25 @@ function saveLogScreen(){
   const imgScans=ls.images.filter(i=>i.scanResult).map(i=>i.scanResult).join('\n\n');
   let scanText='';
   if(ls.dayType==='gym'){
-    // Gym: screenshot scan takes priority, then manual text notes
     scanText=imgScans||ls.notes||'';
-    // If editing and no new scan, keep existing
     if(!scanText&&ls.isEdit)scanText=ls.existingScanText||'';
   }else if(ls.dayType==='cardio'){
     scanText=ls.notes||'';
   }
   const muscles=ls.dayType==='gym'?getLogMuscles():[];
   const duration=extractDuration(scanText)||'';
+  // Use the user-selected datetime, update key accordingly
+  const dt=ls.datetime||keyToISO(ls.key);
+  const key=dateKey(dt);
   if(ls.isEdit&&ls.editIdx!==null){
     S.history[ls.editIdx]={...S.history[ls.editIdx],
-      dayType:ls.dayType,energy:ls.energy,
+      date:dt,dayType:ls.dayType,energy:ls.energy,
       muscles:muscles,scanText:scanText,duration:duration
     };
     S.history.sort((a,b)=>new Date(b.date)-new Date(a.date));
     persist();
   }else{
-    logEntry(ls.key,ls.dayType,ls.energy,muscles,scanText,duration);
+    logEntry(key,ls.dayType,ls.energy,muscles,scanText,duration,dt);
   }
   S.logScreen=null;
   render();
@@ -735,14 +669,12 @@ function renderBackupPanel(id1,id2){
 // ── MAIN RENDER
 function render(){
   const app=document.getElementById('app');if(!app)return;
-  const lg=S.lastSessionMode==='gym'?getLastGymSession():null;
-  const lastV=lg?.date||null,hrs=hDiff(lastV,nowDT());
-  const scanned=S.images.filter(i=>i.scanResult).length;
-  const anyScanning=S.images.some(i=>i.scanning);
-  const unscanned=S.images.filter(i=>!i.scanResult&&!i.scanning).length;
-  const trained=getEffectiveMuscles().length>0?getEffectiveMuscles():(lg?.muscles||[]);
+  // All data sourced from history
+  const lg=getLastGymSession();
+  const lastV=lg?.date||null,hrs=hDiff(lastV,S.sessionDT||nowDT());
+  const trained=lg?.muscles||[];
   let mps={};
-  if(S.lastSessionMode==='gym'&&hrs!==null&&trained.length>0)trained.forEach(m=>{mps[m]=hrs<MPS_H[m]?'active':'clear';});
+  if(lg&&hrs!==null&&trained.length>0)trained.forEach(m=>{mps[m]=hrs<MPS_H[m]?'active':'clear';});
   const mpsActive=trained.filter(m=>mps[m]==='active'),mpsClear=trained.filter(m=>mps[m]==='clear');
   const{freq}=getFrequency();
   let h='';
@@ -750,7 +682,7 @@ function render(){
   // Header
   h+='<div style="margin-bottom:20px">'
     +'<div class="logo">⚡ AP<span>E</span>X</div>'
-    +'<div class="tagline">Adaptive Performance Engine · v8</div>'
+    +'<div class="tagline">Adaptive Performance Engine · v9</div>'
     +'</div>';
 
   // Tabs
@@ -789,10 +721,17 @@ function render(){
         +'</div>';
 
       // Day type selector
-      h+='<div style="margin-bottom:16px"><label class="lbl">Type</label>'
+      h+='<div style="margin-bottom:14px"><label class="lbl">Type</label>'
         +'<div class="tog-row">'
         +['gym','cardio','rest'].map(t=>'<button class="tog'+(ls.dayType===t?' on':'')+'" onclick="S.logScreen.dayType=\''+t+'\';render()">'+(t==='gym'?'🏋️ GYM':t==='cardio'?'🏃 CARDIO':'😴 REST')+'</button>').join('')
         +'</div></div>';
+
+      // Date & Time picker — always shown so user can set exact time
+      h+='<div class="card" style="margin-bottom:14px">'
+        +'<label class="lbl">Date &amp; Time</label>'
+        +'<input type="datetime-local" class="inp" style="color-scheme:dark" value="'+ls.datetime+'" oninput="S.logScreen.datetime=this.value;S.logScreen.key=S.logScreen.datetime.slice(0,10);render()"/>'
+        +'<div style="font-size:8px;color:var(--muted);margin-top:4px">'+fmtDT(ls.datetime)+' &nbsp;·&nbsp; exact time is used for MPS hours</div>'
+        +'</div>';
 
       // Energy (not for rest)
       if(ls.dayType!=='rest'){
@@ -925,11 +864,16 @@ function render(){
 
   // ── SECTION 1: TODAY
   h+='<div class="sec"><div class="sec-head"><div class="sec-num">1</div>'
-    +'<div><div class="sec-title">Today</div><div class="sec-sub">'+fmtDS(nowDT())+' · type &amp; energy</div></div></div>'
+    +'<div><div class="sec-title">Today</div><div class="sec-sub">Set the exact time for accurate MPS calculation</div></div></div>'
     +'<div class="card">'
     +'<div style="margin-bottom:14px"><label class="lbl">Day Type</label><div class="tog-row">'
     +['gym','cardio','rest'].map(t=>'<button class="tog'+(S.dayType===t?' on':'')+'" onclick="S.dayType=\''+t+'\';persist();render()">'+(t==='gym'?'🏋️ GYM':t==='cardio'?'🏃 CARDIO':'😴 REST')+'</button>').join('')
     +'</div></div>'
+    +'<div style="margin-bottom:14px">'
+    +'<label class="lbl">Session Date &amp; Time</label>'
+    +'<input type="datetime-local" class="inp" style="color-scheme:dark" value="'+S.sessionDT+'" oninput="S.sessionDT=this.value;render()"/>'
+    +'<div style="font-size:8px;color:var(--muted);margin-top:4px">'+fmtDT(S.sessionDT)+' &nbsp;·&nbsp; used for MPS hour calculation</div>'
+    +'</div>'
     +(S.dayType!=='rest'
       ?'<div><label class="lbl">Energy: <span style="color:var(--amber)">'+S.energy+'/10 — '+eLbl(S.energy)+'</span></label>'
         +'<input type="range" min="1" max="10" step="1" value="'+S.energy+'" oninput="S.energy=parseInt(this.value);persist();render()" style="margin:8px 0"/>'
@@ -951,9 +895,9 @@ function render(){
       +['none','mild','moderate','severe'].map(o=>'<button class="pill '+o+(S.soreness[m]===o?' on':'')+'" onclick="S.soreness[\''+m+'\']=\''+o+'\';persist();render()">'+(o==='none'?'—':o.slice(0,3))+'</button>').join('')
       +'</div></div>').join('')
     +'</div>'
-    +(trained.length>0&&lastV&&S.lastSessionMode==='gym'
+    +(trained.length>0&&lastV
       ?'<div style="margin-top:13px;padding-top:12px;border-top:1px solid rgba(255,255,255,.05)">'
-        +'<div style="font-size:9px;color:var(--muted);margin-bottom:6px">MPS · '+hrs+'h since last gym session</div>'
+        +'<div style="font-size:9px;color:var(--muted);margin-bottom:6px">MPS · <strong style="color:var(--text)">'+hrs+'h</strong> since last gym · based on history</div>'
         +'<div style="display:flex;flex-wrap:wrap;gap:4px">'
         +mpsActive.map(m=>'<span class="badge badge-active">⚡ '+m+' '+(Math.max(0,MPS_H[m]-hrs)).toFixed(0)+'h</span>').join('')
         +mpsClear.map(m=>'<span class="badge badge-clear">✓ '+m+'</span>').join('')
@@ -966,70 +910,6 @@ function render(){
         :'')
     +'</div></div>';
 
-  // ── SECTION 3: LAST SESSION
-  const hasStoredScan=!!(lg&&lg.scanText),hasUploadedScan=scanned>0;
-  h+='<div class="sec"><div class="sec-head"><div class="sec-num">3</div>'
-    +'<div><div class="sec-title">Last Session</div><div class="sec-sub">Tell APEX what happened before today</div></div></div>'
-    +'<div class="card">'
-    // 3-way mode selector
-    +'<div style="margin-bottom:14px"><label class="lbl">What was your last session?</label>'
-    +'<div class="lsm-row">'
-    +'<button class="lsm-btn'+(S.lastSessionMode==='gym'?' on-gym':'')+'" onclick="S.lastSessionMode=\'gym\';persist();render()">🏋️<br>Had a<br>gym session</button>'
-    +'<button class="lsm-btn'+(S.lastSessionMode==='rest'?' on-rest':'')+'" onclick="S.lastSessionMode=\'rest\';persist();render()">😴<br>Was rest<br>or cardio</button>'
-    +'<button class="lsm-btn'+(S.lastSessionMode==='unknown'?' on-unk':'')+'" onclick="S.lastSessionMode=\'unknown\';persist();render()">❓<br>Don\'t<br>remember</button>'
-    +'</div></div>';
-
-  if(S.lastSessionMode==='gym'){
-    if(lg){
-      const da=daysAgo(lg.date);
-      h+='<div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:11px 13px;margin-bottom:12px">'
-        +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">'
-        +'<div><div style="font-size:11px;font-weight:700">'+fmtDS(lg.date)+'</div>'
-        +'<div style="font-size:8px;color:var(--muted);margin-top:2px">'+da+'d ago'+(da===0?' (today)':da===1?' (yesterday)':'')+(lg.duration?' · '+lg.duration:'')+'</div></div>'
-        +'<div style="font-size:8px">'+(hasStoredScan?'<span style="color:var(--green)">✓ scan saved</span>':hasUploadedScan?'':'<span style="color:var(--amber)">no scan</span>')+'</div>'
-        +'</div>'
-        +((lg.muscles||[]).length?'<div style="display:flex;flex-wrap:wrap;gap:3px">'+lg.muscles.map(m=>'<span style="padding:2px 7px;border-radius:3px;font-size:8px;font-weight:700;text-transform:uppercase;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#fca5a5">'+m+'</span>').join('')+'</div>':'')
-        +(hasStoredScan&&!hasUploadedScan?'<div class="gym-ref-scan">'+lg.scanText.split('\n').filter(l=>l.trim()).slice(0,5).join('\n')+'</div>':'')
-        +(!hasStoredScan&&!hasUploadedScan?'<div class="alert a-amber" style="margin-top:8px;margin-bottom:0;font-size:9px">Upload screenshot for progressive overload targets</div>':'')
-        +'</div>';
-    }else{
-      h+='<div class="alert a-amber" style="margin-bottom:12px">No gym sessions in history. Upload a screenshot or change the option above.</div>';
-    }
-    h+='<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:9px">'+(hasStoredScan&&!hasUploadedScan?'Override with new screenshot — optional':'Upload workout screenshot')+'</div>';
-    if(S.images.length>0){
-      h+='<div class="img-grid">'+S.images.map((img,i)=>'<div class="img-card"><img src="'+img.dataUrl+'" alt=""/>'
-        +'<button class="img-rm" onclick="removeImg('+i+')">✕</button>'
-        +'<div class="img-card-body">'
-        +'<div style="font-size:8px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+img.fileName+'</div>'
-        +'<div style="font-size:8px;margin-top:2px">'+(img.scanning?'<span class="spin"></span>scanning...':img.scanResult?'<span style="color:var(--green)">✓ '+img.scanResult.split('\n').filter(l=>l.trim()).length+' lines</span>':img.scanError?'<span style="color:#fca5a5">✗ error</span>':'<span style="color:var(--muted)">not scanned</span>')+'</div>'
-        +(!img.scanResult&&!img.scanning?'<button class="scan-mini" onclick="scanOne('+i+')" '+(S.apiKey?'':'disabled')+'>⚡ Scan</button>':'')
-        +(img.scanResult?'<button class="scan-mini" onclick="scanOne('+i+')" style="color:var(--muted);border-color:rgba(255,255,255,.08)">↺ Re-scan</button>':'')
-        +(img.scanError?'<div style="font-size:8px;color:#fca5a5;margin-top:2px">'+img.scanError.slice(0,55)+'</div>':'')
-        +'</div></div>').join('')+'</div>';
-    }
-    h+='<div class="scan-zone" onclick="document.getElementById(\'fileInp\').click()" ondragover="event.preventDefault()" ondrop="event.preventDefault();handleFiles(event.dataTransfer.files)">'
-      +'<div style="font-size:18px;margin-bottom:3px">📷</div>'
-      +'<div style="font-size:10px;color:#9ca3af;margin-bottom:2px">'+(S.images.length?'Add more screenshots':'Tap to upload screenshot')+'</div>'
-      +'<div style="font-size:8px;color:var(--muted2)">Gymshark · Strong · any app · drag &amp; drop</div></div>';
-    h+='<input type="file" id="fileInp" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files);this.value=\'\'"/>';
-    if(unscanned>1)h+='<button class="btn-sm" style="width:100%;margin-top:8px" onclick="scanAll()" '+(anyScanning||!S.apiKey?'disabled':'')+'>'+(anyScanning?'<span class="spin"></span>Scanning...':'⚡ SCAN ALL '+unscanned+' IMAGES')+'</button>';
-    if(scanned>0){
-      const trainedNow=getEffectiveMuscles();
-      h+='<div style="margin-top:12px;padding:11px;background:rgba(167,139,250,.05);border:1px solid rgba(167,139,250,.2);border-radius:8px">'
-        +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">'
-        +'<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--purple)">✏ Confirm Muscles</span>'
-        +(S.manualMuscles!==null?'<button onclick="S.manualMuscles=null;render()" style="background:none;border:none;font-size:8px;color:var(--muted);cursor:pointer;font-family:\'Space Mono\',monospace;text-decoration:underline">↺ auto</button>':'<span style="font-size:8px;color:var(--muted)">tap to adjust</span>')
-        +'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'
-        +MUSCLES.map(m=>{const on=trainedNow.includes(m);return'<div onclick="toggleManualMuscle(\''+m+'\')" style="display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:6px;border:1px solid '+(on?'rgba(239,68,68,.4)':'rgba(255,255,255,.06)')+';background:'+(on?'rgba(239,68,68,.1)':'rgba(255,255,255,.02)')+';cursor:pointer"><div style="width:7px;height:7px;border-radius:50%;background:'+(on?'var(--red)':'rgba(255,255,255,.12)')+';flex-shrink:0"></div><span style="font-size:9px;font-family:\'Space Mono\',monospace;text-transform:capitalize;color:'+(on?'#fca5a5':'var(--muted)')+(on?';font-weight:700':'')+'">'+ m+'</span></div>';}).join('')
-        +'</div></div>';
-    }
-  } else if(S.lastSessionMode==='rest'){
-    h+='<div class="alert a-green" style="margin-bottom:0">APEX will programme a fresh session — all MPS windows cleared, no previous weights to reference. If you have recent gym data in history, it will still appear in the 14-day block.</div>';
-  } else {
-    h+='<div class="alert a-amber" style="margin-bottom:0">APEX will use conservative baseline weights, RPE 7 across all exercises.</div>';
-  }
-  h+='</div></div>';
-
   // ── GENERATE
   h+='<button class="btn" style="font-size:13px;padding:15px;margin-bottom:20px" onclick="generatePacket()">'+(S.outputGenerated?'↺ REGENERATE PACKET':'⚡ GENERATE APEX PACKET')+'</button>';
 
@@ -1037,11 +917,6 @@ function render(){
   if(S.outputGenerated){
     const esc=S.outputText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const tokens=Math.round(S.outputText.length/4);
-    const lgNow=getLastGymSession(),scansPresent=allScansText().length>0,trainedNow=getEffectiveMuscles();
-    let saveLbl='💾 SAVE TODAY TO HISTORY';
-    if(scansPresent&&lgNow)saveLbl='💾 SAVE TODAY + ATTACH SCAN TO '+fmtDS(lgNow.date).toUpperCase();
-    let savedMsg='Today logged as '+S.dayType.toUpperCase()+'.';
-    if(scansPresent&&lgNow)savedMsg+=' Scan attached to '+fmtDS(lgNow.date)+(trainedNow.length>0?' ('+trainedNow.map(m=>m.toUpperCase()).join(', ')+')':'')+'.';
     h+='<div id="out-sec">'
       +'<div class="alert a-green">✓ Packet ready — open fresh APEX chat → paste → get your plan.</div>'
       +'<div class="token-bar">'
@@ -1052,9 +927,9 @@ function render(){
       +'<div class="out-wrap"><div class="out-head"><span>APEX PACKET</span><span style="color:var(--muted)">copy → paste to new chat</span></div><div class="out-body">'+esc+'</div></div>'
       +'<button class="btn" id="cpyBtn" onclick="copyText(S.outputText,\'cpyBtn\')" style="margin-bottom:8px">📋 COPY FOR APEX CHAT</button>'
       +(S.sessionSaved
-        ?'<div class="alert a-green" style="margin-bottom:8px;display:flex;align-items:center;gap:8px"><span>✓</span><span>'+savedMsg+'</span></div>'
-        :'<button class="btn-green" style="width:100%;margin-bottom:8px;padding:12px" onclick="saveAll()">'+saveLbl+'</button>')
-      +'<button class="btn-ghost" style="width:100%" onclick="S.outputGenerated=false;S.outputText=\'\';S.sessionSaved=false;S.images=[];S.manualMuscles=null;render()">↺ RESET — NEW SESSION</button>'
+        ?'<div class="alert a-green" style="margin-bottom:8px;display:flex;align-items:center;gap:8px"><span>✓</span><span>Today logged as '+S.dayType.toUpperCase()+'.</span></div>'
+        :'<button class="btn-green" style="width:100%;margin-bottom:8px;padding:12px" onclick="saveAll()">💾 SAVE TODAY TO HISTORY</button>')
+      +'<button class="btn-ghost" style="width:100%" onclick="S.outputGenerated=false;S.outputText=\'\';S.sessionSaved=false;S.cardioNotes=\'\';S.sessionDT=nowDT();render()">↺ RESET — NEW SESSION</button>'
       +'</div>';
   }
 
@@ -1063,9 +938,6 @@ function render(){
 
   h+='<div class="footer">APEX v9 · CALENDAR · HISTORY · EXPORT · IMPORT</div>';
   app.innerHTML=h;
-
-  // Quick log overlay (from session tab — shouldn't normally be open here but guard)
-  if(S.ql&&S.activeTab==='session'){S.activeTab='history';render();}
 }
 
 loadStorage();render();
