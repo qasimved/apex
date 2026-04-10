@@ -234,6 +234,7 @@ let S={
   keyOpen:false,bkOpen:false,showImport:false,importText:'',
   outputGenerated:false,outputText:'',sessionSaved:false,
   cardioNotes:'',
+  apexNote:'', // free-text context for today's session
   sessionDT:nowDT(),
   // calendar
   calYear:new Date().getFullYear(),calMonth:new Date().getMonth(),
@@ -398,6 +399,11 @@ function buildPacket(){
   L.push('DATE: '+fmtDT(nowV),'DAY: '+S.dayType.toUpperCase()+' | ENERGY: '+S.energy+'/10 ['+eLbl(S.energy)+']','');
   if(!sore.length){L.push('SORENESS: none');}
   else{L.push('SORENESS:');sore.forEach(([m,v])=>L.push('  '+m.toUpperCase()+': '+v.toUpperCase()));}
+  if(S.apexNote&&S.apexNote.trim()){
+    L.push('');
+    L.push('ATHLETE NOTE:');
+    S.apexNote.trim().split('\n').forEach(line=>L.push('  '+line));
+  }
   L.push('');
   if(lg){
     L.push('LAST GYM SESSION: '+fmtDT(lastV)+(hrs!==null?' ('+hrs+'h ago)':''));
@@ -908,6 +914,12 @@ function render(){
           +'<div style="font-size:9px;color:var(--muted);margin-bottom:6px">Weekly frequency:</div>'
           +'<div style="display:flex;flex-wrap:wrap;gap:4px">'+MUSCLES.map(m=>{const f=freq[m];const c=f===0?'badge-zero':f===1?'badge-due':f>=2?'badge-full':'badge-zero';return'<span class="badge '+c+'">'+m+' '+f+'x</span>';}).join('')+'</div></div>'
         :'')
+    // ── Apex note
+    +'<div style="margin-top:14px;padding-top:13px;border-top:1px solid rgba(255,255,255,.05)">'
+    +'<label class="lbl">Note for APEX <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">— optional</span></label>'
+    +'<textarea class="inp" placeholder="Anything your coach should know today... e.g. sharp pain in right delt and neck, only Smith machine available, want to focus on chest, feeling tight in lower back..." oninput="S.apexNote=this.value" style="min-height:72px;margin-top:2px;font-size:10px">'+S.apexNote+'</textarea>'
+    +'<div style="font-size:8px;color:var(--muted);margin-top:4px">Goes directly into your packet — APEX reads this before designing today\'s workout.</div>'
+    +'</div>'
     +'</div></div>';
 
   // ── GENERATE
@@ -929,7 +941,7 @@ function render(){
       +(S.sessionSaved
         ?'<div class="alert a-green" style="margin-bottom:8px;display:flex;align-items:center;gap:8px"><span>✓</span><span>Today logged as '+S.dayType.toUpperCase()+'.</span></div>'
         :'<button class="btn-green" style="width:100%;margin-bottom:8px;padding:12px" onclick="saveAll()">💾 SAVE TODAY TO HISTORY</button>')
-      +'<button class="btn-ghost" style="width:100%" onclick="S.outputGenerated=false;S.outputText=\'\';S.sessionSaved=false;S.cardioNotes=\'\';S.sessionDT=nowDT();render()">↺ RESET — NEW SESSION</button>'
+      +'<button class="btn-ghost" style="width:100%" onclick="S.outputGenerated=false;S.outputText=\'\';S.sessionSaved=false;S.cardioNotes=\'\';S.apexNote=\'\';S.sessionDT=nowDT();render()">↺ RESET — NEW SESSION</button>'
       +'</div>';
   }
 
