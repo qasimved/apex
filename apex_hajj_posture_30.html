@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>APEX · Hajj Posture Protocol · 30 Days</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#ef4444;--red-dark:#b91c1c;--red-dim:rgba(239,68,68,.12);--red-border:rgba(239,68,68,.25);
+  --bg:#080c14;--bg2:rgba(255,255,255,.025);
+  --text:#e2e8f0;--muted:#6b7280;--muted2:#374151;
+  --green:#86efac;--green-dim:rgba(34,197,94,.08);--green-border:rgba(34,197,94,.22);
+  --blue:#93c5fd;--blue-dim:rgba(59,130,246,.07);--blue-border:rgba(59,130,246,.2);
+  --amber:#fbbf24;--amber-dim:rgba(251,191,36,.08);--amber-border:rgba(251,191,36,.22);
+  --orange:#fb923c;--purple:#a78bfa;--purple-dim:rgba(167,139,250,.07);--purple-border:rgba(167,139,250,.22);
+  --gold:#f59e0b;--gold-dim:rgba(245,158,11,.08);--gold-border:rgba(245,158,11,.25);
+}
+body{background:var(--bg);min-height:100vh;color:var(--text);font-family:'Space Mono',monospace;line-height:1.6}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(239,68,68,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,.018) 1px,transparent 1px);
+  background-size:44px 44px}
+
+/* HERO */
+.hero{position:relative;z-index:1;text-align:center;padding:48px 20px 36px;border-bottom:1px solid rgba(239,68,68,.12)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(239,68,68,.06),transparent);pointer-events:none}
+.hero-eyebrow{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.hero-logo{font-family:'Orbitron',sans-serif;font-size:2.2rem;font-weight:900;color:var(--red);letter-spacing:.14em;margin-bottom:6px}
+.hero-logo span{color:rgba(239,68,68,.22)}
+.hero-title{font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text);letter-spacing:.08em;margin-bottom:8px}
+.hero-sub{font-size:10px;color:var(--muted);letter-spacing:.06em;max-width:360px;margin:0 auto 20px}
+.hero-tags{display:flex;justify-content:center;flex-wrap:wrap;gap:6px}
+.htag{padding:4px 10px;border-radius:3px;font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid}
+.htag-red{background:var(--red-dim);border-color:var(--red-border);color:#fca5a5}
+.htag-gold{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold)}
+.htag-green{background:var(--green-dim);border-color:var(--green-border);color:var(--green)}
+.htag-blue{background:var(--blue-dim);border-color:var(--blue-border);color:var(--blue)}
+
+/* LAYOUT */
+.wrap{max-width:680px;margin:0 auto;padding:28px 16px 60px;position:relative;z-index:1}
+
+/* SECTION */
+.sec{margin-bottom:32px}
+.sec-label{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px}
+.sec-num{width:24px;height:24px;background:var(--red);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:'Orbitron',sans-serif;flex-shrink:0}
+.sec-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--text)}
+
+/* CARD */
+.card{background:var(--bg2);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:16px;margin-bottom:10px}
+.card-red{border-color:var(--red-border);background:rgba(239,68,68,.03)}
+.card-gold{border-color:var(--gold-border);background:var(--gold-dim)}
+.card-green{border-color:var(--green-border);background:var(--green-dim)}
+.card-blue{border-color:var(--blue-border);background:var(--blue-dim)}
+.card-purple{border-color:var(--purple-border);background:var(--purple-dim)}
+.card-amber{border-color:var(--amber-border);background:var(--amber-dim)}
+
+/* ALERT */
+.alert{border-radius:7px;padding:11px 14px;font-size:10px;line-height:1.75;margin-bottom:12px}
+.a-gold{background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold)}
+.a-green{background:var(--green-dim);border:1px solid var(--green-border);color:var(--green)}
+.a-red{background:var(--red-dim);border:1px solid var(--red-border);color:#fca5a5}
+.a-blue{background:var(--blue-dim);border:1px solid var(--blue-border);color:var(--blue)}
+.a-amber{background:var(--amber-dim);border:1px solid var(--amber-border);color:var(--amber)}
+.a-purple{background:var(--purple-dim);border:1px solid var(--purple-border);color:var(--purple)}
+
+/* PHASE HEADER */
+.phase{border-radius:10px;overflow:hidden;margin-bottom:22px}
+.phase-head{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.ph-red{background:linear-gradient(135deg,rgba(239,68,68,.18),rgba(185,28,28,.1));border:1px solid rgba(239,68,68,.3)}
+.ph-amber{background:linear-gradient(135deg,rgba(245,158,11,.14),rgba(217,119,6,.08));border:1px solid rgba(245,158,11,.28)}
+.ph-green{background:linear-gradient(135deg,rgba(34,197,94,.1),rgba(22,163,74,.06));border:1px solid rgba(34,197,94,.25)}
+.ph-purple{background:linear-gradient(135deg,rgba(167,139,250,.1),rgba(139,92,246,.06));border:1px solid rgba(167,139,250,.25)}
+.phase-num{font-family:'Orbitron',sans-serif;font-size:1.4rem;font-weight:900;opacity:.3;line-height:1}
+.phase-days{font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.1em}
+.phase-name{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+.phase-focus{font-size:9px;color:var(--muted);margin-top:1px;letter-spacing:.06em}
+.phase-badge{padding:4px 10px;border-radius:4px;font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:9px;margin:0}
+.tbl th{text-align:left;padding:7px 10px;font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.06);white-space:nowrap}
+.tbl td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:top;line-height:1.6}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(255,255,255,.015)}
+.tbl-wrap{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.06);border-radius:8px;overflow:hidden;margin-bottom:12px}
+
+/* ROUTINE BLOCK */
+.routine{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.07);border-radius:9px;overflow:hidden;margin-bottom:12px}
+.routine-head{padding:9px 13px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.05)}
+.routine-icon{font-size:14px}
+.routine-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em}
+.routine-time{font-size:8px;color:var(--muted);margin-left:auto;background:rgba(255,255,255,.04);padding:2px 7px;border-radius:3px}
+.routine-body{padding:12px 13px}
+.ex-row{display:flex;align-items:flex-start;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.ex-row:last-child{border-bottom:none;padding-bottom:0}
+.ex-num{width:18px;height:18px;border-radius:3px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.25);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fca5a5;flex-shrink:0;margin-top:1px;font-family:'Orbitron',sans-serif}
+.ex-num-gold{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.25);color:var(--gold)}
+.ex-num-green{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.22);color:var(--green)}
+.ex-num-blue{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.22);color:var(--blue)}
+.ex-num-purple{background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.22);color:var(--purple)}
+.ex-main{flex:1}
+.ex-name{font-size:10px;font-weight:700;color:var(--text)}
+.ex-sets{font-size:8px;color:var(--amber);margin-top:1px;font-weight:700;letter-spacing:.04em}
+.ex-cue{font-size:8px;color:var(--muted);margin-top:2px;font-style:italic;line-height:1.55}
+.ex-band{font-size:8px;color:var(--green);margin-top:2px;font-weight:700}
+.mandatory{display:inline-block;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);border-radius:2px;padding:1px 5px;font-size:7px;font-weight:700;color:#fca5a5;letter-spacing:.06em;text-transform:uppercase;margin-left:4px;vertical-align:middle}
+
+/* GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
+@media(max-width:480px){.grid2,.grid3{grid-template-columns:1fr}.tbl td,.tbl th{padding:6px 8px;font-size:8px}}
+
+/* STAT */
+.stat-card{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:13px;text-align:center}
+.stat-val{font-family:'Orbitron',sans-serif;font-size:1.5rem;font-weight:900;line-height:1;margin-bottom:4px}
+.stat-lbl{font-size:8px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+
+/* PROGRESS */
+.prog-bar-wrap{background:rgba(255,255,255,.04);border-radius:4px;height:6px;overflow:hidden;margin-top:6px}
+.prog-bar{height:100%;border-radius:4px;transition:width .3s}
+
+/* WEEK TIMELINE */
+.week-line{display:flex;gap:0;margin-bottom:20px;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.07)}
+.week-cell{flex:1;padding:10px 8px;text-align:center;cursor:default;transition:background .15s}
+.week-cell.w1{background:rgba(239,68,68,.08);border-right:1px solid rgba(255,255,255,.05)}
+.week-cell.w2{background:rgba(245,158,11,.07);border-right:1px solid rgba(255,255,255,.05)}
+.week-cell.w3{background:rgba(34,197,94,.06);border-right:1px solid rgba(255,255,255,.05)}
+.week-cell.w4{background:rgba(167,139,250,.07)}
+.wc-num{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;line-height:1;margin-bottom:3px}
+.wc-label{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.wc-focus{font-size:7px;color:var(--muted);line-height:1.4}
+
+/* CHECKLIST */
+.checklist{list-style:none;padding:0}
+.checklist li{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:10px;line-height:1.6}
+.checklist li:last-child{border-bottom:none}
+.check-dot{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--red);flex-shrink:0;margin-top:2px}
+
+/* DIVIDER */
+.divider{border:none;border-top:1px solid rgba(239,68,68,.08);margin:24px 0}
+
+/* HIGHLIGHT */
+.hl-red{color:#fca5a5;font-weight:700}
+.hl-gold{color:var(--gold);font-weight:700}
+.hl-green{color:var(--green);font-weight:700}
+.hl-blue{color:var(--blue);font-weight:700}
+.hl-purple{color:var(--purple);font-weight:700}
+.hl-orange{color:var(--orange);font-weight:700}
+
+/* PRINT */
+@media print{body{background:#fff;color:#000}.hero::before,.hero{background:none}}
+
+/* FOOTER */
+.footer{text-align:center;font-size:8px;color:var(--muted2);letter-spacing:.1em;padding-top:20px;border-top:1px solid rgba(239,68,68,.07);margin-top:40px}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">⚡ APEX · Adaptive Performance Engine</div>
+  <div class="hero-logo">AP<span>E</span>X</div>
+  <div class="hero-title">HAJJ POSTURE PROTOCOL</div>
+  <div class="hero-sub">30-Day Structural Reset · Makkah · Bands Only · No Desk · Full Correction Focus</div>
+  <div class="hero-tags">
+    <span class="htag htag-gold">☪ Hajj Mode Active</span>
+    <span class="htag htag-red">Qasim · 30y · Munich</span>
+    <span class="htag htag-green">Full Crossed Syndrome</span>
+    <span class="htag htag-blue">3 Dysfunctions · 1 Block</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- WHY THIS WORKS -->
+<div class="sec">
+  <div class="sec-label"><div class="sec-num">0</div><div class="sec-title">Why This Month Is Optimal</div></div>
+
+  <div class="alert a-gold">
+    ☪ The desk job is the upstream driver of all three dysfunctions. For 30 days it is completely removed. You will be upright, walking 15,000–30,000+ steps daily — the exact opposite stimulus your body normally receives. Hajj doesn't just allow this work. It actively accelerates it.
+  </div>
+
+  <div class="grid3">
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--red)">3</div>
+      <div class="stat-lbl">Dysfunctions<br>to fix</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--gold)">30</div>
+      <div class="stat-lbl">Days of zero<br>desk loading</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--green)">20k+</div>
+      <div class="stat-lbl">Steps/day<br>passive fix</div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead><tr><th>What Hajj Fixes Passively</th><th>Why It Helps</th></tr></thead>
+      <tbody>
+        <tr><td>🚶 15,000–30,000 steps/day</td><td style="color:var(--green)">Activates glutes + strengthens posterior chain continuously</td></tr>
+        <tr><td>🪑 No chair / no desk</td><td style="color:var(--green)">Hip flexors decompress for the first time in months</td></tr>
+        <tr><td>☀️ Heat throughout the day</td><td style="color:var(--green)">Connective tissue loosens — stretches are significantly more effective</td></tr>
+        <tr><td>🧍 Constant upright posture</td><td style="color:var(--green)">Retrains neural patterns for standing alignment</td></tr>
+        <tr><td>😴 Earlier sleep (no screens)</td><td style="color:var(--green)">Systemic tissue repair accelerates overnight</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- THE 3 DYSFUNCTIONS -->
+<div class="sec">
+  <div class="sec-label"><div class="sec-num">1</div><div class="sec-title">Your 3 Dysfunctions — Fix Order</div></div>
+
+  <div class="alert a-red">
+    ⚠️ Fix order is non-negotiable. APT is the root. Rounded shoulders cannot fully resolve while the pelvis is anteriorly tilted. Forward head cannot fully resolve while the thoracic spine is kyphotic. Bottom up.
+  </div>
+
+  <div class="card card-red" style="margin-bottom:10px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <div style="font-family:'Orbitron',sans-serif;font-size:1.6rem;font-weight:900;color:rgba(239,68,68,.25)">01</div>
+      <div>
+        <div class="hl-red" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em">Anterior Pelvic Tilt (APT)</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px">Weeks 1–2 primary focus · maintained all 4 weeks</div>
+      </div>
+      <span style="margin-left:auto;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:4px;padding:3px 8px;font-size:8px;font-weight:700;color:#fca5a5">ROOT CAUSE</span>
+    </div>
+    <div style="font-size:9px;color:var(--muted);line-height:1.7">
+      <span class="hl-red">Driver:</span> Hip flexors chronically shortened by desk sitting. Glutes neurologically inhibited.<br>
+      <span class="hl-red">Visible effect:</span> Lower back arches, belly pushes forward, pelvic floor strain.<br>
+      <span class="hl-red">Your fix:</span> Hip flexor stretch (2× daily) · Glute activation circuit · Posterior pelvic tilt drills
+    </div>
+  </div>
+
+  <div class="card card-amber" style="margin-bottom:10px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <div style="font-family:'Orbitron',sans-serif;font-size:1.6rem;font-weight:900;color:rgba(245,158,11,.2)">02</div>
+      <div>
+        <div class="hl-gold" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em">Rounded Shoulders + Thoracic Kyphosis</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px">Weeks 2–3 primary focus · maintained all 4 weeks</div>
+      </div>
+      <span style="margin-left:auto;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);border-radius:4px;padding:3px 8px;font-size:8px;font-weight:700;color:var(--gold)">MID CHAIN</span>
+    </div>
+    <div style="font-size:9px;color:var(--muted);line-height:1.7">
+      <span class="hl-gold">Driver:</span> Pec minor + anterior delt overactive. Rear delts/mid-traps/rhomboids weak and lengthened.<br>
+      <span class="hl-gold">Visible effect:</span> Shoulders rolled forward, chest caves in, mid-back rounded.<br>
+      <span class="hl-gold">Your fix:</span> Face pulls + pull-aparts daily · Thoracic extension · Scapular retraction drills
+    </div>
+  </div>
+
+  <div class="card card-purple" style="margin-bottom:0">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <div style="font-family:'Orbitron',sans-serif;font-size:1.6rem;font-weight:900;color:rgba(167,139,250,.2)">03</div>
+      <div>
+        <div class="hl-purple" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em">Forward Head Posture (FHP)</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px">Weeks 3–4 primary focus · builds on fixes 1 & 2</div>
+      </div>
+      <span style="margin-left:auto;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);border-radius:4px;padding:3px 8px;font-size:8px;font-weight:700;color:var(--purple)">TOP CHAIN</span>
+    </div>
+    <div style="font-size:9px;color:var(--muted);line-height:1.7">
+      <span class="hl-purple">Driver:</span> Upper traps + SCM overactive. Deep neck flexors (longus colli) atrophied.<br>
+      <span class="hl-purple">Visible effect:</span> Head sits forward of shoulders. Neck tension. Headaches.<br>
+      <span class="hl-purple">Your fix:</span> Chin tucks 3× daily · Thoracic extension chair · No upper trap overloading
+    </div>
+  </div>
+</div>
+
+<!-- 4-WEEK OVERVIEW -->
+<div class="sec">
+  <div class="sec-label"><div class="sec-num">2</div><div class="sec-title">30-Day Phase Overview</div></div>
+
+  <div class="week-line">
+    <div class="week-cell w1">
+      <div class="wc-num" style="color:#fca5a5">W1</div>
+      <div class="wc-label" style="color:#fca5a5">Foundation</div>
+      <div class="wc-focus">Days 1–7<br>APT primary<br>Build habit</div>
+    </div>
+    <div class="week-cell w2">
+      <div class="wc-num" style="color:var(--gold)">W2</div>
+      <div class="wc-label" style="color:var(--gold)">Load</div>
+      <div class="wc-focus">Days 8–14<br>APT + shoulders<br>Add band work</div>
+    </div>
+    <div class="week-cell w3">
+      <div class="wc-num" style="color:var(--green)">W3</div>
+      <div class="wc-label" style="color:var(--green)">Integration</div>
+      <div class="wc-focus">Days 15–21<br>All 3 active<br>FHP protocol</div>
+    </div>
+    <div class="week-cell w4">
+      <div class="wc-num" style="color:var(--purple)">W4</div>
+      <div class="wc-label" style="color:var(--purple)">Consolidate</div>
+      <div class="wc-focus">Days 22–30<br>Full stack<br>Retention work</div>
+    </div>
+  </div>
+
+  <div class="alert a-amber">
+    ⚡ <span class="hl-gold">Energy rule:</span> Heat + walking volume is real fatigue. If energy ≤ 4 on any day → morning correctives only, no band session. Never sacrifice ibadah for training. The walking itself is medicine.
+  </div>
+</div>
+
+<!-- PHASE 1 -->
+<div class="sec">
+  <div class="sec-label"><div class="sec-num">3</div><div class="sec-title">Phase Detail</div></div>
+
+  <!-- WEEK 1 -->
+  <div class="phase ph-red">
+    <div class="phase-head">
+      <div>
+        <div class="phase-days" style="color:#fca5a5">WEEK 1 · DAYS 1–7</div>
+        <div class="phase-name" style="color:#fca5a5">Foundation — APT Root Fix</div>
+        <div class="phase-focus">Primary: Anterior Pelvic Tilt · Secondary: Begin shoulder awareness</div>
+      </div>
+      <div class="phase-num" style="color:#fca5a5">01</div>
+    </div>
+  </div>
+
+  <div class="alert a-red" style="margin-bottom:14px">
+    🎯 <span class="hl-red">Week 1 goal:</span> Wake the glutes up and start decompressing the hip flexors. These muscles have been in a shortened, inhibited state for years. Expect mild DOMS in glutes by day 2–3. That is the correction starting. Do not skip rest.
+  </div>
+
+  <div class="routine">
+    <div class="routine-head">
+      <div class="routine-icon">🌅</div>
+      <div class="routine-title" style="color:var(--gold)">Morning Correctives — Week 1</div>
+      <div class="routine-time">5–6 min · after Fajr</div>
+    </div>
+    <div class="routine-body">
+      <div class="ex-row">
+        <div class="ex-num ex-num-gold">1</div>
+        <div class="ex-main">
+          <div class="ex-name">Wall Pelvic Tilt <span class="mandatory">mandatory</span></div>
+          <div class="ex-sets">5 × 10-sec hold</div>
+          <div class="ex-cue">Back flat against wall. Brace abs + squeeze glutes simultaneously. Feel lower back press into wall — that gap closing is APT correcting. Do this every single morning of all 4 weeks.</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-gold">2</div>
+        <div class="ex-main">
+          <div class="ex-name">Glute Bridge <span class="mandatory">mandatory</span></div>
+          <div class="ex-sets">3 × 15, 2-sec hold at top · BW or Gritin Medium loop</div>
+          <div class="ex-cue">Lie on back, knees bent. Drive through heels — if lower back fires instead of glutes, tuck pelvis harder before lifting. Hold at top, squeeze hard. Progress to Gritin Medium loop band across hips by day 3.</div>
+          <div class="ex-band">Gritin Light → Gritin Medium by day 3</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-gold">3</div>
+        <div class="ex-main">
+          <div class="ex-name">Clamshell</div>
+          <div class="ex-sets">2 × 15 each side · Gritin Light</div>
+          <div class="ex-cue">Lie on side, knees at 45°. Rotate top knee up without rolling the hips back. Hip abductors and external rotators — key APT muscles. Gritin Light for Week 1, no heavier.</div>
+          <div class="ex-band">Gritin Light loop</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-gold">4</div>
+        <div class="ex-main">
+          <div class="ex-name">Chin Tuck (start Week 1)</div>
+          <div class="ex-sets">3 × 10, 3-sec hold</div>
+          <div class="ex-cue">Standing or sitting. Pull head straight back — "make a double chin." Ears move over shoulders. Do not tilt chin down. Feel deep front neck muscles engage. Build the habit now even though FHP is not primary focus yet.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="routine">
+    <div class="routine-head">
+      <div class="routine-icon">🌙</div>
+      <div class="routine-title" style="color:var(--red)">Evening Correctives — Week 1</div>
+      <div class="routine-time">7–8 min · after Isha or before sleep</div>
+    </div>
+    <div class="routine-body">
+      <div class="ex-row">
+        <div class="ex-num">1</div>
+        <div class="ex-main">
+          <div class="ex-name">Kneeling Hip Flexor Stretch <span class="mandatory">mandatory · daily all 4 weeks</span></div>
+          <div class="ex-sets">60 sec each side — do NOT rush</div>
+          <div class="ex-cue">One knee on ground, other foot forward. Push hips forward, tuck tailbone to deepen. You should feel a deep pull at the front of the rear hip/thigh. The heat of Makkah makes this 30% more effective — use it. This single stretch done daily will do more for your back pain and belly appearance than anything else.</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num">2</div>
+        <div class="ex-main">
+          <div class="ex-name">Couch Stretch</div>
+          <div class="ex-sets">30 sec each side</div>
+          <div class="ex-cue">Rear shin against wall, front foot on floor. Hits rectus femoris — the hip flexor most shortened by chairs. Progress to 45 sec by end of Week 1.</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num">3</div>
+        <div class="ex-main">
+          <div class="ex-name">90/90 Hip Stretch</div>
+          <div class="ex-sets">60 sec each side</div>
+          <div class="ex-cue">Sit with both knees at 90°, front shin across, rear shin behind. Upright torso. Opens hip external rotators and capsule. New addition for Hajj — the walking volume creates hip tightness this directly addresses.</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num">4</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Pull-Apart <span class="mandatory">mandatory</span></div>
+          <div class="ex-sets">2 × 20 · Yellow tube band</div>
+          <div class="ex-cue">Arms straight at shoulder height. Pull band to T-shape, squeeze scapulae at end. Yellow only — near-zero fatigue cost. Primes rear delts and mid-traps. Start this habit Week 1, even though shoulder focus comes Week 2.</div>
+          <div class="ex-band">Yellow tube band (4.6kg)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert a-blue" style="margin-bottom:6px">
+    🚶 <span class="hl-blue">Hajj walking:</span> Every tawaf, every sa'i, every walk between hotels is active rehab. Focus cues during walking: <span class="hl-green">chest lifted · shoulders back · chin tucked · glutes squeezing slightly on each push-off</span>. This turns 20,000 steps into 20,000 reps of postural reinforcement.
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- WEEK 2 -->
+  <div class="phase ph-amber">
+    <div class="phase-head">
+      <div>
+        <div class="phase-days" style="color:var(--gold)">WEEK 2 · DAYS 8–14</div>
+        <div class="phase-name" style="color:var(--gold)">Load — APT Consolidation + Shoulder Attack</div>
+        <div class="phase-focus">APT now habitual · Add thoracic mobility · Introduce face pulls + rowing</div>
+      </div>
+      <div class="phase-num" style="color:var(--gold)">02</div>
+    </div>
+  </div>
+
+  <div class="alert a-amber" style="margin-bottom:14px">
+    🎯 <span class="hl-gold">Week 2 goal:</span> APT exercises should feel easier — glutes activating faster, hip flexor stretch deepening. Now layer in the thoracic work. The thoracic spine stacks better once the pelvis finds neutral, so Week 2 is the right time. Add face pulls and band rows to begin building the posterior shoulder strength needed to hold the corrected position.
+  </div>
+
+  <div class="routine">
+    <div class="routine-head">
+      <div class="routine-icon">🌅</div>
+      <div class="routine-title" style="color:var(--gold)">Morning Correctives — Week 2</div>
+      <div class="routine-time">8–10 min · after Fajr</div>
+    </div>
+    <div class="routine-body">
+      <div class="ex-row">
+        <div class="ex-num ex-num-gold">1</div>
+        <div class="ex-main">
+          <div class="ex-name">Wall Pelvic Tilt <span class="mandatory">mandatory</span></div>
+          <div class="ex-sets">5 × 10-sec hold</div>
+          <div class="ex-cue">Same as Week 1. Non-negotiable daily for all 30 days. By now this should feel natural rather than effortful — that's the neural pattern solidifying.</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-gold">2</div>
+        <div class="ex-main">
+          <div class="ex-name">Glute Bridge <span class="mandatory">mandatory</span></div>
+          <div class="ex-sets">3 × 15, 2-sec hold · Gritin Medium loop</div>
+          <div class="ex-cue">Progress from Week 1. Gritin Medium loop band placed across hip creases. Drive through heels. Band adds hip abduction resistance — activates glute med simultaneously. If lower back still compensating → single leg BW instead.</div>
+          <div class="ex-band">Gritin Medium loop</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-gold">3</div>
+        <div class="ex-main">
+          <div class="ex-name">Clamshell</div>
+          <div class="ex-sets">2 × 20 each side · Gritin Medium</div>
+          <div class="ex-cue">Progress from Gritin Light to Gritin Medium. If 20 reps feel easy, pause 2 seconds at top of each rep before progressing band level.</div>
+          <div class="ex-band">Gritin Medium loop</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-gold">4</div>
+        <div class="ex-main">
+          <div class="ex-name">Scapular Wall Slides <span class="mandatory">NEW Week 2</span></div>
+          <div class="ex-sets">2 × 10 slow reps</div>
+          <div class="ex-cue">Back flat on wall, arms at 90° ("goalpost"). Slide arms up wall keeping entire arm in contact. If arms peel off, reduce range. Targets lower traps and serratus — the muscles that hold shoulder blades in correct position. Do slowly — 3 sec up, 2 sec down.</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-gold">5</div>
+        <div class="ex-main">
+          <div class="ex-name">Thoracic Extension — Chair/Wall <span class="mandatory">NEW Week 2</span></div>
+          <div class="ex-sets">2 × 60 sec</div>
+          <div class="ex-cue">Lean back over the top of a chair at mid-thoracic level (NOT lower back). Arms crossed on chest or behind head. Let gravity extend the thoracic curve. You should feel a gentle stretch across the upper back. This is thoracic kyphosis reversing. Can also do with rolled towel on floor.</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-gold">6</div>
+        <div class="ex-main">
+          <div class="ex-name">Chin Tuck</div>
+          <div class="ex-sets">3 × 10, 3-sec hold — add one more set</div>
+          <div class="ex-cue">Now do 3 sets every morning. By end of Week 2 this should feel like a natural resting position for 1–2 seconds.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="routine">
+    <div class="routine-head">
+      <div class="routine-icon">💪</div>
+      <div class="routine-title" style="color:var(--orange)">Band Session — Week 2 · Every Other Day</div>
+      <div class="routine-time">15–20 min · cooler time of day preferred</div>
+    </div>
+    <div class="routine-body">
+      <div class="alert a-amber" style="margin-bottom:10px">Do on alternate days — not after heavy tawaf/walking days. If energy ≤ 4 → skip and just do morning + evening correctives.</div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-gold">1</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Face Pull <span class="mandatory">mandatory every session</span></div>
+          <div class="ex-sets">3 × 15 · Yellow band</div>
+          <div class="ex-cue">Door anchor at eye height. Face door. Pull to forehead, elbows flared wide and high. Add chin tuck at full contraction — this trains the FHP fix simultaneously. Yellow band keeps fatigue cost near zero. Do EVERY band session all 4 weeks.</div>
+          <div class="ex-band">Yellow tube band (4.6kg)</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-gold">2</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Pull-Apart <span class="mandatory">mandatory every session</span></div>
+          <div class="ex-sets">3 × 20 · Yellow band</div>
+          <div class="ex-cue">Standing, arms straight at shoulder height. Pull to T-shape, hold 1 sec. Rear delts + mid-traps + rhomboids. Volume here is the posture correction stimulus — 3×20 every session adds up to hundreds of reps per week.</div>
+          <div class="ex-band">Yellow tube band (4.6kg)</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-gold">3</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Single-Arm Row</div>
+          <div class="ex-sets">3 × 12 each side · Red band</div>
+          <div class="ex-cue">Foot on band, hinge 45° at hip, row to hip. Elbow drives back, not up. Feel mid-back contract. Posterior pelvic tilt maintained — do not let lower back arch as you pull. Row = back posture fix. Red band keeps load manageable in heat.</div>
+          <div class="ex-band">Red tube band (13.6kg)</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-gold">4</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Lateral Walk</div>
+          <div class="ex-sets">3 × 15 steps each direction · Gritin Medium</div>
+          <div class="ex-cue">Gritin loop around ankles. Slight squat position. Step side to side — keep pelvis level, do NOT hike hip. Glute med activation is critical for APT and pelvic stability during walking.</div>
+          <div class="ex-band">Gritin Medium loop</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-gold">5</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Bicep Curl (retention)</div>
+          <div class="ex-sets">3 × 12 · Green band</div>
+          <div class="ex-cue">Stand on band, standard curl. Supinate (rotate palm up) at top. This is muscle retention, not primary focus. Green band is correct level here — not fatiguing.</div>
+          <div class="ex-band">Green tube band (9.0kg)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="routine">
+    <div class="routine-head">
+      <div class="routine-icon">🌙</div>
+      <div class="routine-title" style="color:var(--amber)">Evening Correctives — Week 2</div>
+      <div class="routine-time">9–10 min</div>
+    </div>
+    <div class="routine-body">
+      <div class="ex-row">
+        <div class="ex-num">1</div>
+        <div class="ex-main">
+          <div class="ex-name">Kneeling Hip Flexor Stretch <span class="mandatory">mandatory</span></div>
+          <div class="ex-sets">60 sec each side → push to 75 sec if comfortable</div>
+          <div class="ex-cue">Progress from Week 1. By now you should be able to get deeper. Add a slight arm reach overhead on the same side as the rear knee to deepen the stretch into the lateral hip flexor.</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num">2</div>
+        <div class="ex-num" style="display:none"></div>
+        <div class="ex-main">
+          <div class="ex-name">Couch Stretch</div>
+          <div class="ex-sets">45 sec each side</div>
+          <div class="ex-cue">Progress from 30 to 45 seconds. If no wall available, rear foot can rest on a bag or elevated surface.</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num">3</div>
+        <div class="ex-main">
+          <div class="ex-name">Doorframe Pec Stretch <span class="mandatory">NEW Week 2</span></div>
+          <div class="ex-sets">30 sec each side · 2 rounds</div>
+          <div class="ex-cue">Place forearm on door frame at 90°. Gently rotate body away until chest feels a deep stretch. This directly addresses pec minor tightness causing rounded shoulders. Hold still — no bouncing. Do both sides.</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num">4</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Pull-Apart</div>
+          <div class="ex-sets">2 × 20 · Yellow band</div>
+          <div class="ex-cue">Evening version — arms slightly lower (shoulder height). Relaxed, controlled. Daily habit, both morning and evening by Week 2 if available.</div>
+          <div class="ex-band">Yellow tube band (4.6kg)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- WEEK 3 -->
+  <div class="phase ph-green">
+    <div class="phase-head">
+      <div>
+        <div class="phase-days" style="color:var(--green)">WEEK 3 · DAYS 15–21</div>
+        <div class="phase-name" style="color:var(--green)">Integration — All 3 Dysfunctions Active</div>
+        <div class="phase-focus">APT = maintained · Shoulders = strengthening · FHP = primary focus added</div>
+      </div>
+      <div class="phase-num" style="color:var(--green)">03</div>
+    </div>
+  </div>
+
+  <div class="alert a-green" style="margin-bottom:14px">
+    🎯 <span class="hl-green">Week 3 goal:</span> By now glutes are waking up, thoracic mobility is improving, and hip flexors are lengthening. The head can finally start sitting back correctly because the foundation below it is changing. Add chin tuck frequency, add band chest press + tricep work for muscle retention, and begin integrating all three protocols simultaneously.
+  </div>
+
+  <div class="routine">
+    <div class="routine-head">
+      <div class="routine-icon">🌅</div>
+      <div class="routine-title" style="color:var(--green)">Morning Correctives — Week 3</div>
+      <div class="routine-time">10–12 min</div>
+    </div>
+    <div class="routine-body">
+      <div class="ex-row">
+        <div class="ex-num ex-num-green">1</div>
+        <div class="ex-main">
+          <div class="ex-name">Wall Pelvic Tilt <span class="mandatory">mandatory</span></div>
+          <div class="ex-sets">5 × 10-sec hold — now add a 3-sec hold at full posterior tilt</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-green">2</div>
+        <div class="ex-main">
+          <div class="ex-name">Glute Bridge — Single Leg Progression</div>
+          <div class="ex-sets">2 × 10 each side · BW or Gritin Medium</div>
+          <div class="ex-cue">If both-leg bridge has become easy (glutes fire consistently with no lower back compensation), progress to single-leg glute bridge. One foot flat, other leg extended. This is a significant strength indicator. Keep Gritin Medium if both legs, BW if single.</div>
+          <div class="ex-band">Gritin Medium or BW</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-green">3</div>
+        <div class="ex-main">
+          <div class="ex-name">Scapular Wall Slides</div>
+          <div class="ex-sets">3 × 10 — increase from 2 sets</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-green">4</div>
+        <div class="ex-main">
+          <div class="ex-name">Chin Tuck <span class="mandatory">increase to 3× daily</span></div>
+          <div class="ex-sets">3 × 12, 3-sec hold · morning, midday, evening</div>
+          <div class="ex-cue">This is now the primary FHP exercise. Three times daily — after Fajr, after Dhuhr, after Isha. Each session 3 sets. The deep neck flexors need this frequency to overcome years of inhibition. Do while standing in queues, waiting, anywhere.</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-green">5</div>
+        <div class="ex-main">
+          <div class="ex-name">Thoracic Extension + Rotation <span class="mandatory">NEW Week 3</span></div>
+          <div class="ex-sets">5 reps each direction · seated on floor</div>
+          <div class="ex-cue">Sit cross-legged. Hands behind head. Rotate upper body only — hips stay forward. Look up at end range. 5 each side. This adds thoracic rotation to the extension work from Week 2 — a different plane of movement the thoracic spine needs.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="routine">
+    <div class="routine-head">
+      <div class="routine-icon">💪</div>
+      <div class="routine-title" style="color:var(--green)">Band Session — Week 3 · Every Other Day</div>
+      <div class="routine-time">20–25 min</div>
+    </div>
+    <div class="routine-body">
+      <div class="alert a-green" style="margin-bottom:10px">Slightly longer sessions now — fatigue from walking should be reducing as the body adapts. Add chest + tricep retention work.</div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-green">1</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Face Pull <span class="mandatory">mandatory</span></div>
+          <div class="ex-sets">3 × 15 · Yellow band</div>
+          <div class="ex-cue">Add chin tuck at full contraction — actively pull head back as band reaches forehead. Trains FHP + shoulder correction simultaneously. Still Yellow — this is not a strength exercise, it is a postural exercise.</div>
+          <div class="ex-band">Yellow tube band (4.6kg)</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-green">2</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Pull-Apart <span class="mandatory">mandatory</span></div>
+          <div class="ex-sets">3 × 20 · Yellow band</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-green">3</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Single-Arm Row</div>
+          <div class="ex-sets">3 × 12 each side · → try Red if Green+Red available, else Red</div>
+          <div class="ex-cue">If Red felt easy in Week 2 (hit 3×12 with good form), try Green+Red stack (22.6kg). Only if form is perfect. Posterior pelvic tilt maintained throughout — this is a posture exercise as much as a strength exercise.</div>
+          <div class="ex-band">Red (13.6kg) or Green+Red stack (22.6kg)</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-green">4</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Chest Press — Retention</div>
+          <div class="ex-sets">3 × 12–15 · Red band</div>
+          <div class="ex-cue">Door anchor LOW, face away. Press straight out. Critical cue: scapulae retracted BEFORE pressing. This prevents the rounded shoulder pattern reinforcing during chest work. Squeeze chest at lockout, don't hyperextend elbows.</div>
+          <div class="ex-band">Red tube band (13.6kg)</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-green">5</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Tricep Pushdown — Retention</div>
+          <div class="ex-sets">3 × 15 · Red band</div>
+          <div class="ex-cue">Door anchor HIGH. Elbows pinned to sides — do NOT let elbows flare. This keeps the shoulders in correct position during the movement. Red band is correct for Hajj mode.</div>
+          <div class="ex-band">Red tube band (13.6kg)</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-green">6</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Glute Bridge — Gritin Heavy</div>
+          <div class="ex-sets">3 × 15, 2-sec hold</div>
+          <div class="ex-cue">Progress to Gritin Heavy loop. This is now a strength exercise, not just activation. APT correction requires the glutes to be strong enough to actively maintain posterior pelvic tilt during daily movement.</div>
+          <div class="ex-band">Gritin Heavy loop</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- WEEK 4 -->
+  <div class="phase ph-purple">
+    <div class="phase-head">
+      <div>
+        <div class="phase-days" style="color:var(--purple)">WEEK 4 · DAYS 22–30</div>
+        <div class="phase-name" style="color:var(--purple)">Consolidate — Lock In The New Baseline</div>
+        <div class="phase-focus">Full stack daily · Muscle retention complete · Prepare return to Munich gym</div>
+      </div>
+      <div class="phase-num" style="color:var(--purple)">04</div>
+    </div>
+  </div>
+
+  <div class="alert a-purple" style="margin-bottom:14px">
+    🎯 <span class="hl-purple">Week 4 goal:</span> The new posture should be starting to feel natural rather than effortful. The neural patterns are forming. This week is about volume and consolidation — higher rep counts, longer holds, and beginning to automate the corrected position during daily movement without thinking about it.
+  </div>
+
+  <div class="routine">
+    <div class="routine-head">
+      <div class="routine-icon">🌅</div>
+      <div class="routine-title" style="color:var(--purple)">Morning Correctives — Week 4 (Full Stack)</div>
+      <div class="routine-time">12–14 min</div>
+    </div>
+    <div class="routine-body">
+      <div class="ex-row">
+        <div class="ex-num ex-num-purple">1</div>
+        <div class="ex-main">
+          <div class="ex-name">Wall Pelvic Tilt <span class="mandatory">mandatory all 30 days</span></div>
+          <div class="ex-sets">5 × 12-sec hold</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-purple">2</div>
+        <div class="ex-main">
+          <div class="ex-name">Single-Leg Glute Bridge or Banded Bridge</div>
+          <div class="ex-sets">3 × 12 each side · Gritin Heavy</div>
+          <div class="ex-band">Gritin Heavy loop</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-purple">3</div>
+        <div class="ex-main">
+          <div class="ex-name">Clamshell</div>
+          <div class="ex-sets">2 × 20 each side with 2-sec hold at top · Gritin Medium/Heavy</div>
+          <div class="ex-band">Gritin Medium or Heavy</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-purple">4</div>
+        <div class="ex-main">
+          <div class="ex-name">Scapular Wall Slides</div>
+          <div class="ex-sets">3 × 12 — arms should reach overhead consistently now</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-purple">5</div>
+        <div class="ex-main">
+          <div class="ex-name">Chin Tuck 3× daily</div>
+          <div class="ex-sets">3 × 15, 3-sec hold each session</div>
+          <div class="ex-cue">By Week 4 you should notice your resting head position has shifted back naturally. The chin tuck should feel like it barely moves your head — because the new position is already closer to correct.</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-purple">6</div>
+        <div class="ex-main">
+          <div class="ex-name">Thoracic Extension + Cat-Cow</div>
+          <div class="ex-sets">60 sec thoracic extension · 10 slow Cat-Cow</div>
+          <div class="ex-cue">Cat-Cow: all fours, alternate full spine flexion and extension. 10 slow reps, breathing. Full thoracic mobility warm-up now standard every morning.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="routine">
+    <div class="routine-head">
+      <div class="routine-icon">💪</div>
+      <div class="routine-title" style="color:var(--purple)">Band Session — Week 4 · Every Other Day</div>
+      <div class="routine-time">25–30 min</div>
+    </div>
+    <div class="routine-body">
+      <div class="alert a-purple" style="margin-bottom:10px">This is the longest session of the block. Full retention + full posture correction. Hajj ends here — this is your prep for returning to Munich gym at a higher baseline.</div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-purple">1</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Face Pull <span class="mandatory">mandatory</span></div>
+          <div class="ex-sets">4 × 15 · Yellow → try Green if Yellow feels easy</div>
+          <div class="ex-cue">Add full chin tuck + scapular retraction at peak contraction. Hold 2 seconds. This is the most comprehensive single exercise for all three dysfunctions simultaneously.</div>
+          <div class="ex-band">Yellow (4.6kg) or Green (9.0kg)</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-purple">2</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Pull-Apart <span class="mandatory">mandatory</span></div>
+          <div class="ex-sets">4 × 20 · Yellow</div>
+          <div class="ex-band">Yellow tube band (4.6kg)</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-purple">3</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Seated Row (floor)</div>
+          <div class="ex-sets">3 × 12 · Blue band</div>
+          <div class="ex-cue">Sit on floor, band looped around feet. Row to hips, elbows back. Blue band for compound rowing stimulus. Posterior pelvic tilt locked in. If Blue feels light, try Green+Blue stack. This is the most demanding exercise this session.</div>
+          <div class="ex-band">Blue tube band (18.2kg) or Green+Blue (27.2kg)</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-purple">4</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Chest Press</div>
+          <div class="ex-sets">3 × 15 · Red → try Blue if Red feels easy</div>
+          <div class="ex-band">Red (13.6kg) or Blue (18.2kg)</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-purple">5</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Lateral Raise</div>
+          <div class="ex-sets">3 × 15 · Green band</div>
+          <div class="ex-cue">Stand on band. Raise to T — no overhead, no shrugging. This is a posture exercise — focuses on the lateral deltoid which is undertrained when upper traps dominate. Green band, controlled.</div>
+          <div class="ex-band">Green tube band (9.0kg)</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-purple">6</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Squat (retention)</div>
+          <div class="ex-sets">3 × 12 · Black band</div>
+          <div class="ex-cue">Stand on band, handles at shoulders. Knees out, heels down, squeeze glutes at top. Legs need MEV to prevent atrophy. Black band. If lower back flares → skip and add 2 more sets of glute bridges instead.</div>
+          <div class="ex-band">Black tube band (22.8kg)</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-purple">7</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Bicep Curl</div>
+          <div class="ex-sets">3 × 12 · Red band</div>
+          <div class="ex-band">Red tube band (13.6kg)</div>
+        </div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-num ex-num-purple">8</div>
+        <div class="ex-main">
+          <div class="ex-name">Band Glute Bridge — Gritin Heavy</div>
+          <div class="ex-sets">3 × 15, 2-sec hold — finisher</div>
+          <div class="ex-band">Gritin Heavy loop</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- DAILY SUMMARY -->
+<hr class="divider"/>
+<div class="sec">
+  <div class="sec-label"><div class="sec-num">4</div><div class="sec-title">Daily Routine Quick Reference</div></div>
+
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead><tr><th>Time</th><th>Activity</th><th>Duration</th><th>All 30 Days?</th></tr></thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--gold)">After Fajr</td>
+          <td>Wall pelvic tilt · Glute bridge · Clamshell · Chin tucks · Scapular slides (W2+) · Thoracic ext (W2+)</td>
+          <td style="color:var(--muted)">5–14 min</td>
+          <td><span style="color:var(--green);font-weight:700">✓ Every day</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--blue)">Midday</td>
+          <td>Chin tucks only (W3+) · Standing, during queues or rest</td>
+          <td style="color:var(--muted)">2 min</td>
+          <td><span style="color:var(--blue);font-weight:700">W3–4 only</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--orange)">Alternate days</td>
+          <td>Band session (W2+ every other day)</td>
+          <td style="color:var(--muted)">15–30 min</td>
+          <td><span style="color:var(--amber);font-weight:700">Alt days W2+</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--purple)">After Isha</td>
+          <td>Kneeling hip flexor stretch · Couch stretch · 90/90 hip · Pec stretch (W2+) · Pull-aparts · Chin tucks</td>
+          <td style="color:var(--muted)">7–10 min</td>
+          <td><span style="color:var(--green);font-weight:700">✓ Every day</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--red)">All day</td>
+          <td>Walking cues: chest up · shoulders back · chin tucked · glutes squeeze each push-off</td>
+          <td style="color:var(--muted)">Passive</td>
+          <td><span style="color:var(--green);font-weight:700">✓ Every step</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PROGRESS CHECKPOINTS -->
+<div class="sec">
+  <div class="sec-label"><div class="sec-num">5</div><div class="sec-title">Progress Checkpoints</div></div>
+
+  <div class="alert a-blue">
+    📸 Take a side-on photo on Day 1 and Day 30 against a flat wall. You are looking for: ears over shoulders · shoulders over hips · hips over ankles · natural S-curve in spine (not exaggerated arch).
+  </div>
+
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead><tr><th>Checkpoint</th><th>What to Look For</th><th>Green Signal</th></tr></thead>
+      <tbody>
+        <tr>
+          <td style="color:#fca5a5">Day 7</td>
+          <td>Glute bridge: glutes fire without lower back compensating</td>
+          <td style="color:var(--green)">✓ Glutes activate on set 1</td>
+        </tr>
+        <tr>
+          <td style="color:var(--gold)">Day 7</td>
+          <td>Hip flexor stretch: can you go deeper than Day 1?</td>
+          <td style="color:var(--green)">✓ Visibly more range</td>
+        </tr>
+        <tr>
+          <td style="color:var(--gold)">Day 14</td>
+          <td>Lower back pain: is it reducing?</td>
+          <td style="color:var(--green)">✓ Significantly less or gone</td>
+        </tr>
+        <tr>
+          <td style="color:var(--gold)">Day 14</td>
+          <td>Scapular wall slides: can arms reach overhead without peeling off wall?</td>
+          <td style="color:var(--green)">✓ Full ROM maintained on wall</td>
+        </tr>
+        <tr>
+          <td style="color:var(--green)">Day 21</td>
+          <td>Chin tuck: does resting head position feel more naturally back?</td>
+          <td style="color:var(--green)">✓ Less effort to maintain</td>
+        </tr>
+        <tr>
+          <td style="color:var(--green)">Day 21</td>
+          <td>Walking: are you catching yourself maintaining posture cues without prompting?</td>
+          <td style="color:var(--green)">✓ Occasional automatic correction</td>
+        </tr>
+        <tr>
+          <td style="color:var(--purple)">Day 30</td>
+          <td>Side-on photo vs Day 1 photo</td>
+          <td style="color:var(--green)">✓ Visible alignment improvement</td>
+        </tr>
+        <tr>
+          <td style="color:var(--purple)">Day 30</td>
+          <td>Pelvic tilt: does neutral pelvis feel like resting position?</td>
+          <td style="color:var(--green)">✓ Needs effort to return to APT</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- RETURN TO MUNICH -->
+<div class="sec">
+  <div class="sec-label"><div class="sec-num">6</div><div class="sec-title">Return to Munich — First Week Back</div></div>
+
+  <div class="alert a-green">
+    ✅ You will return to the Munich gym with: stronger glutes · longer hip flexors · improved thoracic mobility · stronger rear delts and mid-traps · better deep neck flexor tone. The desk job will immediately begin working against this — but now you have the corrective protocol fully habituated.
+  </div>
+
+  <ul class="checklist">
+    <li><span class="check-dot"></span><span><span class="hl-green">Keep the morning + evening correctives permanently</span> — 7–10 min daily. These are now part of your programme, not a temporary fix.</span></li>
+    <li><span class="check-dot"></span><span>Face pulls + pull-aparts mandatory every upper body gym session — written into your APEX system prompt (Part 13).</span></li>
+    <li><span class="check-dot"></span><span><span class="hl-gold">First gym session back:</span> reduce all weights ~20%. Tendons adapt slower than muscles — 4 weeks of deload means a deload-style return. Build back over 2 weeks.</span></li>
+    <li><span class="check-dot"></span><span>Hip flexor stretch mandatory after every gym session — the desk job reloads hip flexors daily. Non-negotiable.</span></li>
+    <li><span class="check-dot"></span><span>Log Day 30 posture photo into APEX notes — use it as your baseline for the 4-Week Review.</span></li>
+    <li><span class="check-dot"></span><span>Continue chin tucks 3× daily at desk — set a phone alarm for Dhuhr time as a midday reminder habit carry-over.</span></li>
+  </ul>
+</div>
+
+<!-- BAND QUICK REF -->
+<div class="sec">
+  <div class="sec-label"><div class="sec-num">7</div><div class="sec-title">Band Quick Reference — This Protocol</div></div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead><tr><th>Exercise</th><th>Band</th><th>Week Introduced</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Face Pull</td><td style="color:var(--gold)">Yellow (4.6kg)</td><td>W1 (evening)</td><td>Rear delt · Upper cross fix</td></tr>
+        <tr><td>Pull-Apart</td><td style="color:var(--gold)">Yellow (4.6kg)</td><td>W1 (evening)</td><td>Mid-trap · Rhomboid · Posture</td></tr>
+        <tr><td>Glute Bridge</td><td style="color:var(--green)">Gritin Light → Heavy</td><td>W1 morning</td><td>Glute activation · APT fix</td></tr>
+        <tr><td>Clamshell</td><td style="color:var(--green)">Gritin Light → Medium</td><td>W1 morning</td><td>Glute med · Pelvic stability</td></tr>
+        <tr><td>Lateral Walk</td><td style="color:var(--green)">Gritin Medium</td><td>W2 band session</td><td>Glute med · APT</td></tr>
+        <tr><td>Single-Arm Row</td><td style="color:var(--red)">Red (13.6kg)</td><td>W2 band session</td><td>Back strength · Posture hold</td></tr>
+        <tr><td>Bicep Curl</td><td style="color:var(--green)">Green (9.0kg)</td><td>W2 band session</td><td>Retention</td></tr>
+        <tr><td>Chest Press</td><td style="color:var(--red)">Red (13.6kg)</td><td>W3 band session</td><td>Retention</td></tr>
+        <tr><td>Tricep Pushdown</td><td style="color:var(--red)">Red (13.6kg)</td><td>W3 band session</td><td>Retention</td></tr>
+        <tr><td>Lateral Raise</td><td style="color:var(--green)">Green (9.0kg)</td><td>W4 band session</td><td>Lateral delt · No upper trap</td></tr>
+        <tr><td>Seated Row</td><td style="color:var(--blue)">Blue (18.2kg)</td><td>W4 band session</td><td>Back compound · Retention</td></tr>
+        <tr><td>Band Squat</td><td style="color:var(--muted)">Black (22.8kg)</td><td>W4 band session</td><td>Leg retention · MEV only</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="footer">APEX v9 · Hajj Posture Protocol · 30-Day Structural Reset · Qasim · Makkah · ☪</div>
+</div>
+
+</body>
+</html>
